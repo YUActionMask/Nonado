@@ -4,30 +4,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:backgroundTint="#00FFFFFF"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/chatRecyclerView"
-        android:layout_weight = "1"
-        android:scrollbars="vertical" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-        android:layout_weight ="1">
-    <EditText
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:id="@+id/chatEt"/>
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/chatEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <Button
-            android:id="@+id/sentBtn"
+            android:id="@+id/senBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
+            android:background="#673AB7"
             app:icon="@android:drawable/ic_menu_send" />
     </LinearLayout>
 
