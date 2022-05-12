@@ -27,7 +27,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/senBtn"
+            android:id="@+id/sendBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:background="#673AB7"

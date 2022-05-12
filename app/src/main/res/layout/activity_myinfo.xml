@@ -8,18 +8,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/userImage"
+        />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="사진등록"
+            android:id="@+id/imageBtn"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginHorizontal="20dp">
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="이름"
+            android:textAlignment="center"
+            android:layout_margin="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:layout_margin="10dp"
+            android:id="@+id/nameTv"
+            android:text=".."/>
 
     </LinearLayout>
 
@@ -41,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:layout_margin="10dp"
+            android:id="@+id/pointTv"
             android:text=".."/>
 
     </LinearLayout>
@@ -52,6 +76,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/postingBtn"
             android:text="함께한 글"/>
 
     </LinearLayout>
@@ -74,18 +99,21 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_margin="10dp"
-            android:text="메시지 보내기"/>
+            android:text="메시지 보내기"
+            android:id="@+id/msgBtn"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_margin="10dp"
+            android:id="@+id/pointBtn"
             android:text="포인트 내역"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_margin="10dp"
+            android:id="@+id/certifyBtn"
             android:text="인증하기"/>
 
     </LinearLayout>
