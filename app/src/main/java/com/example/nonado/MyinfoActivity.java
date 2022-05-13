@@ -1,5 +1,6 @@
 package com.example.nonado;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,13 @@ public class MyinfoActivity extends AppCompatActivity {
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+
+    //사진 업로드용 uri
+    private Uri mlmageCaptureUri;
+
+    private static final int PICK_FROM_CAMERA = 0;
+    private static final int PICK_FROM_ALBUM = 1;
+    private static final int CROP_FROM_IMAGE = 2;
     
 
     @Override
@@ -95,7 +104,44 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
     }
+    public void doTakePhotoAction(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        //임시파일 경로
+        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
+        mlmageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
+        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mlmageCaptureUri);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
+    }
+
+    public void doTakeAlbumAction(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode != RESULT_OK)
+            return;
+
+        switch(requestCode){
+            case PICK_FROM_ALBUM:
+            {
+                mlmageCaptureUri = data.getData();
+                Log.d("SmartWheel", mlmageCaptureUri.getPath().toString());
+            }
+            case PICK_FROM_CAMERA:
+            {
+                ㅑ
+            }
+            case CROP_FROM_IMAGE:{
+
+            }
+        }
+    }
 
     public class ListViewAdapter extends BaseAdapter{
         ArrayList <Posting> items = new ArrayList<Posting>();
