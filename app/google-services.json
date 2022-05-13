@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "957837137195",
+    "project_id": "nonado-51090",
+    "storage_bucket": "nonado-51090.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957837137195:android:0829d5bef9637f4e4ae16e",
+        "android_client_info": {
+          "package_name": "com.example.nonado"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957837137195-1pjut84s98i266145g2r7vof1qu7pufe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdYzzshUY46nOfOdgDuP9pgQ70KPt4Spc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957837137195-1pjut84s98i266145g2r7vof1qu7pufe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
