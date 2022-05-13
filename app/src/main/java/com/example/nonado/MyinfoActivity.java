@@ -135,7 +135,7 @@ public class MyinfoActivity extends AppCompatActivity {
             }
             case PICK_FROM_CAMERA:
             {
-                ㅑ
+
             }
             case CROP_FROM_IMAGE:{
 
