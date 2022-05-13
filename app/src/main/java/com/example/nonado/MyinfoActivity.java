@@ -1,32 +1,84 @@
 package com.example.nonado;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MyinfoActivity extends AppCompatActivity {
+    Button msgBtn;
+    Button imageBtn;
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo);
-        //오류수정
-        
+
+        msgBtn = (Button) findViewById(R.id.msgBtn);
+        imageBtn = (Button) findViewById(R.id.imageBtn);
+
+        msgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //사진 등록 버튼
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       doTakePhotoAction();
+                    }
+                };
+                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                       // doTakeAlbumAction();
+                    }
+                };
+                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                };
+                new AlertDialog.Builder(MyinfoActivity.this)
+                        .setTitle("업로드할 이미지 선택")
+                        .setPositiveButton("사진촬영", cameraListener)
+                        .setNeutralButton("앨범선택", albumListener)
+                        .setNegativeButton("취소", cancelListener)
+                        .show();
+
+            }
+        });
 
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
@@ -40,7 +92,10 @@ public class MyinfoActivity extends AppCompatActivity {
         adapter.addItem(new Posting("F"));
 
         listView.setAdapter(adapter);
+
+
     }
+
 
     public class ListViewAdapter extends BaseAdapter{
         ArrayList <Posting> items = new ArrayList<Posting>();
@@ -86,4 +141,6 @@ public class MyinfoActivity extends AppCompatActivity {
             return convertView;
         }
     }
+
 }
+
