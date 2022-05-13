@@ -13,7 +13,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
+class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     private List<Chat> chatList;
     private String name;
 
