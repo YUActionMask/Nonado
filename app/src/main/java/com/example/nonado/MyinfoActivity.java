@@ -83,7 +83,7 @@ public class MyinfoActivity extends AppCompatActivity {
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
 
-            return null;
+            return convertView;
         }
     }
 }
