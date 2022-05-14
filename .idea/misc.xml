@@ -12,10 +12,12 @@
         <entry key="app/src/main/res/layout/activity_chat_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_home.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/activity_my_posting.xml" value="0.21979166666666666" />
         <entry key="app/src/main/res/layout/activity_myinfo.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/activity_point_history.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/chat_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/row_my_posting.xml" value="0.21979166666666666" />
         <entry key="app/src/main/res/layout/row_point_history.xml" value="0.23489583333333333" />
         <entry key="app/src/main/res/layout/row_posting.xml" value="0.1" />
       </map>

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class PointHistoryActivity extends AppCompatActivity {
+public class MyPostingActivity extends AppCompatActivity {
 
     private ListView listView = null;
     private ListViewAdapter adapter = null;
@@ -23,32 +23,32 @@ public class PointHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_point_history);
+        setContentView(R.layout.activity_my_posting);
 
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
 
-        //임시정보 저장
-        adapter.addItem(new Point("입금", "A", 1000));
-        adapter.addItem(new Point("입금", "B", 2300));
-        adapter.addItem(new Point("출금", "C", 4533));
-        adapter.addItem(new Point("입금", "D", 1234));
-        adapter.addItem(new Point("출금", "E", 12000));
-        adapter.addItem(new Point("출금", "F", 12455));
-        adapter.addItem(new Point("입금", "G", 12466));
+        adapter.addItem(new Posting("A", "김"));
+        adapter.addItem(new Posting("B", "이"));
+        adapter.addItem(new Posting("C", "박"));
+        adapter.addItem(new Posting("D", "최"));
+        adapter.addItem(new Posting("E", "윤"));
+        adapter.addItem(new Posting("F", "강"));
 
         listView.setAdapter(adapter);
+
+
     }
 
     public class ListViewAdapter extends BaseAdapter {
-        ArrayList<Point> items = new ArrayList<Point>();
+        ArrayList<Posting> items = new ArrayList<Posting>();
 
         @Override
         public int getCount() {
             return items.size();
         }
 
-        public void addItem(Point item){
+        public void addItem(Posting item){
             items.add(item);
         }
         @Override
@@ -64,23 +64,21 @@ public class PointHistoryActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             final Context context = viewGroup.getContext();
-            final Point point = items.get(position);
+            final Posting posting = items.get(position);
 
             if(convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.row_point_history, viewGroup, false);
+                convertView = inflater.inflate(R.layout.row_my_posting, viewGroup, false);
             } else{
                 View view = new View(context);
                 view = (View) convertView;
             }
 
-            TextView typeTv = (TextView) convertView.findViewById(R.id.typeTv);
-            TextView pointNameTv = (TextView) convertView.findViewById(R.id.pointNameTv);
-            TextView pointAmountTv = (TextView) convertView.findViewById(R.id.pointAmountTv);
+            TextView postNameTv = (TextView) convertView.findViewById(R.id.postNameTv);
+            TextView writerTv = (TextView) convertView.findViewById(R.id.writerTv);
 
-            typeTv.setText(point.getType());
-            pointNameTv.setText(point.getPointName());
-            pointAmountTv.setText(point.getAmount().toString());
+            postNameTv.setText(posting.getPostName());
+            writerTv.setText(posting.getWriter());
 
 
             return convertView;

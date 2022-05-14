@@ -33,6 +33,7 @@ public class MyinfoActivity extends AppCompatActivity {
     Button msgBtn;
     Button imageBtn;
     Button pointBtn;
+    Button postingBtn;
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
@@ -59,7 +60,9 @@ public class MyinfoActivity extends AppCompatActivity {
         msgBtn = (Button) findViewById(R.id.msgBtn);
         imageBtn = (Button) findViewById(R.id.imageBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
+        postingBtn = (Button) findViewById(R.id.postingBtn);
 
+        //메시지 정보 버튼
         msgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,11 +94,22 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+        //함께한 글 버튼
+        postingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MyPostingActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
 
-        //추가 정보 담기
+
+        //임시 정보 담기
         adapter.addItem(new Posting("A"));
         adapter.addItem(new Posting("B"));
         adapter.addItem(new Posting("C"));
