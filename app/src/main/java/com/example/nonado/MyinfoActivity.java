@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class MyinfoActivity extends AppCompatActivity {
     Button msgBtn;
     Button imageBtn;
+    Button pointBtn;
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
@@ -57,6 +58,7 @@ public class MyinfoActivity extends AppCompatActivity {
 
         msgBtn = (Button) findViewById(R.id.msgBtn);
         imageBtn = (Button) findViewById(R.id.imageBtn);
+        pointBtn = (Button) findViewById(R.id.pointBtn);
 
         msgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,17 @@ public class MyinfoActivity extends AppCompatActivity {
 
             }
         });
+
+        //포인트 내역 버튼
+        pointBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
