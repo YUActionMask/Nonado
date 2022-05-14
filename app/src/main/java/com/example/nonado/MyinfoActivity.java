@@ -135,6 +135,17 @@ public class MyinfoActivity extends AppCompatActivity {
             }
             case PICK_FROM_CAMERA:
             {
+                Intent intent = new Intent("com.android.action.CROP");
+                intent.setDataAndType(mlmageCaptureUri, "image/*");
+                //이미지 크기 200*200으로 임시 저장
+                intent.putExtra("outputX", 200);
+                intent.putExtra("outputY", 200);
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+                intent.putExtra("return-data", true);
+                startActivityForResult(intent, CROP_FROM_IMAGE);
+                break;
+
 
             }
             case CROP_FROM_IMAGE:{
