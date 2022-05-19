@@ -16,19 +16,22 @@
             android:name=".ChatActivity"
             android:exported="true" />
         <activity
-            android:name=".detailActivity"
+            android:name=".DetailActivity"
             android:exported="true" />
         <activity
-            android:name=".homeActivity"
+            android:name=".HomeActivity"
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
-            android:name=".plusActivity"
+            android:name=".PlusActivity"
             android:exported="true" />
         <activity
             android:name=".SignupActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ChangeinfoActivity"
             android:exported="true" />
     </application>
 

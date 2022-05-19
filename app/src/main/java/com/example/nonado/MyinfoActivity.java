@@ -28,6 +28,7 @@ import java.util.ArrayList;
 public class MyinfoActivity extends AppCompatActivity {
     Button msgBtn;
     Button imageBtn;
+    Button cha;
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
@@ -48,6 +49,15 @@ public class MyinfoActivity extends AppCompatActivity {
 
         msgBtn = (Button) findViewById(R.id.msgBtn);
         imageBtn = (Button) findViewById(R.id.imageBtn);
+        cha = (Button) findViewById(R.id.cha);
+
+        cha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChangeinfoActivity.class);
+                startActivity(intent);
+            }
+        });
 
         msgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
