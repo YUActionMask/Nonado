@@ -34,6 +34,8 @@ public class MyinfoActivity extends AppCompatActivity {
     Button imageBtn;
     Button pointBtn;
     Button postingBtn;
+    Button cha;
+
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
@@ -50,7 +52,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,16 @@ public class MyinfoActivity extends AppCompatActivity {
         imageBtn = (Button) findViewById(R.id.imageBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
+        cha = (Button) findViewById(R.id.cha);
+
+        cha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChangeinfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         //메시지 정보 버튼
         msgBtn.setOnClickListener(new View.OnClickListener() {
@@ -81,8 +93,21 @@ public class MyinfoActivity extends AppCompatActivity {
                 intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 2222);
 
+
             }
         });
+
+        //포인트 내역 버튼
+        pointBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+
 
         //포인트 내역 버튼
         pointBtn.setOnClickListener(new View.OnClickListener() {

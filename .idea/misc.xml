@@ -3,24 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_chat_main.xml" value="0.22" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_login.xml" value="0.25" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_myinfo.xml" value="0.33" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_signup.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/chat_item.xml" value="0.18" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/Nonado/app/src/main/res/layout/row_posting.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_chat_main.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
-        <entry key="app/src/main/res/layout/activity_my_posting.xml" value="0.21979166666666666" />
-        <entry key="app/src/main/res/layout/activity_myinfo.xml" value="0.25052083333333336" />
-        <entry key="app/src/main/res/layout/activity_plus.xml" value="0.1671875" />
-        <entry key="app/src/main/res/layout/activity_point_history.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/chat_item.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/row_my_posting.xml" value="0.21979166666666666" />
-        <entry key="app/src/main/res/layout/row_point_history.xml" value="0.23489583333333333" />
-        <entry key="app/src/main/res/layout/row_posting.xml" value="0.1" />
+
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_changeinfo.xml" value="0.4276155717761557" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_chat_main.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_detail.xml" value="0.25" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_home.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_login.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_myinfo.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_notice.xml" value="0.4276155717761557" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_plus.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_signup.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/chat_item.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/home.xml" value="0.11052631578947368" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/multi_image.xml" value="0.2151268115942029" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/plus.xml" value="0.23423423423423423" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/row_posting.xml" value="0.30833333333333335" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/view_comment.xml" value="0.2644927536231884" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/view_multi_image.xml" value="0.30833333333333335" />
+
       </map>
     </option>
   </component>
