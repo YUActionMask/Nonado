@@ -14,5 +14,10 @@
     <string name="e_mail">E-mail</string>
     <string name="id">ID</string>
     <string name="password">password</string>
-    <string name="nonado_image">Nonado Image</string>
+    <string name="signup">회원가입</string>
+    <string name="signupcomplete">가입 완료</string>
+    <string name="signupRes">Sign up</string>
+    <string name="signup_id">ID</string>
+    <string name="signup_password">password</string>
+    <string name="signup_name">Name</string>
 </resources>
