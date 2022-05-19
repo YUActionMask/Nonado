@@ -36,6 +36,7 @@ public class MyinfoActivity extends AppCompatActivity {
     Button postingBtn;
     Button cha;
 
+
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
@@ -72,6 +73,7 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+
         //메시지 정보 버튼
         msgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,8 +93,21 @@ public class MyinfoActivity extends AppCompatActivity {
                 intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(intent, 2222);
 
+
             }
         });
+
+        //포인트 내역 버튼
+        pointBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+
 
         //포인트 내역 버튼
         pointBtn.setOnClickListener(new View.OnClickListener() {
