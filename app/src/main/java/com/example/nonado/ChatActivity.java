@@ -23,7 +23,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Chat> chatList;
-    private String nickname = "익명";
+    private String nickname = "익명33";
 
     private EditText chatEt;
     private Button sendBtn;

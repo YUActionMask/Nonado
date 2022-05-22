@@ -20,11 +20,10 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     private List<Chat> chatList;
     private String name;
 
-//    public ChatAdapter(List<Chat> chatData, String name){
-//        //MainActivity.java에서 받은 데이터들을 저장
-//        chatList = chatData;
-//        this.name = name;
-//    }
+    public ChatAdapter(List<Chat> chatData, String name){
+        chatList = chatData;
+        this.name = name;
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
@@ -45,10 +44,6 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
              itemView.setClickable(true);
 
         }
-    }
-    public ChatAdapter(List<Chat> chatData, String name){
-        chatList = chatData;
-        this.name = name;
     }
 
     @NonNull
