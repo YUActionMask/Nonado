@@ -5,19 +5,10 @@ package com.example.nonado;
  */
 public class UserAccount {
     private String id; //이메일? 아이디
-    private String idToken; //firebase Uid(고유 토큰정보)
     private String password; //비밀번호
     private String name; //이름
 
     public UserAccount() { }
-
-    public String getIdToken() {
-        return idToken;
-    }
-
-    public void setIdToken(String idToken) {
-        this.idToken = idToken;
-    }
 
     public String getId() {
         return id;
@@ -42,4 +33,11 @@ public class UserAccount {
     public void setName(String name) {
         this.name = name;
     }
+
+    public UserAccount(String id, String password, String name){
+        this.id = id;
+        this.password = password;
+        this.name=name;
+    }
+
 }
