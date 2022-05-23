@@ -38,7 +38,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
         kakaoMapView.setMapViewEventListener((MapView.MapViewEventListener) this);
         kakaoMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-        if(!checkLocationServicesStatus()){
+        if(!checkLocationServiceStatus()){
             //showD
         }else{
 
