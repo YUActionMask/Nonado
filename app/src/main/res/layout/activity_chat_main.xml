@@ -10,6 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scrollbars="vertical" />

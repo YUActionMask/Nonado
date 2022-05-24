@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class plusActivity extends AppCompatActivity {
+public class PlusActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
     private static final String TAG = "MultiImageActivity";
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체

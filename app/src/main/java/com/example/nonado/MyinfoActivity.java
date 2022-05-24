@@ -3,8 +3,11 @@ package com.example.nonado;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,10 +32,19 @@ import java.util.ArrayList;
 public class MyinfoActivity extends AppCompatActivity {
     Button msgBtn;
     Button imageBtn;
+    Button pointBtn;
+    Button postingBtn;
+    Button cha;
+
 
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+
+    ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
+
+    RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
+    MultiImageAdapter MultiAdapter;  // 리사이클러뷰에 적용시킬 어댑터
 
     //사진 업로드용 uri
     private Uri mlmageCaptureUri;
@@ -39,16 +52,30 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo);
 
         msgBtn = (Button) findViewById(R.id.msgBtn);
         imageBtn = (Button) findViewById(R.id.imageBtn);
+        pointBtn = (Button) findViewById(R.id.pointBtn);
+        postingBtn = (Button) findViewById(R.id.postingBtn);
+        cha = (Button) findViewById(R.id.cha);
 
+        cha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ChangeinfoActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
+        //메시지 정보 버튼
         msgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,38 +88,54 @@ public class MyinfoActivity extends AppCompatActivity {
         imageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogInterface.OnClickListener cameraListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       doTakePhotoAction();
-                    }
-                };
-                DialogInterface.OnClickListener albumListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                       // doTakeAlbumAction();
-                    }
-                };
-                DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                };
-                new AlertDialog.Builder(MyinfoActivity.this)
-                        .setTitle("업로드할 이미지 선택")
-                        .setPositiveButton("사진촬영", cameraListener)
-                        .setNeutralButton("앨범선택", albumListener)
-                        .setNegativeButton("취소", cancelListener)
-                        .show();
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 2222);
+
 
             }
         });
 
+        //포인트 내역 버튼
+        pointBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                startActivity(intent);
+
+
+            }
+        });
+
+
+        //포인트 내역 버튼
+        pointBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+        //함께한 글 버튼
+        postingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MyPostingActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
+
         listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
 
-        //추가 정보 담기
+
+        //임시 정보 담기
         adapter.addItem(new Posting("A"));
         adapter.addItem(new Posting("B"));
         adapter.addItem(new Posting("C"));
@@ -104,41 +147,21 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
     }
-    public void doTakePhotoAction(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        //임시파일 경로
-        String url = "tmp_" + String.valueOf(System.currentTimeMillis()) + ".jpg";
-        mlmageCaptureUri = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), url));
-        intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mlmageCaptureUri);
-        startActivityForResult(intent, PICK_FROM_CAMERA);
-    }
-
-    public void doTakeAlbumAction(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
-    }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {   // 어떤 이미지도 선택하지 않은 경우
+            Toast.makeText(getApplicationContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_LONG).show();
+        } else {   // 이미지를 하나라도 선택한 경우
+            if (data.getClipData() == null) {     // 이미지를 하나만 선택한 경우
+                Log.e("single choice: ", String.valueOf(data.getData()));
+                Uri imageUri = data.getData();
+                uriList.add(imageUri);
 
-        if(resultCode != RESULT_OK)
-            return;
-
-        switch(requestCode){
-            case PICK_FROM_ALBUM:
-            {
-                mlmageCaptureUri = data.getData();
-                Log.d("SmartWheel", mlmageCaptureUri.getPath().toString());
-            }
-            case PICK_FROM_CAMERA:
-            {
-
-            }
-            case CROP_FROM_IMAGE:{
-
+                MultiAdapter = new MultiImageAdapter(uriList, getApplicationContext());
+                imageView.setAdapter(MultiAdapter);
+                imageView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
             }
         }
     }
