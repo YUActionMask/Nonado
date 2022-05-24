@@ -7,6 +7,7 @@ public class UserAccount {
     private String id; //이메일? 아이디
     private String password; //비밀번호
     private String name; //이름
+    private int point;
 
     public UserAccount() { }
 
@@ -34,10 +35,21 @@ public class UserAccount {
         this.name = name;
     }
 
-    public UserAccount(String id, String password, String name){
+    public int getPoint(){return point;}
+
+    public void setPoint(int point){this.point = point;}
+
+    public UserAccount(String id, String password, String name, int point){
         this.id = id;
         this.password = password;
         this.name=name;
+        this.point = point;
     }
-
+    public String toString(){
+        return "User{"+
+                "name='" + name + '\''+
+                ", id='" + id + '\''+
+                ",password=" + password+
+                '}';
+    }
 }
