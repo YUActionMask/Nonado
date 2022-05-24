@@ -103,7 +103,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     }
 
     @Override
-    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
+    public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint  ) {
 
     }
 
@@ -140,7 +140,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
                     finish();
                 }else{
                     Toast.makeText(NeighborhoodCertificationActivity.this, "권한이 거부되었습니다. 설정에서 권한을 허용하십시오.", Toast.LENGTH_LONG).show();
-+
+
                 }
             }
         }
