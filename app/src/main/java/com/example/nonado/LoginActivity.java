@@ -1,5 +1,6 @@
 package com.example.nonado;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,14 +8,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +28,10 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
 
-    private FirebaseAuth mfirebaseAuth; //파이어베이스 인증
-    private DatabaseReference mDatabaseRef; //실시간 데이터베이스
-    private EditText editTextEmail;
-    private EditText editTextPassword;
+    private DatabaseReference mDatabase; //실시간 데이터베이스
+    private FirebaseAuth firebaseAuth;
+    private EditText id;
+    private EditText password;
     private Button buttonLogIn;
     private Button buttonSignUp;
 
@@ -35,8 +40,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button buttonSignUp = findViewById(R.id.btn_signup);
-        Button buttonLogIn = findViewById(R.id.btn_login);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        buttonSignUp = findViewById(R.id.btn_signup);
+        buttonLogIn = findViewById(R.id.btn_login);
+
+        id = findViewById(R.id.id);
+        password = findViewById(R.id.password);
+
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +57,30 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        buttonLogIn.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+
+                String strId = id.getText().toString().trim();
+                String strPwd = password.getText().toString().trim();
+
+
+                firebaseAuth.signInWithEmailAndPassword(strId, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            //Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            //startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+
+            }
+        });
     }
-
-
-
 
 }
