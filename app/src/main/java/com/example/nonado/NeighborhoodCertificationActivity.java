@@ -20,29 +20,48 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+
+import java.util.List;
+
 public class NeighborhoodCertificationActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
     private ViewGroup mapViewContainer;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
+    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION };
     private static final String LOG_TAG = "NeighborhoodCertificationActivity";
+
+    private static final String TAG = "[MainA]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_neighborhood_certification);
+
+
+//        LocationManager locationManager = getApplicationContext().getSystemService(LocationManager.GPS_PROVIDER);
+
+
+
         MapView kakaoMapView = new MapView(this);
 
-         mapViewContainer = (ViewGroup) findViewById(R.id.kakaoMapView);
+        mapViewContainer = (ViewGroup) findViewById(R.id.kakaoMapView);
         mapViewContainer.addView(kakaoMapView);
 
         kakaoMapView.setMapViewEventListener((MapView.MapViewEventListener) this);
-        kakaoMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-        if(!checkLocationServiceStatus()){
-            //showD
-        }else{
+        kakaoMapView.setMapViewEventListener(this);
 
+        if(!checkLocationServiceStatus()){
+            Log.d("fdf","errors");
+            showDialogForLocationServiceSetting();
+        }else{
+            checkRuntTimePermission();;
         }
+       kakaoMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+
+
+
+
+
     }
 
     @Override
@@ -107,7 +126,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     }
 
-    @Override
+    @Override 
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
 
     }
@@ -149,6 +168,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(NeighborhoodCertificationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED){
+            Log.d(TAG, "checkRuntTimePermission: ");
         }else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(NeighborhoodCertificationActivity.this, REQUIRED_PERMISSIONS[0])){
                 Toast.makeText(NeighborhoodCertificationActivity.this, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
@@ -166,7 +186,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent callGPSettingIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+                Intent callGPSettingIntent = new Intent(android.provider.Settings.ACTION_LOCALE_SETTINGS);
                 startActivityForResult(callGPSettingIntent, GPS_ENABLE_REQUEST_CODE);
             }
         });
@@ -201,4 +221,9 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
         return locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
+
+    private void onFinishReverseGeoCoding(String result){
+
+    }
+
 }
