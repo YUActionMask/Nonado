@@ -117,7 +117,7 @@ public class PlusActivity extends AppCompatActivity {
             }
         }
     }
-
+//
     public void plus(String title, String comment){
         Plusfirebase Pf = new Plusfirebase(title,comment);
         databaseReference.child("Post").child(title).setValue(Pf);
