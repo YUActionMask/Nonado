@@ -8,20 +8,36 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
+import com.google.firebase.database.DatabaseReference;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlusActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 0;
     private static final String TAG = "MultiImageActivity";
+    private FirebaseStorage storage;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference();
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
+    EditText EditText4, EditText5;
+    Button btn2;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
 
@@ -30,8 +46,11 @@ public class PlusActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plus);
 
+        EditText4 = findViewById(R.id.EditText4);
+        EditText5 = findViewById(R.id.EditText5);
+        btn2 = findViewById(R.id.btn2);
         imageView = findViewById(R.id.image);
-
+        storage = FirebaseStorage.getInstance();
         Button btn_getImage = findViewById(R.id.btn);
         btn_getImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +62,15 @@ public class PlusActivity extends AppCompatActivity {
                 startActivityForResult(intent, 2222);
             }
         });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                plus(EditText4.getText().toString(), EditText5.getText().toString());
+                //finish();
+            }
+        });
+
     }
 
     @Override
@@ -67,11 +95,15 @@ public class PlusActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "사진은 10장까지 선택 가능합니다.", Toast.LENGTH_LONG).show();
                 } else {   // 선택한 이미지가 1장 이상 10장 이하인 경우
                     Log.e(TAG, "multiple choice");
+                    StorageReference storageRef = storage.getReference();
 
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                    for (int i =0; i < clipData.getItemCount(); i++) {
                         Uri imageUri = clipData.getItemAt(i).getUri();  // 선택한 이미지들의 uri를 가져온다.
+                        String path = EditText4.getText().toString()+"/"+i+".png";
+                        StorageReference riversRef = storageRef.child(path);
                         try {
                             uriList.add(imageUri);  //uri를 list에 담는다.
+                            UploadTask uploadTask = riversRef.putFile(imageUri);
 
                         } catch (Exception e) {
                             Log.e(TAG, "File select error", e);
@@ -84,5 +116,10 @@ public class PlusActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public void plus(String title, String comment){
+        Plusfirebase Pf = new Plusfirebase(title,comment);
+        databaseReference.child("Post").child(title).setValue(Pf);
     }
 }
