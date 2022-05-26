@@ -3,7 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_changeinfo.xml" value="0.4276155717761557" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_chat_main.xml" value="0.30833333333333335" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/activity_detail.xml" value="0.25" />
@@ -21,7 +20,10 @@
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/row_posting.xml" value="0.30833333333333335" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/view_comment.xml" value="0.2644927536231884" />
         <entry key="..\:/Users/user/AndroidStudioProjects/Nonado/app/src/main/res/layout/view_multi_image.xml" value="0.30833333333333335" />
-
+        <entry key="app/src/main/res/layout/activity_neighborhood_cetification.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_plus.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/view_multi_image.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/network_security_config.xml" value="0.1" />
       </map>
     </option>
   </component>
