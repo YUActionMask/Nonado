@@ -25,9 +25,11 @@ import java.util.HashMap;
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference mDatabase;
     private EditText name, id, password;
     final private int point = 0;
     private Button mBtnRegister;
+    String num = "1";
 
 
     @Override
@@ -42,6 +44,7 @@ public class SignupActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         id = findViewById(R.id.signup_id);
         name = findViewById(R.id.signup_name);
@@ -70,15 +73,22 @@ public class SignupActivity extends AppCompatActivity {
                             result.put("password", strPwd);
                             result.put("point", point);
 
+
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference reference = database.getReference("User");
                             reference.child(strId).setValue(result);
 
+                            wirteUser(strId, strId, strPwd, strName, point, mDatabase);
                             Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                             startActivity(intent);
-                            Toast.makeText(SignupActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+
+                            //int int_num = Integer.parseInt(num);
+                            //int_num++;
+                            //String num = Integer.toString(int_num);
+
                         } else {
-                            Toast.makeText(SignupActivity.this, "이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+
                             return;
                         }
                     }
@@ -89,7 +99,21 @@ public class SignupActivity extends AppCompatActivity {
     private void wirteUser(String userid, String id , String password, String name, int point, DatabaseReference reference){
         UserAccount user = new UserAccount(id, password, name, point);
 
+        reference.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
 
+                Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     public boolean onSupportNavigateUp(){
         onBackPressed();;
