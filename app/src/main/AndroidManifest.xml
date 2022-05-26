@@ -31,13 +31,13 @@
             android:name=".ChatActivity"
             android:exported="true" />
         <activity
-            android:name=".detailActivity"
+            android:name=".PointHistoryActivity"
             android:exported="true" />
         <activity
-            android:name=".homeActivity"
+            android:name=".HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".plusActivity"
+            android:name=".PlusActivity"
             android:exported="true" />
 
     </application>
