@@ -45,11 +45,5 @@ public class UserAccount {
         this.name=name;
         this.point = point;
     }
-    public String toString(){
-        return "User{"+
-                "name='" + name + '\''+
-                ", id='" + id + '\''+
-                ",password=" + password+
-                '}';
-    }
+
 }
