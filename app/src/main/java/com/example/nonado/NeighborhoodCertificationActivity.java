@@ -28,9 +28,8 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION };
-    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
-
-    private static final String TAG = "[MainA]";
+//    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
+//    private static final String TAG = "[MainA]";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         kakaoMapView.setMapViewEventListener(this);
 
         if(!checkLocationServiceStatus()){
-            Log.d("fdf","errors");
+            //Log.d("fdf","errors");
             showDialogForLocationServiceSetting();
         }else{
             checkRuntTimePermission();;
@@ -126,7 +125,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     }
 
-    @Override 
+    @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
 
     }
@@ -168,7 +167,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(NeighborhoodCertificationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED){
-            Log.d(TAG, "checkRuntTimePermission: ");
+            //Log.d(TAG, "checkRuntTimePermission: ");
         }else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(NeighborhoodCertificationActivity.this, REQUIRED_PERMISSIONS[0])){
                 Toast.makeText(NeighborhoodCertificationActivity.this, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
@@ -207,7 +206,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
             case GPS_ENABLE_REQUEST_CODE:
                 if(checkLocationServiceStatus()){
                     if(checkLocationServiceStatus()){
-                        Log.d("@@@", "gps활성화 됨");
+                        //Log.d("@@@", "gps활성화 됨");
                         checkRuntTimePermission();
                         return;
                     }

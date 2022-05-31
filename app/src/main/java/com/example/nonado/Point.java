@@ -1,9 +1,9 @@
 package com.example.nonado;
 
 public class Point {
-    String type;
-    String pointName;
-    Integer amount;
+    private String type;
+    private String pointName;
+    private Integer amount;
     public Point(String type, String pointName, int pointAmount){
         this.type = type;
         this.pointName = pointName;

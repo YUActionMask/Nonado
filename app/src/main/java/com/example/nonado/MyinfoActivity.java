@@ -30,11 +30,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MyinfoActivity extends AppCompatActivity {
-    Button msgBtn;
-    Button imageBtn;
-    Button pointBtn;
-    Button postingBtn;
-    Button cha;
+    private Button msgBtn;
+    private Button imageBtn;
+    private Button pointBtn;
+    private Button postingBtn;
+    private Button cha;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -46,8 +46,9 @@ public class MyinfoActivity extends AppCompatActivity {
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter MultiAdapter;  // 리사이클러뷰에 적용시킬 어댑터
 
+
     //사진 업로드용 uri
-    private Uri mlmageCaptureUri;
+   // private Uri mlmageCaptureUri;
 
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
