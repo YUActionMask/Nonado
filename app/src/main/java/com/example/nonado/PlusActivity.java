@@ -67,7 +67,8 @@ public class PlusActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 plus(EditText4.getText().toString(), EditText5.getText().toString());
-                //finish();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -117,9 +118,9 @@ public class PlusActivity extends AppCompatActivity {
             }
         }
     }
-
-   public void plus(String title, String comment){
+//
+    public void plus(String title, String comment){
         Plusfirebase Pf = new Plusfirebase(title,comment);
         databaseReference.child("Post").child(title).setValue(Pf);
-   }
+    }
 }

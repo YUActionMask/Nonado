@@ -18,16 +18,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference mDatabase;
     private EditText name, id, password;
     final private int point = 0;
     private Button mBtnRegister;
+    int num = 1;
 
 
     @Override
@@ -42,6 +48,11 @@ public class SignupActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //DatabaseReference reference = database.getReference();
+
 
         id = findViewById(R.id.signup_id);
         name = findViewById(R.id.signup_name);
@@ -62,7 +73,6 @@ public class SignupActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
 
                             HashMap result = new HashMap<>();
                             result.put("name", strName);
@@ -70,29 +80,47 @@ public class SignupActivity extends AppCompatActivity {
                             result.put("password", strPwd);
                             result.put("point", point);
 
-                            FirebaseDatabase database = FirebaseDatabase.getInstance();
-                            DatabaseReference reference = database.getReference("User");
-                            reference.child(strId).setValue(result);
 
-                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(SignupActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+                            wirteUser(Integer.toString(num), strId, strPwd, strName, point);
+                            //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
+
+                            //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            //startActivity(intent);
+
+
                         } else {
-                            Toast.makeText(SignupActivity.this, "이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+
                             return;
                         }
                     }
                 });
+                num++;
             }
         });
     }
-    private void wirteUser(String userid, String id , String password, String name, int point, DatabaseReference reference){
+    private void wirteUser(String userid, String id , String password, String name, int point){
         UserAccount user = new UserAccount(id, password, name, point);
 
+        mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+
+                Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
     public boolean onSupportNavigateUp(){
-        onBackPressed();;
+        onBackPressed();
         return super.onSupportNavigateUp();
     }
 }
