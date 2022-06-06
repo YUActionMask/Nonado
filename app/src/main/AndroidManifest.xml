@@ -19,17 +19,33 @@
             android:exported="true" />
         <activity
             android:name=".PointHistoryActivity"
-            android:exported="true" />
+            android:exported="true" />=
         <activity
             android:name=".MyinfoActivity"
+            android:exported="true" />=
+        <activity
+            android:name=".HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".PlusActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".NoticeActivity"
+            android:exported="true" />
+
         <activity
             android:name=".DetailActivity"
             android:exported="true" />
+
         <activity
+            android:name=".NewsActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="true" />
+
             android:name=".HomeActivity"
             android:exported="true" />
         <activity
@@ -46,14 +62,13 @@
             android:exported="true" />
 
         <meta-data android:name="com.kakao.sdk.AppKey" android:value="7e42e6137510138c724d8005c5413cf7"/>
+
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET">
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
-    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
 
 
