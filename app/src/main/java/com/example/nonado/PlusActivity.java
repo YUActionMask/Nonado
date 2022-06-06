@@ -67,7 +67,8 @@ public class PlusActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 plus(EditText4.getText().toString(), EditText5.getText().toString());
-                //finish();
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
             }
         });
 
