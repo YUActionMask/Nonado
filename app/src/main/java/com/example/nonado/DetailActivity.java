@@ -1,8 +1,10 @@
 package com.example.nonado;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -41,6 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     FirebaseStorage storage;
     StorageReference stoRe;
     StorageReference patRe;
+    Button btn;
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
     @Override
@@ -55,8 +58,16 @@ public class DetailActivity extends AppCompatActivity {
         storage=FirebaseStorage.getInstance();
         stoRe=storage.getReference();
         patRe=stoRe.child(str);
-
+        btn = (Button) findViewById(R.id.btn);
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
         patRe.listAll().continueWithTask(task -> {
             if (task.getException() != null) {
