@@ -28,7 +28,6 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
 
-    private DatabaseReference mDatabase; //실시간 데이터베이스
     private FirebaseAuth firebaseAuth;
     private EditText id;
     private EditText password;
