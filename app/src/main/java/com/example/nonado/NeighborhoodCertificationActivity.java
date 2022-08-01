@@ -20,7 +20,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -32,6 +34,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private MapView kakaoMapView;
+    private Button certificationBtn;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION };
 //    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
 //    private static final String TAG = "[MainA]";
@@ -40,6 +43,16 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_neighborhood_certification);
+
+        certificationBtn = findViewById(R.id.certificationBtn);
+
+        certificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
+                mapReverseGeoCoder.startFindingAddress();
+            }
+        });
 
         kakaoMapView = new MapView(this);
 
@@ -133,9 +146,9 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
-        MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
-        mapReverseGeoCoder.startFindingAddress();
+//
+//        MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
+//        mapReverseGeoCoder.startFindingAddress();
     }
 
     @Override
