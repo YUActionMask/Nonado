@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.nonado">
 
     <application
@@ -19,21 +20,22 @@
             android:exported="true" />
         <activity
             android:name=".PointHistoryActivity"
-            android:exported="true" />=
+            android:exported="true" />
         <activity
             android:name=".MyinfoActivity"
-            android:exported="true" />=
+            android:exported="true" />
         <activity
             android:name=".HomeActivity"
             android:exported="true" />
-        <activity=
+        <activity
             android:name=".PlusActivity"
             android:exported="true" />
 
 
         <activity
             android:name=".MyinfoActivity"
-            android:exported="true" />
+            android:exported="true"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name=".ChatActivity"
             android:exported="true" />
@@ -45,7 +47,8 @@
             android:exported="true" />
         <activity
             android:name=".PlusActivity"
-            android:exported="true" />
+            android:exported="true"
+            tools:ignore="DuplicateActivity" />
         <activity
             android:name=".SignupActivity"
             android:exported="true" />
