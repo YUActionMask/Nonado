@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button pointBtn;
     private Button postingBtn;
     private Button cha;
+    private Button certifyBtn;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -66,6 +68,7 @@ public class MyinfoActivity extends AppCompatActivity {
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
+        certifyBtn = (Button) findViewById(R.id.certifyBtn);
 
         cha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +131,15 @@ public class MyinfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MyPostingActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        //동네인증 버튼
+        certifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NeighborhoodCertificationActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -106,28 +106,36 @@
         <Button
             android:id="@+id/msgBtn"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
             android:layout_margin="3dp"
-            android:text="메시지 보내기" />
+            android:background="@drawable/ic_bear"
+            android:clickable="false"
+            android:text="메시지"
+            />
 
         <Button
             android:id="@+id/pointBtn"
-            android:layout_width="86dp"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_margin="3dp"
-            android:text="Point 내역" />
+            android:background="@drawable/ic_bear"
+            android:text="Point" />
 
         <Button
             android:id="@+id/certifyBtn"
-            android:layout_width="76dp"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/ic_bear"
             android:layout_margin="3dp"
             android:text="인증" />
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:background="@drawable/ic_bear"
             android:layout_margin="3dp"
-            android:text="정보 수정"
+            android:text="정보\n수정"
+
+
             android:id="@+id/cha"/>
 
 
