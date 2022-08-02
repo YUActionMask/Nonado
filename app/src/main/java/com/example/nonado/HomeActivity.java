@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -27,7 +28,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     Button plus, info, notice;
-    String title;
+    List<String> title = new ArrayList<String>();
+    List<String> comment = new ArrayList<String>();
     ListView listView;
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
@@ -46,16 +48,26 @@ public class HomeActivity extends AppCompatActivity {
         notice = (Button) findViewById(R.id.notice);
         info = (Button) findViewById(R.id.info);
         listView = (ListView) findViewById(R.id.listView);
-        //initDatabase;
+        initDatabase();
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
-//       notice.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+       notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtra("title", title.get(i));
+                intent.putExtra("comment", comment.get(i));
+                startActivity(intent);
+            }
+        });
 
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,14 +88,16 @@ public class HomeActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
 
                     String msg2 = messageData.getValue().toString();
-                    msg2 = msg2.substring(msg2.lastIndexOf("=")+1);
-                    Array.add(msg2);
-                    adapter.add(msg2);
-
+                    msg2 = msg2.substring(9);
+                    String msg3[] = msg2.split(",");
+                    comment.add(msg3[0]);
+                    String msg4 = msg3[1].substring(7, msg3[1].length()-1);
+                    title.add(msg3[1].substring(7, msg3[1].length()-1));
+                    Array.add(msg4);
+                    adapter.add(msg4);
                 }
                 adapter.notifyDataSetChanged();
                 listView.setSelection(adapter.getCount() - 1);
