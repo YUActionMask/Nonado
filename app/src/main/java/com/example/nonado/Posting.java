@@ -1,8 +1,8 @@
 package com.example.nonado;
 
 public class Posting {
-    String postName;
-    String writer;
+    private String postName;
+    private String writer;
     public Posting(String postName){
         this.postName = postName;
     }
