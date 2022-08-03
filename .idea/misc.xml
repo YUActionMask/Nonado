@@ -13,6 +13,7 @@
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.23177083333333334" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/activity_my_posting.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/activity_myinfo.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_neighborhood_certification.xml" value="0.1109375" />
         <entry key="app/src/main/res/layout/activity_news.xml" value="0.23177083333333334" />
@@ -20,6 +21,7 @@
         <entry key="app/src/main/res/layout/chat_item.xml" value="0.335" />
         <entry key="app/src/main/res/layout/row_my_posting.xml" value="0.16822916666666668" />
         <entry key="app/src/main/res/layout/row_posting.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/view_comment.xml" value="0.16822916666666668" />
       </map>
     </option>
   </component>
