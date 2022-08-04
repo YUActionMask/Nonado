@@ -25,13 +25,13 @@
     <TextView
         android:id="@+id/cmt_content_tv"
         android:layout_width="match_parent"
-        android:textColor="#333333"
+        android:textColor="#753800"
         android:layout_height="wrap_content"
         android:text="content" />
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_margin="16dp"
-        android:background="#000000"
+        android:backgroundTint="#753800"
         />
 </LinearLayout>

@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         android:layout_weight="1"
         android:scrollbars="vertical" />
 
@@ -31,8 +32,8 @@
             android:id="@+id/sendBtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:background="#673AB7"
-            app:icon="@android:drawable/ic_menu_send" />
+            android:background="@drawable/ic_bear"
+             />
     </LinearLayout>
 
 </LinearLayout>
