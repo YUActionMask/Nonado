@@ -16,13 +16,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:id="@+id/userImage"
+            android:src="@drawable/ic_bear"
         />
-        <Button
-            android:layout_width  = "100dp"
-            android:layout_height="40dp"
-            android:text="사진등록"
-            android:background="@drawable/roundbutton"
-            android:id="@+id/imageBtn"/>
     </LinearLayout>
 
     <LinearLayout
