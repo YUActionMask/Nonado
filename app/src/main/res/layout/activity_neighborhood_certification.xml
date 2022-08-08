@@ -4,10 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NeighborhoodCertificationActivity">
     <RelativeLayout
         android:id="@+id/kakaoMapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
+        <Button
+            android:id="@+id/certificationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인증하기"
+
+            />
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

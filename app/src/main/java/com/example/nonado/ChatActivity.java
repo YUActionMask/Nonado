@@ -23,7 +23,8 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Chat> chatList;
-    private String nickname = "익명33";
+    private String sender = "익명2";
+    private String receiver = "익명1";
 
     private EditText chatEt;
     private Button sendBtn;
@@ -45,8 +46,9 @@ public class ChatActivity extends AppCompatActivity {
 
                 if(msg != null){
                     Chat chat = new Chat();
-                    chat.setName(nickname);
+                    chat.setName(sender);
                     chat.setMsg(msg);
+                    chat.setReceiver(receiver);
 
                     myRef.push().setValue(chat);
 
@@ -60,7 +62,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(chatList, nickname);
+        adapter = new ChatAdapter(chatList, sender);
         recyclerView.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();

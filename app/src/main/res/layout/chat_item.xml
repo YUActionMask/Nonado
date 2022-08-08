@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/nameTv"
-        android:textSize="25sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/msgTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background_normal"
-        android:backgroundTint="#FFF9BB"
+        android:backgroundTint="#b67d58"
         android:textSize="25sp" />
 
 
