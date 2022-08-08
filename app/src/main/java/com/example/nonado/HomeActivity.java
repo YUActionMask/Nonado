@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
@@ -69,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        plus.setOnClickListener(new View.OnClickListener() {
+       plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
@@ -77,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        info.setOnClickListener(new View.OnClickListener() {
+       info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+       databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
@@ -146,5 +146,4 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
     }
-//
 }
