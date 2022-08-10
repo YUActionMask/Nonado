@@ -21,6 +21,8 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
+        android:background="@drawable/list_border"
+        android:layout_margin="10dp"
         android:layout_height="wrap_content">
     <ListView
         android:layout_width="match_parent"
@@ -38,6 +40,7 @@
             android:layout_height="wrap_content"
             android:text="포인트 충전"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/roundbutton"
             android:id="@+id/chargingBtn"/>
     </RelativeLayout>
 

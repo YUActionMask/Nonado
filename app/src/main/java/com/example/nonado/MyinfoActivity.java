@@ -32,7 +32,6 @@ import java.util.ArrayList;
 
 public class MyinfoActivity extends AppCompatActivity {
     private Button msgBtn;
-    private Button imageBtn;
     private Button pointBtn;
     private Button postingBtn;
     private Button cha;
@@ -64,7 +63,6 @@ public class MyinfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_myinfo);
 
         msgBtn = (Button) findViewById(R.id.msgBtn);
-        imageBtn = (Button) findViewById(R.id.imageBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
@@ -85,20 +83,6 @@ public class MyinfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        //사진 등록 버튼
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 2222);
-
-
             }
         });
 
