@@ -69,5 +69,19 @@
         android:importantForAutofill="no"
         tools:ignore="LabelFor" />
 
+    <Button
+        android:id="@+id/btn_goFindid"
+        android:layout_width="170dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="150dp"
+        android:layout_marginBottom="40dp"
+        android:text="Find ID"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_signup" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
