@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +31,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MyinfoActivity extends AppCompatActivity {
-    Button msgBtn;
-    Button imageBtn;
-    Button pointBtn;
-    Button postingBtn;
-    Button cha;
+    private Button msgBtn;
+    private Button pointBtn;
+    private Button postingBtn;
+    private Button cha;
+    private Button certifyBtn;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -46,8 +47,9 @@ public class MyinfoActivity extends AppCompatActivity {
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter MultiAdapter;  // 리사이클러뷰에 적용시킬 어댑터
 
+
     //사진 업로드용 uri
-    private Uri mlmageCaptureUri;
+   // private Uri mlmageCaptureUri;
 
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
@@ -61,10 +63,10 @@ public class MyinfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_myinfo);
 
         msgBtn = (Button) findViewById(R.id.msgBtn);
-        imageBtn = (Button) findViewById(R.id.imageBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
+        certifyBtn = (Button) findViewById(R.id.certifyBtn);
 
         cha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,20 +83,6 @@ public class MyinfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 startActivity(intent);
-            }
-        });
-
-        //사진 등록 버튼
-        imageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 2222);
-
-
             }
         });
 
@@ -127,6 +115,15 @@ public class MyinfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MyPostingActivity.class);
                 startActivity(intent);
 
+            }
+        });
+
+        //동네인증 버튼
+        certifyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), NeighborhoodCertificationActivity.class);
+                startActivity(intent);
             }
         });
 

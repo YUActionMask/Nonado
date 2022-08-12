@@ -1,38 +1,27 @@
 package com.example.nonado;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     TextView title, comment;
@@ -50,9 +39,11 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
         comment = (TextView) findViewById(R.id.textView5);
         imageView = findViewById(R.id.image);
+        imageView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
         str = getIntent().getStringExtra("title");
         title.setText(str);
         storage=FirebaseStorage.getInstance();
@@ -61,45 +52,61 @@ public class DetailActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        /*btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         patRe.listAll().continueWithTask(task -> {
-            if (task.getException() != null) {
-                throw task.getException();
-            }
-
             for (StorageReference item : task.getResult().getItems()) {
                 tasks.add(item.getDownloadUrl());
             }
-
             return Tasks.whenAllComplete(tasks);
-
         }).addOnCompleteListener(task -> {
-            if (task.getException() != null) {
-                Toast.makeText(DetailActivity.this, "실패!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             for (Task<Uri> task2 : tasks) {
-                if (task2.getException() != null) {
-                    Toast.makeText(DetailActivity.this, "실패!", Toast.LENGTH_SHORT).show();
-
-                } else {
                     uriList.add(task2.getResult());
-                }
             }
-
             adapter = new MultiImageAdapter(uriList, getApplicationContext());
             imageView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
-            imageView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
-
         });
         comment.setText(getIntent().getStringExtra("comment"));
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                showLoading(DetailActivity.this, false);
+            }
+        }, 1900);// 0.6초 정도 딜레이를 준 후 시작
+
+    }
+    void showLoading(Activity activity, boolean isShow) {
+        if(isShow) {
+            LinearLayout linear = new LinearLayout(activity);
+            linear.setTag("MyProgressBar");
+            linear.setGravity(Gravity.CENTER);
+            linear.setBackgroundColor(0xFFFFFFFF);
+            ProgressBar progressBar = new ProgressBar(activity);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            progressBar.setLayoutParams(layoutParams);
+            linear.addView(progressBar);
+            linear.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) { /*클릭방지*/ }
+            });
+
+            FrameLayout rootView = activity.findViewById(android.R.id.content);
+            rootView.addView(linear);
+
+        } else {
+            FrameLayout rootView = activity.findViewById(android.R.id.content);
+            LinearLayout linear = rootView.findViewWithTag("MyProgressBar");
+            if(linear != null) {
+                rootView.removeView(linear);
+            }
+        }
     }
 }
+
