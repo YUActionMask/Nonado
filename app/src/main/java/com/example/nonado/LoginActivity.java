@@ -83,13 +83,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        buttonFindId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
-                startActivity(intent);
-            }
-        });
+//        buttonFindId.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
 }

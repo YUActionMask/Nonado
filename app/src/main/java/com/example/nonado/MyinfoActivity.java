@@ -1,5 +1,6 @@
 package com.example.nonado;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -36,6 +47,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button postingBtn;
     private Button cha;
     private Button certifyBtn;
+    private TextView nameTv;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -55,6 +67,11 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
 
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+    private UserAccount userAccount;
+    private String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +84,35 @@ public class MyinfoActivity extends AppCompatActivity {
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
         certifyBtn = (Button) findViewById(R.id.certifyBtn);
+        nameTv = (TextView) findViewById(R.id.nameTv);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference("User");
+
+        Log.d("milky", "Ed");
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                userAccount = dataSnapshot.getValue(UserAccount.class);
+                Log.d("milky", "SS");
+                // ..
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("milky", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+
+
+        String name = userName;
+
+        nameTv.setText(name);
+
 
         cha.setOnClickListener(new View.OnClickListener() {
             @Override
