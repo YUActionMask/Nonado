@@ -48,6 +48,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button cha;
     private Button certifyBtn;
     private TextView nameTv;
+    private TextView pointTv;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -85,19 +86,26 @@ public class MyinfoActivity extends AppCompatActivity {
         cha = (Button) findViewById(R.id.cha);
         certifyBtn = (Button) findViewById(R.id.certifyBtn);
         nameTv = (TextView) findViewById(R.id.nameTv);
+        pointTv = (TextView) findViewById(R.id.pointTv);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference("User");
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child("2");
+       // mDatabase.child("2");
 
         Log.d("milky", "Ed");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                userAccount = dataSnapshot.getValue(UserAccount.class);
-                Log.d("milky", "SS");
-                // ..
+                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
+                    userName = dataSnapshot.child("name").getValue().toString();
+                    nameTv.setText(userName);
+                    String userPoint = dataSnapshot.child("point").getValue().toString();
+                    pointTv.setText(userPoint);
+
+                    Log.d("milky", userName);
+
+                //}
             }
 
             @Override
@@ -109,9 +117,7 @@ public class MyinfoActivity extends AppCompatActivity {
         mDatabase.addValueEventListener(postListener);
 
 
-        String name = userName;
-
-        nameTv.setText(name);
+        nameTv.setText(userName);
 
 
         cha.setOnClickListener(new View.OnClickListener() {
