@@ -54,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
+                Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
                 startActivity(intent);
             }
         });
@@ -80,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
        info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
                 startActivity(intent);
             }
         });
@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
                     String msg3[] = msg2.split(",");
                     comment.add(msg3[0]);
                     String msg4 = msg3[1].substring(7, msg3[1].length()-1);
-                    title.add(msg3[1].substring(7, msg3[1].length()-1));
+                    title.add(msg4);
                     Array.add(msg4);
                     adapter.add(msg4);
                 }
@@ -110,8 +110,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
     private void initDatabase() {
-
-
         mChild = new ChildEventListener() {
 
             @Override
