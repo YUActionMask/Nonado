@@ -51,15 +51,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginTop="20dp">
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        android:fillViewport="true">
 
-        <LinearLayout
-            android:id="@+id/comment_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"></LinearLayout>
+            <ListView
+                android:id="@+id/comment"
+                android:layout_width="match_parent"
+                android:layout_height="190dp">
+
+            </ListView>
     </ScrollView>
 
     <LinearLayout
