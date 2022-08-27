@@ -1,7 +1,6 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -32,7 +31,6 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private EditText name, id, password;
     final private int point = 0;
-    private  String position;
     private Button mBtnRegister;
     int num = 1;
 
@@ -41,12 +39,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Create Account");
-
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -83,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-                            wirteUser(Integer.toString(num), strId, strPwd, strName, point,position);
+                            wirteUser(Integer.toString(num), strId, strPwd, strName, point);
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -101,8 +93,8 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-    private void wirteUser(String userid, String id , String password, String name, int point, String position){
-        UserAccount user = new UserAccount(id, password, name, point, position);
+    private void wirteUser(String userid, String id , String password, String name, int point){
+        UserAccount user = new UserAccount(id, password, name, point);
 
         mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -121,8 +113,5 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
-    public boolean onSupportNavigateUp(){
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
+
 }
