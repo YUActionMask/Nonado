@@ -32,6 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private EditText name, id, password;
     final private int point = 0;
+    private  String position;
     private Button mBtnRegister;
     int num = 1;
 
@@ -81,7 +82,8 @@ public class SignupActivity extends AppCompatActivity {
                             result.put("point", point);
 
 
-                            wirteUser(Integer.toString(num), strId, strPwd, strName, point);
+
+                            wirteUser(Integer.toString(num), strId, strPwd, strName, point,position);
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -99,8 +101,8 @@ public class SignupActivity extends AppCompatActivity {
             }
         });
     }
-    private void wirteUser(String userid, String id , String password, String name, int point){
-        UserAccount user = new UserAccount(id, password, name, point);
+    private void wirteUser(String userid, String id , String password, String name, int point, String position){
+        UserAccount user = new UserAccount(id, password, name, point, position);
 
         mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

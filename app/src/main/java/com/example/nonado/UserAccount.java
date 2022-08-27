@@ -8,6 +8,7 @@ public class UserAccount {
     private String password; //비밀번호
     private String name; //이름
     private int point;
+    private String position; //위치정보
 
     public UserAccount() { }
 
@@ -39,11 +40,17 @@ public class UserAccount {
 
     public void setPoint(int point){this.point = point;}
 
-    public UserAccount(String id, String password, String name, int point){
+    public String getPosition(){return position;}
+
+    public void setPosition(){this.position = position;}
+
+
+    public UserAccount(String id, String password, String name, int point, String position){
         this.id = id;
         this.password = password;
         this.name=name;
         this.point = point;
+        this.position = position;
     }
 
 }
