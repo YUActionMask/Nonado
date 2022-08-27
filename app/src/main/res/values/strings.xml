@@ -20,4 +20,6 @@
     <string name="signup_id">ID</string>
     <string name="signup_password">password</string>
     <string name="signup_name">Name</string>
+    <string name="find_id">Find ID</string>
+    <string name="todo">TODO</string>
 </resources>
