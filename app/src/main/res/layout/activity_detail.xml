@@ -39,23 +39,16 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/list_border"
-        android:layout_margin="10dp">
+        android:layout_height="250dp"
+        android:layout_marginTop="20dp"
+        android:fillViewport="true">
 
-
-            <TextView
-                android:id="@+id/textView5"
+            <ListView
+                android:id="@+id/comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:overScrollMode="ifContentScrolls"
-                android:text=""
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.333"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image"/>
+                android:layout_height="190dp">
+
+            </ListView>
     </ScrollView>
 
     <LinearLayout

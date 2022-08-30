@@ -39,6 +39,9 @@ public class UserAccount {
 
     public void setPoint(int point){this.point = point;}
 
+
+
+
     public UserAccount(String id, String password, String name, int point){
         this.id = id;
         this.password = password;

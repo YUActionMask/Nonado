@@ -1,7 +1,6 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -41,12 +40,6 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Create Account");
-
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -81,7 +74,7 @@ public class SignupActivity extends AppCompatActivity {
                             result.put("point", 33);
 
 
-                            wirteUser("ysarag0503@gmail.com", "ysarah0503@gmail.com", "abcd123", "milkey", 33);
+
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -119,8 +112,5 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
-    public boolean onSupportNavigateUp(){
-        onBackPressed();
-        return super.onSupportNavigateUp();
-    }
+
 }
