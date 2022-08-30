@@ -89,7 +89,8 @@ public class MyinfoActivity extends AppCompatActivity {
         pointTv = (TextView) findViewById(R.id.pointTv);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference("User").child("2");
+        String user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
        // mDatabase.child("2");
 
         Log.d("milky", "Ed");

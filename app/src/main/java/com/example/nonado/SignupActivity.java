@@ -68,13 +68,14 @@ public class SignupActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             HashMap result = new HashMap<>();
-                            result.put("name", "milky");
-                            result.put("id", "ysarah0503@gmail.com");
-                            result.put("password", "abcd1234");
-                            result.put("point", 33);
+                            result.put("name", strName);
+                            result.put("id", strId);
+                            result.put("password", strPwd);
+                            result.put("point", point);
 
 
 
+                            wirteUser(strId.split("@")[0], strId, strPwd, strName, point);
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
