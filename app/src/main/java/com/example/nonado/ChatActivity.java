@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +25,9 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Chat> chatList;
-    private String sender = "익명2";
+    private FirebaseUser user;
+
+    private String sender;
     private String receiver = "익명1";
 
     private EditText chatEt;
@@ -38,6 +42,10 @@ public class ChatActivity extends AppCompatActivity {
 
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        sender = user.getEmail();
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,6 +26,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +45,23 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 //    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
 //    private static final String TAG = "[MainA]";
 
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+    private UserAccount userAccount;
+    private String userName;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_neighborhood_certification);
 
         certificationBtn = findViewById(R.id.certificationBtn);
+
+        //데이터 베이스에서 사용자 받아오기
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
         certificationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,8 +256,14 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     }
 
     private void onFinishReverseGeoCoding(String result){
-        Toast.makeText(NeighborhoodCertificationActivity.this, result, Toast.LENGTH_SHORT).show();
-        Log.d("milky", result);
+        String [] neighborhood = result.split(" ");
+        String location =  neighborhood[neighborhood.length -2];
+        
+        Toast.makeText(NeighborhoodCertificationActivity.this, location, Toast.LENGTH_SHORT).show();
+
+        Map<String, Object> update = new HashMap<>();
+        update.put("location", location);
+        mDatabase.updateChildren(update);
     }
 
 
