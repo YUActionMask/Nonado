@@ -14,26 +14,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
 
 
-    private DatabaseReference mDatabase; //실시간 데이터베이스
     private FirebaseAuth firebaseAuth;
     private EditText id;
     private EditText password;
     private Button buttonLogIn;
     private Button buttonSignUp;
+    private Button buttonFindId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonSignUp = findViewById(R.id.btn_signup);
         buttonLogIn = findViewById(R.id.btn_login);
+        buttonFindId = findViewById(R.id.btn_sendEmail);
 
         id = findViewById(R.id.id);
         password = findViewById(R.id.password);
@@ -74,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 });
@@ -82,6 +75,13 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+//        buttonFindId.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
 }

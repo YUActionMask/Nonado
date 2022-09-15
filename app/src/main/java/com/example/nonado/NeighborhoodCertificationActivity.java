@@ -1,5 +1,7 @@
 package com.example.nonado;
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapReverseGeoCoder;
+import net.daum.mf.map.api.MapPoint.GeoCoordinate;
 import net.daum.mf.map.api.MapView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,32 +20,58 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 
-import java.util.List;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-public class NeighborhoodCertificationActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class NeighborhoodCertificationActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
     private ViewGroup mapViewContainer;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private MapView kakaoMapView;
+    private Button certificationBtn;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION };
-    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
+//    private static final String LOG_TAG = "NeighborhoodCertificationActivity";
+//    private static final String TAG = "[MainA]";
 
-    private static final String TAG = "[MainA]";
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+    private UserAccount userAccount;
+    private String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_neighborhood_certification);
 
+        certificationBtn = findViewById(R.id.certificationBtn);
 
-//        LocationManager locationManager = getApplicationContext().getSystemService(LocationManager.GPS_PROVIDER);
+        //데이터 베이스에서 사용자 받아오기
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
+        certificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
+                mapReverseGeoCoder.startFindingAddress();
+            }
+        });
 
-
-        MapView kakaoMapView = new MapView(this);
+        kakaoMapView = new MapView(this);
 
         mapViewContainer = (ViewGroup) findViewById(R.id.kakaoMapView);
         mapViewContainer.addView(kakaoMapView);
@@ -58,11 +87,12 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         }
        kakaoMapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
 
-
-
+        Log.d("milky", "Start");
 
 
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -72,7 +102,8 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-        MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+        //MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
+
         //Log.i(LOG_TAG)
     }
 
@@ -93,12 +124,12 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
-
     }
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
+//        MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
+//        mapReverseGeoCoder.startFindingAddress();
     }
 
     @Override
@@ -118,7 +149,6 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-
     }
 
     @Override
@@ -126,14 +156,16 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
 
     }
 
-    @Override 
+    @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
 
     }
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
+//
+//        MapReverseGeoCoder mapReverseGeoCoder = new MapReverseGeoCoder("7e42e6137510138c724d8005c5413cf7", kakaoMapView.getMapCenterPoint(), NeighborhoodCertificationActivity.this, NeighborhoodCertificationActivity.this);
+//        mapReverseGeoCoder.startFindingAddress();
     }
 
     @Override
@@ -151,7 +183,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
             }
 
             if(check_result){
-                //Log.d("@@@", "Start");
+                Log.d("fdf", "Start");
             }
             else{
                 if(ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])){
@@ -168,7 +200,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(NeighborhoodCertificationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
 
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED){
-            Log.d(TAG, "checkRuntTimePermission: ");
+            //Log.d(TAG, "checkRuntTimePermission: ");
         }else{
             if(ActivityCompat.shouldShowRequestPermissionRationale(NeighborhoodCertificationActivity.this, REQUIRED_PERMISSIONS[0])){
                 Toast.makeText(NeighborhoodCertificationActivity.this, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG).show();
@@ -186,8 +218,9 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         builder.setPositiveButton("설정", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent callGPSettingIntent = new Intent(android.provider.Settings.ACTION_LOCALE_SETTINGS);
-                startActivityForResult(callGPSettingIntent, GPS_ENABLE_REQUEST_CODE);
+                Intent callGPSSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(callGPSSettingIntent,  GPS_ENABLE_REQUEST_CODE);
+
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
@@ -207,7 +240,7 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
             case GPS_ENABLE_REQUEST_CODE:
                 if(checkLocationServiceStatus()){
                     if(checkLocationServiceStatus()){
-                        Log.d("@@@", "gps활성화 됨");
+                        Log.d("milky", "gps활성화 됨");
                         checkRuntTimePermission();
                         return;
                     }
@@ -223,7 +256,25 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
     }
 
     private void onFinishReverseGeoCoding(String result){
+        String [] neighborhood = result.split(" ");
+        String location =  neighborhood[neighborhood.length -2];
+        
+        Toast.makeText(NeighborhoodCertificationActivity.this, location, Toast.LENGTH_SHORT).show();
 
+        Map<String, Object> update = new HashMap<>();
+        update.put("location", location);
+        mDatabase.updateChildren(update);
     }
 
+
+    @Override
+    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+        mapReverseGeoCoder.toString();
+        onFinishReverseGeoCoding(s);
+    }
+
+    @Override
+    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+        onFinishReverseGeoCoding("FAIL");
+    }
 }

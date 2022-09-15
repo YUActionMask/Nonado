@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +25,10 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<Chat> chatList;
-    private String nickname = "익명33";
+    private FirebaseUser user;
+
+    private String sender;
+    private String receiver = "익명1";
 
     private EditText chatEt;
     private Button sendBtn;
@@ -38,6 +43,10 @@ public class ChatActivity extends AppCompatActivity {
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        sender = user.getEmail();
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,8 +54,9 @@ public class ChatActivity extends AppCompatActivity {
 
                 if(msg != null){
                     Chat chat = new Chat();
-                    chat.setName(nickname);
+                    chat.setName(sender);
                     chat.setMsg(msg);
+                    chat.setReceiver(receiver);
 
                     myRef.push().setValue(chat);
 
@@ -60,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(chatList, nickname);
+        adapter = new ChatAdapter(chatList, sender);
         recyclerView.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
