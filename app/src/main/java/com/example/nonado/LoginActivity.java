@@ -53,6 +53,13 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        buttonFindId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
+                startActivity(intent);
+            }
+        });
         buttonLogIn.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
