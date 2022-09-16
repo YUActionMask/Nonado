@@ -24,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
 public class LoginActivity extends AppCompatActivity {
 
 
@@ -34,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button buttonLogIn;
     private Button buttonSignUp;
     private Button buttonFindId;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference("User");
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
@@ -59,11 +60,19 @@ public class LoginActivity extends AppCompatActivity {
         String user_id = user.getEmail().split("@")[0];
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
+
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //회원가입 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonFindId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
                 startActivity(intent);
             }
         });
@@ -79,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()){
+
 
                             Log.d("milky",  "주소찾기");
                             ValueEventListener postListener = new ValueEventListener() {
@@ -126,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(intent);
                                 finish();
                             }
+
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -138,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
         buttonFindId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
 }
