@@ -9,7 +9,7 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Plusfirebase {
-    public String title , comment;
+    public String title , comment, name;
 
     public Plusfirebase(){
         // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)
@@ -21,8 +21,15 @@ public class Plusfirebase {
     public String getcomment(){
         return comment;
     }
-    public Plusfirebase(String title, String comment) {
+    public String getname(){
+        return name;
+    }
+    public Plusfirebase(String title, String comment, String name) {
         this.title = title;
+        this.comment = comment;
+        this.name = name;
+    }
+    public Plusfirebase(String comment) {
         this.comment = comment;
     }
 

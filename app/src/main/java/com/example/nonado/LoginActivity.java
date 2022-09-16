@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -25,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button buttonLogIn;
     private Button buttonSignUp;
     private Button buttonFindId;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = database.getReference("User");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +45,18 @@ public class LoginActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         password = findViewById(R.id.password);
 
-
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //회원가입 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+        buttonFindId.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,6 +72,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            String msg[] = strId.split("@");
+                            intent.putExtra("name", msg[0]);
                             startActivity(intent);
                             finish();
                         }
@@ -75,6 +88,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
 //        buttonFindId.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
