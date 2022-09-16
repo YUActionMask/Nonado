@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 public class LoginActivity extends AppCompatActivity {
 
 
@@ -33,8 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     private Button buttonLogIn;
     private Button buttonSignUp;
     private Button buttonFindId;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = database.getReference("User");
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
@@ -56,9 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         password = findViewById(R.id.password);
 
         //데이터 베이스에서 사용자 받아오기
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
-        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
 
         buttonSignUp.setOnClickListener(new View.OnClickListener() {
@@ -66,13 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //회원가입 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-            }
-        });
-        buttonFindId.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
                 startActivity(intent);
             }
         });
@@ -88,7 +77,10 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if(task.isSuccessful()){
-
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            //String user_id = user.getEmail().split(".")[0];
+                            String user_id = strId.split("@")[0];
+                            mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
                             Log.d("milky",  "주소찾기");
                             ValueEventListener postListener = new ValueEventListener() {
@@ -96,6 +88,38 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                                     location = dataSnapshot.child("location").getValue().toString();
+                                    Log.d("milky", location);
+
+                                    if(location.equals("null")){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                        builder.setTitle("동네인증이 필요합니다. ").setMessage("확인을 누르면 동네인증이 진행됩니다. ");
+
+                                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                Intent intent = new Intent(LoginActivity.this, NeighborhoodCertificationActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        });
+
+                                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        });
+                                        AlertDialog alertDialog = builder.create();
+                                        alertDialog.show();
+                                    }
+                                    else{
+                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                                        intent.putExtra("name", user_id);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+
                                     //}
                                 }
 
@@ -107,35 +131,7 @@ public class LoginActivity extends AppCompatActivity {
                             };
                             mDatabase.addValueEventListener(postListener);
 
-                            Log.d("milky", location);
 
-                            if(location.equals("null")){
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setTitle("동네인증이 필요합니다. ").setMessage("확인을 누르면 동네인증이 진행됩니다. ");
-
-                                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent intent = new Intent(LoginActivity.this, NeighborhoodCertificationActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-
-                                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    }
-                                });
-                                AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
-                            }
-                            else{
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
 
                         }
                         else{
@@ -149,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
         buttonFindId.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +152,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
 }

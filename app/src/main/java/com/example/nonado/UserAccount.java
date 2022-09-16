@@ -9,7 +9,6 @@ public class UserAccount {
     private String name; //이름
     private String location;
     private int point;
-    private String location; // 위치 정보
 
     public UserAccount() { }
 
@@ -48,10 +47,6 @@ public class UserAccount {
     public int getPoint(){return point;}
 
     public void setPoint(int point){this.point = point;}
-
-    public String getLocation(){return location;}
-
-    public void setLocation(String location){this.location = location;}
 
 
     public UserAccount(String id, String password, String name, int point, String location){
