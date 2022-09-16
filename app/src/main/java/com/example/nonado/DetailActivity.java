@@ -45,6 +45,7 @@ public class DetailActivity extends AppCompatActivity {
     StorageReference patRe;
     ListView comment2;
     ListView listView;
+    
     Button reg_button;
     private ArrayAdapter<String> adapter2;
     List<Object> Array = new ArrayList<Object>();
@@ -60,6 +61,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
+
         comment = (TextView) findViewById(R.id.textView5);
         comment2 = (ListView) findViewById(R.id.comment);
         adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
@@ -85,6 +87,7 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
+
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +99,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
+
                     adapter2.add(msg2);
                 }
                 adapter2.notifyDataSetChanged();
@@ -192,6 +196,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
     }
+
 
     public void plus(String title, String comment){
         Plusfirebase Pf = new Plusfirebase(comment);
