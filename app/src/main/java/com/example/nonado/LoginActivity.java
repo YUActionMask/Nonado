@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
         buttonSignUp = findViewById(R.id.btn_signup);
         buttonLogIn = findViewById(R.id.btn_login);
-        buttonFindId = findViewById(R.id.btn_findid);
+        buttonFindId = findViewById(R.id.btn_sendEmail);
 
         id = findViewById(R.id.id);
         password = findViewById(R.id.password);
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
                 });
@@ -87,6 +88,14 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+//        buttonFindId.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, FindActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
 }

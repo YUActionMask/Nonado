@@ -15,34 +15,44 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class FindActivity extends AppCompatActivity {
 
-    private Button buttonFindId;
-    private EditText editTextfindid;
+    private Button buttonSnedEamil;
+    private EditText editTextFindEmail;
     private FirebaseAuth firebaseAuth;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
 
-        buttonFindId = findViewById(R.id.btn_findid);
-        editTextfindid = findViewById(R.id.editTextFindEmail);
+        buttonSnedEamil = findViewById(R.id.btn_sendEmail);
+        editTextFindEmail = findViewById(R.id.editTextFindEmail);
         firebaseAuth = FirebaseAuth.getInstance();
-    }
-    public void onClick(View view){
-        if(view == buttonFindId){
-            String emailAddress = editTextfindid.getText().toString().trim();
-            firebaseAuth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(FindActivity.this, new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful()){
-                        Toast.makeText(FindActivity.this, "해당 Email로 메일을 전송하였습니다.", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toast.makeText(FindActivity.this, "해당 Email을 찾을 수 없습니다..", Toast.LENGTH_SHORT).show();
-                        return;
+
+        buttonSnedEamil.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                if(view == buttonSnedEamil){
+                    String emailAddress = editTextFindEmail.getText().toString().trim();
+                    if(emailAddress.length()>0) {
+                        firebaseAuth.sendPasswordResetEmail(emailAddress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    startToast("해당 Email로 mail을 전송했습다.");
+                                }
+                                else {
+                                    startToast("Email을 입력해주세요.");
+                                    return;
+                                }
+                            }
+                        });
                     }
                 }
-            });
-        }
+            }
+        });
     }
+
+
+    private void startToast(String msg){Toast.makeText(this,msg,Toast.LENGTH_SHORT).show();}
 }

@@ -1,5 +1,6 @@
 package com.example.nonado;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +28,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -36,6 +47,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button postingBtn;
     private Button cha;
     private Button certifyBtn;
+    private TextView nameTv;
+    private TextView pointTv;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -55,6 +68,11 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
 
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
+    private UserAccount userAccount;
+    private String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +85,41 @@ public class MyinfoActivity extends AppCompatActivity {
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
         certifyBtn = (Button) findViewById(R.id.certifyBtn);
+        nameTv = (TextView) findViewById(R.id.nameTv);
+        pointTv = (TextView) findViewById(R.id.pointTv);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+       // mDatabase.child("2");
+
+        Log.d("milky", "Ed");
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
+                    userName = dataSnapshot.child("name").getValue().toString();
+                    nameTv.setText(userName);
+                    String userPoint = dataSnapshot.child("point").getValue().toString();
+                    pointTv.setText(userPoint);
+
+                    Log.d("milky", userName);
+
+                //}
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("milky", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
+
+
+        nameTv.setText(userName);
+
 
         cha.setOnClickListener(new View.OnClickListener() {
             @Override

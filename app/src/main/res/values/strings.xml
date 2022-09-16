@@ -20,4 +20,10 @@
     <string name="signup_id">ID</string>
     <string name="signup_password">password</string>
     <string name="signup_name">Name</string>
+    <string name="find_id">Find ID</string>
+    <string name="todo">TODO</string>
+    <string name="text_login">로그인</string>
+    <string name="text_findpw">비밀번호 재설정</string>
+    <string name="email">Email</string>
+    <string name="send_e_mail">Send E-mail</string>
 </resources>
