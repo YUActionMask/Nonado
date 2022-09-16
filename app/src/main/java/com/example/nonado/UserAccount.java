@@ -7,6 +7,7 @@ public class UserAccount {
     private String id; //이메일? 아이디
     private String password; //비밀번호
     private String name; //이름
+    private String location;
     private int point;
     private String location; // 위치 정보
 
@@ -14,6 +15,14 @@ public class UserAccount {
 
     public String getId() {
         return id;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
     }
 
     public void setId(String id) {
@@ -51,6 +60,14 @@ public class UserAccount {
         this.name=name;
         this.point = point;
         this.location = location;
+    }
+
+    public UserAccount(String id, String password, String name, String location, int point){
+        this.id = id;
+        this.password = password;
+        this.location = location;
+        this.name=name;
+        this.point = point;
     }
 
 }

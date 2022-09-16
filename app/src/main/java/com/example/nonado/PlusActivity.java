@@ -50,6 +50,7 @@ public class PlusActivity extends AppCompatActivity {
         EditText5 = findViewById(R.id.EditText5);
         btn2 = findViewById(R.id.btn2);
         imageView = findViewById(R.id.image);
+        String name = getIntent().getStringExtra("name");
         storage = FirebaseStorage.getInstance();
         Button btn_getImage = findViewById(R.id.btn);
         btn_getImage.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +67,7 @@ public class PlusActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plus(EditText4.getText().toString(), EditText5.getText().toString());
+                plus(EditText4.getText().toString(), EditText5.getText().toString(), name);
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
@@ -119,8 +120,8 @@ public class PlusActivity extends AppCompatActivity {
         }
     }
 //
-    public void plus(String title, String comment){
-        Plusfirebase Pf = new Plusfirebase(title,comment);
+    public void plus(String title, String comment, String id){
+        Plusfirebase Pf = new Plusfirebase(title,comment,id);
         databaseReference.child("Post").child(title).setValue(Pf);
     }
 }

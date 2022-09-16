@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     TextView title, comment;
-    String str;
+    String str, name;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
     private static final String TAG = "MultiImageActivity";
@@ -44,9 +45,12 @@ public class DetailActivity extends AppCompatActivity {
     StorageReference patRe;
     ListView comment2;
     ListView listView;
+    
+    Button reg_button;
     private ArrayAdapter<String> adapter2;
     List<Object> Array = new ArrayList<Object>();
     Button btn;
+    EditText comment_et;
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
@@ -57,13 +61,17 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
-        //comment = (TextView) findViewById(R.id.textView5);
+
+        comment = (TextView) findViewById(R.id.textView5);
         comment2 = (ListView) findViewById(R.id.comment);
         adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         comment2.setAdapter(adapter2);
         imageView = findViewById(R.id.image);
+        reg_button = findViewById(R.id.reg_button);
+        comment_et = findViewById(R.id.comment_et);
         imageView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
         str = getIntent().getStringExtra("title");
+        name = getIntent().getStringExtra("name");
         title.setText(str);
         storage=FirebaseStorage.getInstance();
         stoRe=storage.getReference();
@@ -79,13 +87,19 @@ public class DetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
-        databaseReference.addValueEventListener(new ValueEventListener() {
+
+        reg_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                plus(str, name +" : " + comment_et.getText().toString());
+            }
+        });
+        databaseReference.child(str).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-
                     String msg2 = messageData.getValue().toString();
-                    String msg3[] = msg2.split(",");
+
                     adapter2.add(msg2);
                 }
                 adapter2.notifyDataSetChanged();
@@ -181,6 +195,12 @@ public class DetailActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
+    }
+
+
+    public void plus(String title, String comment){
+        Plusfirebase Pf = new Plusfirebase(comment);
+        databaseReference.child(title).setValue(Pf);
     }
 }
 
