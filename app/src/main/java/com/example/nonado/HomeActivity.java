@@ -1,17 +1,13 @@
 package com.example.nonado;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,16 +30,18 @@ public class HomeActivity extends AppCompatActivity {
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
     List<Object> Array = new ArrayList<Object>();
+    String str, location;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
+    private DatabaseReference databaseReference2 = database.getReference("User");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        str = getIntent().getStringExtra("name");
         plus = (Button) findViewById(R.id.plus);
         notice = (Button) findViewById(R.id.notice);
         info = (Button) findViewById(R.id.info);
@@ -51,53 +49,63 @@ public class HomeActivity extends AppCompatActivity {
         initDatabase();
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
-       notice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
-                startActivity(intent);
-            }
-        });
-
-       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
-                intent.putExtra("title", title.get(i));
-                intent.putExtra("comment", comment.get(i));
-                startActivity(intent);
-            }
-        });
-
-       plus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
-                startActivity(intent);
-            }
-        });
-
-       info.setOnClickListener(new View.OnClickListener() {
+        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
                 startActivity(intent);
             }
         });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                intent.putExtra("title", title.get(i));
+                intent.putExtra("comment", comment.get(i));
+                intent.putExtra("name",str);
+                startActivity(intent);
+            }
+        });
 
-       databaseReference.addValueEventListener(new ValueEventListener() {
+        plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
+                intent.putExtra("name",str);
+                startActivity(intent);
+            }
+        });
+
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                startActivity(intent);
+            }
+        });
+        databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserAccount user = snapshot.getValue(UserAccount.class);
+                location = user.getLocation(); // 위치 받아옴
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-
                     String msg2 = messageData.getValue().toString();
-                    msg2 = msg2.substring(9);
                     String msg3[] = msg2.split(",");
-                    comment.add(msg3[0]);
-                    String msg4 = msg3[1].substring(7, msg3[1].length()-1);
-                    title.add(msg3[1].substring(7, msg3[1].length()-1));
-                    Array.add(msg4);
-                    adapter.add(msg4);
+                    comment.add(msg3[1].substring(9));
+                    title.add(msg3[2].substring(7));
+                    Array.add(msg3[2].substring(7));
+                    adapter.add(msg3[2].substring(7));
                 }
                 adapter.notifyDataSetChanged();
                 listView.setSelection(adapter.getCount() - 1);
@@ -110,8 +118,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
     private void initDatabase() {
-
-
         mChild = new ChildEventListener() {
 
             @Override

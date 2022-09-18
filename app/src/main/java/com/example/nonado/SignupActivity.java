@@ -75,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-                            wirteUser(strName, strId, strPwd, strName, point,location);
+
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -83,7 +83,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.!!", Toast.LENGTH_SHORT).show();
 
                             return;
                         }
