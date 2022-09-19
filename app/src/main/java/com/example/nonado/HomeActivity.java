@@ -12,8 +12,6 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,9 +35,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
-
     private DatabaseReference databaseReference2 = database.getReference("User");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +47,16 @@ public class HomeActivity extends AppCompatActivity {
         info = (Button) findViewById(R.id.info);
         listView = (ListView) findViewById(R.id.listView);
         initDatabase();
-
-        String name = user.getDisplayName();
-
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
-       notice.setOnClickListener(new View.OnClickListener() {
+        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
                 startActivity(intent);
             }
         });
-       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
@@ -74,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-       plus.setOnClickListener(new View.OnClickListener() {
+        plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
@@ -83,33 +76,32 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-       info.setOnClickListener(new View.OnClickListener() {
+        info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
                 startActivity(intent);
             }
         });
-       databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot snapshot) {
-                   UserAccount user = snapshot.getValue(UserAccount.class);
-                   location = user.getLocation(); // 위치 받아옴
-           }
+        databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserAccount user = snapshot.getValue(UserAccount.class);
+                location = user.getLocation(); // 위치 받아옴
+            }
 
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-           }
-       });
+            }
+        });
 
-       databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
-
                     comment.add(msg3[1].substring(9));
                     title.add(msg3[2].substring(7));
                     Array.add(msg3[2].substring(7));
