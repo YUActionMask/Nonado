@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -100,6 +101,7 @@ public class DetailActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     msg2 = msg2.substring(9).replace("}","");
+                    Log.d("MyTag",msg2);
                     adapter2.add(msg2);
                 }
                 adapter2.notifyDataSetChanged();
@@ -199,7 +201,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public void plus(String title, String comment){
         Plusfirebase Pf = new Plusfirebase(comment);
-        databaseReference.child(title).child(comment).setValue(Pf);
+        databaseReference.child(title).child(title + comment).setValue(Pf);
     }
 }
 

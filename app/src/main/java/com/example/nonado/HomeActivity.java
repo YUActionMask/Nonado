@@ -9,13 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,51 +31,37 @@ public class HomeActivity extends AppCompatActivity {
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
     List<Object> Array = new ArrayList<Object>();
-    EditText edit;
     String str, location;
+    EditText edit;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
     private DatabaseReference databaseReference2 = database.getReference("User");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        str = getIntent().getStringExtra("name");
+        location = getIntent().getStringExtra("location");
         plus = (Button) findViewById(R.id.plus);
         notice = (Button) findViewById(R.id.notice);
         info = (Button) findViewById(R.id.info);
         listView = (ListView) findViewById(R.id.listView);
         edit = (EditText) findViewById(R.id.posi);
-        str = getIntent().getStringExtra("name");
+        edit.setText(location);
         initDatabase();
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
-
-        databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserAccount user = snapshot.getValue(UserAccount.class);
-                location = user.getLocation();
-                edit.setText(location);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-       notice.setOnClickListener(new View.OnClickListener() {
+        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
                 startActivity(intent);
             }
         });
-       listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
@@ -89,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-       plus.setOnClickListener(new View.OnClickListener() {
+        plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
@@ -99,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-       info.setOnClickListener(new View.OnClickListener() {
+        info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
@@ -107,18 +90,19 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-       databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
                     Log.d("MyTag2",edit.getText().toString());
+                    Log.d("MyTag",msg2);
                     if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
-                        comment.add(msg3[1].substring(9));
-                        title.add(msg3[3].substring(7).replace("}", ""));
-                        Array.add(msg3[3].substring(7));
-                        adapter.add(msg3[3].substring(7).replace("}", ""));
+                        comment.add(msg3[1].substring(9).replace("}",""));
+                        title.add(msg3[3].substring(7).replace("}",""));
+                        Array.add(msg3[3].substring(7).replace("}",""));
+                        adapter.add(msg3[3].substring(7).replace("}",""));
                     }
                 }
                 adapter.notifyDataSetChanged();
