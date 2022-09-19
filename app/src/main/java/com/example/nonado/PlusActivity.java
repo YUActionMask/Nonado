@@ -51,6 +51,7 @@ public class PlusActivity extends AppCompatActivity {
         btn2 = findViewById(R.id.btn2);
         imageView = findViewById(R.id.image);
         String name = getIntent().getStringExtra("name");
+        String location = getIntent().getStringExtra("location");
         storage = FirebaseStorage.getInstance();
         Button btn_getImage = findViewById(R.id.btn);
         btn_getImage.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +68,7 @@ public class PlusActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plus(EditText4.getText().toString(), EditText5.getText().toString(), name);
+                plus(EditText4.getText().toString(), EditText5.getText().toString(), name, location);
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
@@ -120,8 +121,8 @@ public class PlusActivity extends AppCompatActivity {
         }
     }
 //
-    public void plus(String title, String comment, String id){
-        Plusfirebase Pf = new Plusfirebase(title,comment,id);
+    public void plus(String title, String comment, String id, String location){
+        Plusfirebase Pf = new Plusfirebase(title,comment,id, location);
         databaseReference.child("Post").child(title).setValue(Pf);
     }
 }

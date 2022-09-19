@@ -98,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
     private void wirteUser(String userid, String id , String password, String name, int point, String location){
         UserAccount user = new UserAccount(id, password, name, point, location);
 
-        mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mDatabase.child("User").child(name).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
 

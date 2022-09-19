@@ -35,7 +35,7 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     TextView title, comment;
-    String str, name;
+    String str, name, location;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
     private static final String TAG = "MultiImageActivity";
@@ -61,7 +61,6 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
-
         comment = (TextView) findViewById(R.id.textView5);
         comment2 = (ListView) findViewById(R.id.comment);
         adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
@@ -91,6 +90,7 @@ public class DetailActivity extends AppCompatActivity {
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                adapter2.clear();
                 plus(str, name +" : " + comment_et.getText().toString());
             }
         });
@@ -99,7 +99,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
-
+                    msg2 = msg2.substring(9).replace("}","");
                     adapter2.add(msg2);
                 }
                 adapter2.notifyDataSetChanged();
@@ -108,7 +108,6 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -200,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public void plus(String title, String comment){
         Plusfirebase Pf = new Plusfirebase(comment);
-        databaseReference.child(title).setValue(Pf);
+        databaseReference.child(title).child(comment).setValue(Pf);
     }
 }
 

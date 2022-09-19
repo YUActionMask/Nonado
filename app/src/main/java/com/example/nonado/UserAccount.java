@@ -9,20 +9,11 @@ public class UserAccount {
     private String name; //이름
     private String location;
     private int point;
-    private String location; // 위치 정보
 
     public UserAccount() { }
 
     public String getId() {
         return id;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLocation() {
-        return location;
     }
 
     public void setId(String id) {

@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +34,12 @@ public class HomeActivity extends AppCompatActivity {
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
     List<Object> Array = new ArrayList<Object>();
+    EditText edit;
     String str, location;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
-
     private DatabaseReference databaseReference2 = database.getReference("User");
 
 
@@ -45,17 +47,30 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        str = getIntent().getStringExtra("name");
         plus = (Button) findViewById(R.id.plus);
         notice = (Button) findViewById(R.id.notice);
         info = (Button) findViewById(R.id.info);
         listView = (ListView) findViewById(R.id.listView);
+        edit = (EditText) findViewById(R.id.posi);
+        str = getIntent().getStringExtra("name");
         initDatabase();
-
-        String name = user.getDisplayName();
-
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
+
+        databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                UserAccount user = snapshot.getValue(UserAccount.class);
+                location = user.getLocation();
+                edit.setText(location);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
        notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
                 intent.putExtra("name",str);
+                intent.putExtra("location",location);
                 startActivity(intent);
             }
         });
@@ -90,18 +106,6 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-       databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(@NonNull DataSnapshot snapshot) {
-                   UserAccount user = snapshot.getValue(UserAccount.class);
-                   location = user.getLocation(); // 위치 받아옴
-           }
-
-           @Override
-           public void onCancelled(@NonNull DatabaseError error) {
-
-           }
-       });
 
        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -109,11 +113,13 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
-
-                    comment.add(msg3[1].substring(9));
-                    title.add(msg3[2].substring(7));
-                    Array.add(msg3[2].substring(7));
-                    adapter.add(msg3[2].substring(7));
+                    Log.d("MyTag2",edit.getText().toString());
+                    if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
+                        comment.add(msg3[1].substring(9));
+                        title.add(msg3[3].substring(7).replace("}", ""));
+                        Array.add(msg3[3].substring(7));
+                        adapter.add(msg3[3].substring(7).replace("}", ""));
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 listView.setSelection(adapter.getCount() - 1);
