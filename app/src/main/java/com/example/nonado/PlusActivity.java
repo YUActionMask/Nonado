@@ -45,7 +45,6 @@ public class PlusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plus);
-
         EditText4 = findViewById(R.id.EditText4);
         EditText5 = findViewById(R.id.EditText5);
         btn2 = findViewById(R.id.btn2);

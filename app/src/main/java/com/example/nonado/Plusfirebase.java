@@ -14,7 +14,6 @@ public class Plusfirebase {
     public Plusfirebase(){
         // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)
     }
-
     public String getTitle(){
         return title;
     }
