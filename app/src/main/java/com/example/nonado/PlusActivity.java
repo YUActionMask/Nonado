@@ -69,6 +69,8 @@ public class PlusActivity extends AppCompatActivity {
             public void onClick(View view) {
                 plus(EditText4.getText().toString(), EditText5.getText().toString(), name, location);
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("location",location);
                 startActivity(intent);
             }
         });
