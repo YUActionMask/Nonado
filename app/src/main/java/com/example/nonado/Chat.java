@@ -4,6 +4,15 @@ public class Chat {
     private String sender;
     private String receiver;
     private String msg;
+    private String postId;
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
     public String getName() {
         return sender;

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -29,10 +30,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private String sender;
     private String receiver = "익명1";
+    private String postId = "";
 
     private EditText chatEt;
     private Button sendBtn;
+    private Button chamBtn;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
 
     @Override
@@ -40,8 +44,11 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_main);
 
+        postId = getIntent().getStringExtra("postId");
+
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
+        chamBtn = findViewById(R.id.chamBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -57,11 +64,20 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setName(sender);
                     chat.setMsg(msg);
                     chat.setReceiver(receiver);
+                    chat.setPostId(postId);
 
                     myRef.push().setValue(chat);
 
                     chatEt.setText("");
                 }
+            }
+        });
+
+        chamBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef = database.getReference("Post-User");
+                myRef.child("Post-User").child(postId).child(sender).setValue("");
             }
         });
         recyclerView = findViewById(R.id.chatRecyclerView);
@@ -70,17 +86,18 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(chatList, sender);
+        adapter = new ChatAdapter(chatList, sender, postId);
         recyclerView.setAdapter(adapter);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
 
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Chat chat = snapshot.getValue(Chat.class);
-                ((ChatAdapter)adapter).addChat(chat);
+                if(chat.getPostId().equals(postId)){
+                    ((ChatAdapter)adapter).addChat(chat);
+                }
             }
 
             @Override
@@ -103,6 +120,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 }

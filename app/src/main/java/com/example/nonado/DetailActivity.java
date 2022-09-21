@@ -1,6 +1,7 @@
 package com.example.nonado;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -88,13 +89,18 @@ public class DetailActivity extends AppCompatActivity {
         initDatabase();
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
 
-        /*btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
+
+
+                intent.putExtra("postId",str);
+
+
                 startActivity(intent);
             }
-        });*/
+        });
 
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
