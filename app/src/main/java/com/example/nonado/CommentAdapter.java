@@ -44,4 +44,5 @@ public class CommentAdapter extends BaseAdapter {
         date.setText(com.getDate());
         return view;
     }
+
 }
