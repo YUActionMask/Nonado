@@ -113,7 +113,6 @@ public class DetailActivity extends AppCompatActivity {
                 CommentAdapter commentAdapter = new CommentAdapter(com);
                 comment2.setAdapter(commentAdapter);
                 commentAdapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -142,8 +141,8 @@ public class DetailActivity extends AppCompatActivity {
                 showLoading(DetailActivity.this, false);
             }
         }, 1900);//
-
     }
+
     void showLoading(Activity activity, boolean isShow) {
         if(isShow) {
             LinearLayout linear = new LinearLayout(activity);
@@ -175,17 +174,14 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -194,7 +190,6 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
         databaseReference.addChildEventListener(mChild);

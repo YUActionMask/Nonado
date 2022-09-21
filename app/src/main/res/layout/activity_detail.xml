@@ -60,7 +60,6 @@
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="190dp">
-
             </ListView>
     </ScrollView>
 
@@ -95,5 +94,6 @@
             android:layout_height="match_parent"
             android:padding="8dp"
             android:text="참여하기" />
+
     </LinearLayout>
 </LinearLayout>
