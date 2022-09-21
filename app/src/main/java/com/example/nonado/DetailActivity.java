@@ -31,7 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -46,9 +48,13 @@ public class DetailActivity extends AppCompatActivity {
     StorageReference patRe;
     ListView comment2;
     ListView listView;
+    long mNow;
+    Date mDate;
+    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
     
     Button reg_button;
     private ArrayAdapter<String> adapter2;
+    private ArrayList<Comment> com = new ArrayList<>();
     List<Object> Array = new ArrayList<Object>();
     Button btn;
     EditText comment_et;
@@ -92,20 +98,22 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 adapter2.clear();
-                plus(str, name +" : " + comment_et.getText().toString());
+                plus(str, name, comment_et.getText().toString(),getTime());
             }
         });
+
         databaseReference.child(str).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    String msg2 = messageData.getValue().toString();
-                    msg2 = msg2.substring(9).replace("}","");
-                    Log.d("MyTag",msg2);
-                    adapter2.add(msg2);
+                    String msg = messageData.getValue().toString();
+                    String msg2[] = msg.split(",");
+                    com.add(new Comment(msg2[1].substring(6),msg2[2].substring(9).replace("}",""),msg2[0].substring(6)));
                 }
-                adapter2.notifyDataSetChanged();
-                comment2.setSelection(adapter2.getCount() - 1);
+                CommentAdapter commentAdapter = new CommentAdapter(com);
+                comment2.setAdapter(commentAdapter);
+                commentAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -198,10 +206,15 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.removeEventListener(mChild);
     }
 
+    private String getTime(){
+        mNow = System.currentTimeMillis();
+        mDate = new Date(mNow);
+        return mFormat.format(mDate);
+    }
 
-    public void plus(String title, String comment){
-        Plusfirebase Pf = new Plusfirebase(comment);
-        databaseReference.child(title).child(title + comment).setValue(Pf);
+    public void plus(String title, String name, String comment, String date){
+        Plusfirebase Pf = new Plusfirebase(name,comment,date);
+        databaseReference.child(title).child(date + comment).setValue(Pf);
     }
 }
 
