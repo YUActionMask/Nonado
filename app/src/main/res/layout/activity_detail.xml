@@ -36,18 +36,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="369dp"
+        android:layout_height="96dp"
+        android:layout_margin="20dp"
+        android:layout_marginTop="20dp"
+        android:overScrollMode="ifContentScrolls"
+        android:text=""
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:layout_marginTop="20dp"
         android:fillViewport="true">
-
             <ListView
                 android:id="@+id/comment"
                 android:layout_width="match_parent"
                 android:layout_height="190dp">
-
             </ListView>
     </ScrollView>
 
@@ -82,5 +94,6 @@
             android:layout_height="match_parent"
             android:padding="8dp"
             android:text="참여하기" />
+
     </LinearLayout>
 </LinearLayout>
