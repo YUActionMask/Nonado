@@ -34,7 +34,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText chatEt;
     private Button sendBtn;
+    private Button chamBtn;
 
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
 
     @Override
@@ -46,6 +48,7 @@ public class ChatActivity extends AppCompatActivity {
 
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
+        chamBtn = findViewById(R.id.chamBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -69,6 +72,14 @@ public class ChatActivity extends AppCompatActivity {
                 }
             }
         });
+
+        chamBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                myRef = database.getReference("Post-User");
+                myRef.child("Post-User").child(postId).child(sender).setValue("");
+            }
+        });
         recyclerView = findViewById(R.id.chatRecyclerView);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -78,7 +89,6 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(chatList, sender, postId);
         recyclerView.setAdapter(adapter);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("message");
 
         myRef.addChildEventListener(new ChildEventListener() {
@@ -110,6 +120,8 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
+
+
 
     }
 }

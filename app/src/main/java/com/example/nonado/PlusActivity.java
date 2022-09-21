@@ -123,5 +123,6 @@ public class PlusActivity extends AppCompatActivity {
     public void plus(String title, String comment, String id, String location){
         Plusfirebase Pf = new Plusfirebase(title,comment,id, location);
         databaseReference.child("Post").child(title).setValue(Pf);
+        databaseReference.child("Post-User").child(title).setValue("");
     }
 }
