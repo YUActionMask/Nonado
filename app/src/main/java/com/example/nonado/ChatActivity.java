@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -29,6 +30,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private String sender;
     private String receiver = "익명1";
+    private String postId = "";
 
     private EditText chatEt;
     private Button sendBtn;
@@ -39,6 +41,8 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_main);
+
+        postId = getIntent().getStringExtra("postId");
 
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
@@ -57,6 +61,7 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setName(sender);
                     chat.setMsg(msg);
                     chat.setReceiver(receiver);
+                    chat.setPostId(postId);
 
                     myRef.push().setValue(chat);
 
@@ -70,7 +75,7 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(chatList, sender);
+        adapter = new ChatAdapter(chatList, sender, postId);
         recyclerView.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -80,7 +85,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Chat chat = snapshot.getValue(Chat.class);
-                ((ChatAdapter)adapter).addChat(chat);
+                if(chat.getPostId().equals(postId)){
+                    ((ChatAdapter)adapter).addChat(chat);
+                }
             }
 
             @Override

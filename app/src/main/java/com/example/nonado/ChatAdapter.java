@@ -19,10 +19,12 @@ import java.util.List;
 class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     private List<Chat> chatList;
     private String name;
+    private String postId;
 
-    public ChatAdapter(List<Chat> chatData, String name){
+    public ChatAdapter(List<Chat> chatData, String name, String postId){
         chatList = chatData;
         this.name = name;
+        this.postId = postId;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
@@ -37,7 +39,7 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
 
              nameTv = itemView.findViewById(R.id.nameTv);
              msgTv = itemView.findViewById(R.id.msgTv);
-            msgLinear = itemView.findViewById(R.id.msgLinear);
+             msgLinear = itemView.findViewById(R.id.msgLinear);
              rootView = itemView;
 
              itemView.setEnabled(true);
@@ -60,20 +62,22 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull ChatAdapter.MyViewHolder holder, int position) {
         Chat chat = chatList.get(position);
 
-        holder.nameTv.setText(chat.getName());
-        holder.msgTv.setText(chat.getMsg());
 
-        if(chat.getName().equals(this.name)){
-            holder.nameTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
-            holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+            holder.nameTv.setText(chat.getName());
+            holder.msgTv.setText(chat.getMsg());
 
-            holder.msgLinear.setGravity(Gravity.RIGHT);
-        } else {
-            holder.nameTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
-            holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            if (chat.getName().equals(this.name)) {
+                holder.nameTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
 
-            holder.msgLinear.setGravity(Gravity.LEFT);
-        }
+                holder.msgLinear.setGravity(Gravity.RIGHT);
+            } else {
+                holder.nameTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+                holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+
+                holder.msgLinear.setGravity(Gravity.LEFT);
+            }
+
     }
 
     @Override
