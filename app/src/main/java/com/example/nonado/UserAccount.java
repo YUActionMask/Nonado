@@ -16,14 +16,6 @@ public class UserAccount {
         return id;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
     public void setId(String id) {
         this.id = id;
     }

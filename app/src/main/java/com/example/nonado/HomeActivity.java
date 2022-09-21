@@ -2,14 +2,13 @@ package com.example.nonado;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.ChildEventListener;
@@ -31,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     List<Object> Array = new ArrayList<Object>();
     String str, location;
+    EditText edit;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -42,10 +42,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         str = getIntent().getStringExtra("name");
+        location = getIntent().getStringExtra("location");
         plus = (Button) findViewById(R.id.plus);
         notice = (Button) findViewById(R.id.notice);
         info = (Button) findViewById(R.id.info);
         listView = (ListView) findViewById(R.id.listView);
+        edit = (EditText) findViewById(R.id.posi);
+        edit.setText(location);
         initDatabase();
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
@@ -72,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PlusActivity.class);
                 intent.putExtra("name",str);
+                intent.putExtra("location",location);
                 startActivity(intent);
             }
         });
@@ -83,18 +87,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        databaseReference2.child(str).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                UserAccount user = snapshot.getValue(UserAccount.class);
-                location = user.getLocation(); // 위치 받아옴
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -102,15 +95,18 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
-                    comment.add(msg3[1].substring(9));
-                    title.add(msg3[2].substring(7));
-                    Array.add(msg3[2].substring(7));
-                    adapter.add(msg3[2].substring(7));
+
+                    if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
+                        comment.add(msg3[1].substring(9).replace("}",""));
+                        title.add(msg3[3].substring(7).replace("}",""));
+                        Array.add(msg3[3].substring(7).replace("}",""));
+                        adapter.add(msg3[3].substring(7).replace("}",""));
+                    }
+
                 }
                 adapter.notifyDataSetChanged();
                 listView.setSelection(adapter.getCount() - 1);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -122,17 +118,14 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -141,7 +134,6 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
         databaseReference.addChildEventListener(mChild);
