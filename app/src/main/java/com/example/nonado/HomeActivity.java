@@ -88,18 +88,21 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
+
                     if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
                         comment.add(msg3[1].substring(9).replace("}",""));
                         title.add(msg3[3].substring(7).replace("}",""));
                         Array.add(msg3[3].substring(7).replace("}",""));
                         adapter.add(msg3[3].substring(7).replace("}",""));
                     }
+
                 }
                 adapter.notifyDataSetChanged();
                 listView.setSelection(adapter.getCount() - 1);

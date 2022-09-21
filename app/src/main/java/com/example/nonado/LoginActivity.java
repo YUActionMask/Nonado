@@ -115,7 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
                                         intent.putExtra("name", user_id);
+
                                         intent.putExtra("location",location);
+
                                         startActivity(intent);
                                         finish();
                                     }

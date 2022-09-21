@@ -26,4 +26,6 @@
     <string name="text_findpw">비밀번호 재설정</string>
     <string name="email">Email</string>
     <string name="send_e_mail">Send E-mail</string>
+    <string name="id_text">ID :</string>
+    <string name="pw_text">PW :</string>
 </resources>

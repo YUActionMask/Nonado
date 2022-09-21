@@ -29,12 +29,10 @@ public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
-    private EditText name, id, password;
+    public EditText name, id, password;
     private int point = 0;
     private String location = null;
     private Button mBtnRegister;
-    int num = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +75,7 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
-                            wirteUser(Integer.toString(num), strId, strPwd, strName, point,location);
+
                             //Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
                             //Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
@@ -85,15 +83,15 @@ public class SignupActivity extends AppCompatActivity {
 
 
                         } else {
-                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.!!", Toast.LENGTH_SHORT).show();
 
                             return;
                         }
                     }
                 });
-                num++;
             }
         });
+
     }
     private void wirteUser(String userid, String id , String password, String name, int point, String location){
         UserAccount user = new UserAccount(id, password, name, point, location);
@@ -115,5 +113,6 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
+
 
 }

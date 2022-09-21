@@ -40,10 +40,6 @@ public class UserAccount {
 
     public void setPoint(int point){this.point = point;}
 
-    public String getLocation(){return location;}
-
-    public void setLocation(String location){this.location = location;}
-
 
     public UserAccount(String id, String password, String name, int point, String location){
         this.id = id;

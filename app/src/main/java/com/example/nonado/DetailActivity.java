@@ -68,7 +68,9 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
+
         comment = (TextView) findViewById(R.id.textView5);
+
         comment2 = (ListView) findViewById(R.id.comment);
         adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         comment2.setAdapter(adapter2);
