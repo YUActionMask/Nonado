@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                 String strId = id.getText().toString().trim();
                 String strPwd = password.getText().toString().trim();
 
-
                 firebaseAuth.signInWithEmailAndPassword(strId, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
