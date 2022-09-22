@@ -33,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
     private int point = 0;
     private String location = "null";
     private Button mBtnRegister;
-    public int num = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +41,6 @@ public class SignupActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference reference = database.getReference();
 
 
         id = findViewById(R.id.signup_id);
@@ -74,22 +70,10 @@ public class SignupActivity extends AppCompatActivity {
                             result.put("point", point);
                             result.put("location", location);
 
-                            wirteUser(strId.split("@")[0], strId, strPwd, strName, point,location);
 
 
-
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
                             wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location);
-                            Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                            startActivity(intent);
-
-=======
->>>>>>> 6eaf749d3598fa766c74808fd535a9b649ed41a4
->>>>>>> Stashed changes
 
                         } else {
                             Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.!!", Toast.LENGTH_SHORT).show();
@@ -121,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
-            mDatabase.child("User-Post").child("userid_" + userid).setValue(userid);
+            mDatabase.child("User-Post").child(userid);
         }
     }
 

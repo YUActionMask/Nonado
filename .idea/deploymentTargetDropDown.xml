@@ -7,27 +7,11 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-<<<<<<< Updated upstream
-            <value value="$USER_HOME$/.android/avd/Nexus_6_API_30.avd" />
-=======
-<<<<<<< HEAD
             <value value="C:\Users\PC\.android\avd\Pixel_3a_API_30_x86.avd" />
-=======
-            <value value="$USER_HOME$/.android/avd/Nexus_6_API_30.avd" />
->>>>>>> 6eaf749d3598fa766c74808fd535a9b649ed41a4
->>>>>>> Stashed changes
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-<<<<<<< Updated upstream
-    <timeTargetWasSelectedWithDropDown value="2022-09-21T15:46:50.841161Z" />
-=======
-<<<<<<< HEAD
-    <timeTargetWasSelectedWithDropDown value="2022-09-22T14:49:31.462069800Z" />
-=======
-    <timeTargetWasSelectedWithDropDown value="2022-09-21T15:46:50.841161Z" />
->>>>>>> 6eaf749d3598fa766c74808fd535a9b649ed41a4
->>>>>>> Stashed changes
+    <timeTargetWasSelectedWithDropDown value="2022-09-22T15:23:28.463646500Z" />
   </component>
 </project>
