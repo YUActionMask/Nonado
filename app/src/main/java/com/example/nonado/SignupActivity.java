@@ -31,7 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     public EditText name, id, password;
     private int point = 0;
-    private String location = "null";
+    private String location = null;
     private Button mBtnRegister;
 
     @Override
@@ -105,7 +105,8 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
-            mDatabase.child("User-Post").child(userid);
+
+            mDatabase.child("User-Post").child("userid_"+userid).setValue(userid);
         }
     }
 
