@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="80dp"
     android:padding="16dp"
     android:layout_margin="16dp"
     android:background="#eeeeee"
@@ -13,21 +13,32 @@
         android:orientation="horizontal">
 
         <TextView
+
             android:id="@+id/cmt_userid_tv"
-            android:layout_width="match_parent"
+            android:layout_width="226dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="userid"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/cmt_date_tv"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
-            android:text="userid" />
+            android:text="date"/>
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/cmt_content_tv"
         android:layout_width="match_parent"
-        android:textColor="#753800"
         android:layout_height="wrap_content"
-        android:text="content" />
+        android:layout_marginTop="5dp"
+        android:text="content"
+        android:textColor="#753800" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

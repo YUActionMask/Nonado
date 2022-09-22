@@ -16,14 +16,6 @@ public class UserAccount {
         return id;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -48,6 +40,13 @@ public class UserAccount {
 
     public void setPoint(int point){this.point = point;}
 
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
 
     public UserAccount(String id, String password, String name, int point, String location){
         this.id = id;
@@ -55,14 +54,6 @@ public class UserAccount {
         this.name=name;
         this.point = point;
         this.location = location;
-    }
-
-    public UserAccount(String id, String password, String name, String location, int point){
-        this.id = id;
-        this.password = password;
-        this.location = location;
-        this.name=name;
-        this.point = point;
     }
 
 }

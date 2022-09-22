@@ -3,15 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_changeinfo.xml" value="0.24895833333333334" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_find.xml" value="0.33" />
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_home.xml" value="0.33" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_login.xml" value="0.27768860353130015" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_myinfo.xml" value="0.24895833333333334" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_notice.xml" value="0.1490036231884058" />
+        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_login.xml" value="0.32447916666666665" />
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_signup.xml" value="0.33" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.121" />
-        <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.121" />
         <entry key="app/src/main/res/layout/activity_chat_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.23177083333333334" />

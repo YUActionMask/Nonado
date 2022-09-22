@@ -71,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                 String strId = id.getText().toString().trim();
                 String strPwd = password.getText().toString().trim();
 
-
                 firebaseAuth.signInWithEmailAndPassword(strId, strPwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -116,6 +115,9 @@ public class LoginActivity extends AppCompatActivity {
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
                                         intent.putExtra("name", user_id);
+
+                                        intent.putExtra("location",location);
+
                                         startActivity(intent);
                                         finish();
                                     }

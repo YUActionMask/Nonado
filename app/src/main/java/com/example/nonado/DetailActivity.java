@@ -1,9 +1,11 @@
 package com.example.nonado;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,12 +32,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     TextView title, comment;
-    String str, name;
+    String str, name, location;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
     private static final String TAG = "MultiImageActivity";
@@ -45,9 +49,13 @@ public class DetailActivity extends AppCompatActivity {
     StorageReference patRe;
     ListView comment2;
     ListView listView;
+    long mNow;
+    Date mDate;
+    SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
     
     Button reg_button;
     private ArrayAdapter<String> adapter2;
+    private ArrayList<Comment> com = new ArrayList<>();
     List<Object> Array = new ArrayList<Object>();
     Button btn;
     EditText comment_et;
@@ -62,7 +70,8 @@ public class DetailActivity extends AppCompatActivity {
         showLoading(DetailActivity.this, true);
         title = (TextView) findViewById(R.id.textView4);
 
-        comment = (TextView) findViewById(R.id.textView4);
+        comment = (TextView) findViewById(R.id.textView5);
+
         comment2 = (ListView) findViewById(R.id.comment);
         adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         comment2.setAdapter(adapter2);
@@ -80,35 +89,42 @@ public class DetailActivity extends AppCompatActivity {
         initDatabase();
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
 
-        /*btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
+
+
+                intent.putExtra("postId",str);
+
+
                 startActivity(intent);
             }
-        });*/
+        });
 
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plus(str, name +" : " + comment_et.getText().toString());
+                adapter2.clear();
+                plus(str, name, comment_et.getText().toString(),getTime());
             }
         });
+
         databaseReference.child(str).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    String msg2 = messageData.getValue().toString();
-
-                    adapter2.add(msg2);
+                    String msg = messageData.getValue().toString();
+                    String msg2[] = msg.split(",");
+                    com.add(new Comment(msg2[1].substring(6),msg2[2].substring(9).replace("}",""),msg2[0].substring(6)));
                 }
-                adapter2.notifyDataSetChanged();
-                comment2.setSelection(adapter2.getCount() - 1);
+                CommentAdapter commentAdapter = new CommentAdapter(com);
+                comment2.setAdapter(commentAdapter);
+                commentAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -133,8 +149,8 @@ public class DetailActivity extends AppCompatActivity {
                 showLoading(DetailActivity.this, false);
             }
         }, 1900);//
-
     }
+
     void showLoading(Activity activity, boolean isShow) {
         if(isShow) {
             LinearLayout linear = new LinearLayout(activity);
@@ -166,17 +182,14 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
@@ -185,7 +198,6 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         };
         databaseReference.addChildEventListener(mChild);
@@ -197,10 +209,15 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.removeEventListener(mChild);
     }
 
+    private String getTime(){
+        mNow = System.currentTimeMillis();
+        mDate = new Date(mNow);
+        return mFormat.format(mDate);
+    }
 
-    public void plus(String title, String comment){
-        Plusfirebase Pf = new Plusfirebase(comment);
-        databaseReference.child(title).setValue(Pf);
+    public void plus(String title, String name, String comment, String date){
+        Plusfirebase Pf = new Plusfirebase(name,comment,date);
+        databaseReference.child(title).child(date + comment).setValue(Pf);
     }
 }
 
