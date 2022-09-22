@@ -33,6 +33,7 @@ public class SignupActivity extends AppCompatActivity {
     private int point = 0;
     private String location = "null";
     private Button mBtnRegister;
+    public int num = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,18 @@ public class SignupActivity extends AppCompatActivity {
 
 
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+                            wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location);
+                            Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            startActivity(intent);
+
+=======
+>>>>>>> 6eaf749d3598fa766c74808fd535a9b649ed41a4
+>>>>>>> Stashed changes
 
                         } else {
                             Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.!!", Toast.LENGTH_SHORT).show();
@@ -89,26 +102,27 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
-    private void wirteUser(String userid, String id , String password, String name, int point, String location){
-        UserAccount user = new UserAccount(id, password, name, point, location);
+    private void wirteUser(String userid, String id , String password, String name, int point, String location) {
+        if(location==null) {
+            UserAccount user = new UserAccount(id, password, name, point, "null");
 
-        mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
+            mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
 
-                Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignupActivity.this, "회원가입에 성공하였습니다..", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-            }
-        });
-        mDatabase.child("User-Post").child("userid").setValue(userid);
-
+                    Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(SignupActivity.this, "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+            mDatabase.child("User-Post").child("userid_" + userid).setValue(userid);
+        }
     }
 
 
