@@ -2,10 +2,13 @@ package com.example.nonado;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -76,8 +79,26 @@ public class ChatActivity extends AppCompatActivity {
         chamBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myRef = database.getReference("Post-User");
-                myRef.child("Post-User").child(postId).child(sender).setValue("");
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+                builder.setTitle("참여 확인").setMessage("거래에 참여하려면 확인을 누르십시오. ");
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        myRef = database.getReference("Post-User");
+                        myRef.child(postId).child(sender.split("@")[0]).setValue("");
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
             }
         });
         recyclerView = findViewById(R.id.chatRecyclerView);

@@ -251,7 +251,7 @@ public class MyinfoActivity extends AppCompatActivity {
             }
 
             TextView postingTv = (TextView) convertView.findViewById(R.id.postingTv);
-            CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+            Button moneyBtn = (Button) convertView.findViewById(R.id.moneyBtn);
 
             postingTv.setText(posting.getPostName());
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
