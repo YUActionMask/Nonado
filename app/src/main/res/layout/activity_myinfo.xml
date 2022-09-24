@@ -82,7 +82,7 @@
             android:background="@drawable/roundbutton"
             android:textAlignment="center"
             android:textSize="15dp"
-            android:text="함께한 글"/>
+            android:text="함께한 채팅"/>
 
     </LinearLayout>
 
