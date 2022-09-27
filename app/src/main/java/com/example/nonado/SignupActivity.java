@@ -106,7 +106,7 @@ public class SignupActivity extends AppCompatActivity {
                 }
             });
 
-            mDatabase.child("User-Post").child("userid_"+userid).setValue(userid);
+            mDatabase.child("User-Post").child(userid).setValue("");
         }
     }
 
