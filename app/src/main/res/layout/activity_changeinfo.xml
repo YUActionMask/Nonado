@@ -37,13 +37,12 @@
             android:textAlignment="center"
             android:layout_margin="10dp"/>
 
-        <EditText
-            android:id="@+id/id"
+        <TextView
+            android:id="@+id/showid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:layout_weight="5"
-            android:hint="***"
             android:minHeight="48dp"
             android:importantForAutofill="no"
             android:inputType="none" />
@@ -64,7 +63,7 @@
             android:textAlignment="center" />
 
         <EditText
-            android:id="@+id/pw"
+            android:id="@+id/changepw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
