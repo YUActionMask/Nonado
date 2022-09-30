@@ -28,4 +28,8 @@
     <string name="send_e_mail">Send E-mail</string>
     <string name="id_text">ID :</string>
     <string name="pw_text">PW :</string>
+    <string name="fcm_title">Title</string>
+    <string name="fcm_message">Message</string>
+    <string name="fcm_imageView">TODO</string>
+    <string name="default_notification_channel_id">com.domain.appname.urgent</string>
 </resources>

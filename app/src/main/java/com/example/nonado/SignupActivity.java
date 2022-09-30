@@ -32,7 +32,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     public EditText name, id, password;
     private int point = 0;
-    private String location = "null";
+    private String location = null;
     private String number = "";
     private Button mBtnRegister;
 
