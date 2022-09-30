@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -40,6 +41,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MyinfoActivity extends AppCompatActivity {
     private Button msgBtn;
@@ -54,6 +56,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private String TAG = MyinfoActivity.class.getSimpleName();
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myPost = database.getReference("User-Post");
 
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
@@ -72,6 +76,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private UserAccount userAccount;
     private String userName;
+    private List<String> title = new ArrayList<String>();
 
 
     @Override
@@ -87,6 +92,7 @@ public class MyinfoActivity extends AppCompatActivity {
         certifyBtn = (Button) findViewById(R.id.certifyBtn);
         nameTv = (TextView) findViewById(R.id.nameTv);
         pointTv = (TextView) findViewById(R.id.pointTv);
+        listView = (ListView) findViewById(R.id.listview);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
@@ -128,6 +134,8 @@ public class MyinfoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
 
         //메시지 정보 버튼
@@ -180,20 +188,23 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
-
-        listView = (ListView) findViewById(R.id.listview);
         adapter = new ListViewAdapter();
+        myPost.child(user_id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot messageData : snapshot.getChildren()){
+                    String msg2 = messageData.getValue().toString();
+                    Log.d("MyTag2",msg2);
+                    adapter.addItem(new Posting(msg2));
+                    title.add(msg2);
+                }
+                listView.setAdapter(adapter);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-
-        //임시 정보 담기
-        adapter.addItem(new Posting("A"));
-        adapter.addItem(new Posting("B"));
-        adapter.addItem(new Posting("C"));
-        adapter.addItem(new Posting("D"));
-        adapter.addItem(new Posting("E"));
-        adapter.addItem(new Posting("F"));
-
-        listView.setAdapter(adapter);
+            }
+        });
 
 
     }
@@ -253,12 +264,57 @@ public class MyinfoActivity extends AppCompatActivity {
             TextView postingTv = (TextView) convertView.findViewById(R.id.postingTv);
             Button moneyBtn = (Button) convertView.findViewById(R.id.moneyBtn);
 
+            moneyBtn.setTag(position);
+            moneyBtn.setOnClickListener(onClickListener);
             postingTv.setText(posting.getPostName());
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
 
             return convertView;
         }
+
+        Button.OnClickListener onClickListener = new Button.OnClickListener(){
+
+            @Override
+            public void onClick(View v){
+                int position = Integer.parseInt(v.getTag().toString());
+                Log.d("MyTag3", title.get(position));
+                String ti = title.get(position);
+                mDatabase = FirebaseDatabase.getInstance().getReference("Post").child(ti);
+
+                ValueEventListener value = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String point = snapshot.child("point").getValue().toString();
+                        Log.d("MyTag4",point);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
+                        builder.setTitle("송금 ").setMessage("송금 금액 : " + point);
+
+                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+
+                };
+                mDatabase.addValueEventListener(value);
+            }
+        };
     }
 
 }
