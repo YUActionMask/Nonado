@@ -99,14 +99,15 @@ public class LoginActivity extends AppCompatActivity {
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     Intent intent = new Intent(LoginActivity.this, NeighborhoodCertificationActivity.class);
                                                     startActivity(intent);
-                                                    finish();
                                                 }
                                             });
 
                                             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                                    mDatabase.child("User").child(user_id).child("location").setValue("현재위치를 설정해주세요.");
+                                                    startActivity(intent);
                                                 }
                                             });
                                             AlertDialog alertDialog = builder.create();
@@ -118,10 +119,8 @@ public class LoginActivity extends AppCompatActivity {
                                             intent.putExtra("location", location);
 
                                             startActivity(intent);
-                                            finish();
                                         }
 
-                                        //}
                                     }
 
                                     @Override

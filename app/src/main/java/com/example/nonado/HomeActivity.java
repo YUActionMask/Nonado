@@ -39,6 +39,12 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //by재은, fcm 서비스 시작 - 220930
+        //MainActivity가 없어서 HomeActivity에 추가함.
+        Intent fcm = new Intent(getApplicationContext(), FCMPushServer.class);
+        startService(fcm);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         str = getIntent().getStringExtra("name");
