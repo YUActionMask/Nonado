@@ -1,36 +1,26 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,12 +29,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyinfoActivity extends AppCompatActivity {
-    private Button msgBtn;
+    private Button homebtn;
     private Button pointBtn;
     private Button postingBtn;
     private Button cha;
@@ -85,7 +74,7 @@ public class MyinfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo);
 
-        msgBtn = (Button) findViewById(R.id.msgBtn);
+        homebtn = (Button) findViewById(R.id.homeBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
@@ -99,7 +88,6 @@ public class MyinfoActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
        // mDatabase.child("2");
 
-        Log.d("milky", "Ed");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -139,10 +127,10 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
         //메시지 정보 버튼
-        msgBtn.setOnClickListener(new View.OnClickListener() {
+        homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(intent);
             }
         });
