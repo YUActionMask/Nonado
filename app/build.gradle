@@ -34,6 +34,8 @@ apply plugin: 'com.google.gms.google-services'
 
 dependencies {
 
+    implementation 'com.android.volley:volley:1.1.0'
+
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -66,5 +68,13 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:30.5.0')
     implementation'com.google.firebase:firebase-storage'
+
+    //카카오
+    implementation "com.kakao.sdk:v2-user:2.2.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.2.0" // 친구, 메시지(카카오톡)
+
+    implementation "com.kakao.sdk:v2-story:2.2.0" // 카카오스토리
+    implementation "com.kakao.sdk:v2-link:2.2.0" // 메시지(카카오링크)
+    implementation "com.kakao.sdk:v2-navi:2.2.0" // 카카오내비
 
 }

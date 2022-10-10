@@ -17,6 +17,9 @@ allprojects {
         google()  // Google's Maven repository
         mavenCentral()
         jcenter()
+
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
+
     }
 }
 
