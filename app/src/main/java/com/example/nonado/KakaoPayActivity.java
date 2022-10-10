@@ -50,7 +50,8 @@ public class KakaoPayActivity extends AppCompatActivity {
     // - Activity는 기본 생성자가 없으면 Manifest에서 사용하지 못함.
     // - 만약 생성자를 오버라이딩 했다면 기본 생성자를 작성해 둘것!
     public KakaoPayActivity() {
-
+        KakaoPayActivity.productName = "name";
+        KakaoPayActivity.productPrice = "price";
     }
 
     // 상품 이름과 가격을 초기화할 생성자
@@ -83,7 +84,7 @@ public class KakaoPayActivity extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("milky", "error");
+                Log.d("milky", "error : " + error);
             }
         };
 
@@ -95,7 +96,7 @@ public class KakaoPayActivity extends AppCompatActivity {
                 JsonParser parser = new JsonParser();
                 JsonElement element = parser.parse(response);
 
-                String url = element.getAsJsonObject().get("next_redirect_moblie_url").getAsString();
+                String url = element.getAsJsonObject().get("next_redirect_mobile_url").getAsString();
                 String tid = element.getAsJsonObject().get("tid").getAsString();
 
                 Log.d("milky", "url : " +  url);
@@ -109,8 +110,8 @@ public class KakaoPayActivity extends AppCompatActivity {
 
         StringRequest readyRequest = new StringRequest(Request.Method.POST,  "https://kapi.kakao.com/v1/payment/ready", readyResponse, errorListener){
 
+            @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-
                 Log.d("milky", "name :  " + productName);
                 Log.d("milky", "price:  " + productPrice);
 
@@ -128,12 +129,12 @@ public class KakaoPayActivity extends AppCompatActivity {
                 return params;
             }
 
-            public Map<String, String> getHeaders() throws AuthFailureError{
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Authorization", "KakaoAK " + "dfdf6d58a8a2977f93162ae5375c579a");
                 return headers;
             }
-
         };
 
         Response.Listener<String> approvalResponse = new Response.Listener<String>() {
@@ -168,6 +169,7 @@ public class KakaoPayActivity extends AppCompatActivity {
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Log.d("milky", "url" + url);
 
             if(url != null && url.contains("pg_token=")){
                 String pg_Token = url.substring(url.indexOf("pg_token=") + 9);
