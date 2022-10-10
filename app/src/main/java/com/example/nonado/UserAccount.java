@@ -7,8 +7,9 @@ public class UserAccount {
     private String id; //이메일? 아이디
     private String password; //비밀번호
     private String name; //이름
-    private String location;
-    private int point;
+    private String location; //위치
+    private int point; // 포인트
+    private String number; // 전화번호
 
     public UserAccount() { }
 
@@ -48,12 +49,16 @@ public class UserAccount {
         return location;
     }
 
-    public UserAccount(String id, String password, String name, int point, String location){
+    public void setNumber(String number){this.number = number;}
+    public String getNumber(){return number;}
+
+    public UserAccount(String id, String password, String name, int point, String location, String number){
         this.id = id;
         this.password = password;
         this.name=name;
         this.point = point;
         this.location = location;
+        this.number = number;
     }
 
 }

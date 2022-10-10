@@ -97,7 +97,7 @@
             android:id="@+id/listview"
             android:padding="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="350dp" />
 
     </LinearLayout>
 
@@ -108,13 +108,13 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/msgBtn"
+            android:id="@+id/homeBtn"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="3dp"
             android:background="@drawable/ic_bear"
             android:clickable="false"
-            android:text="메시지"
+            android:text="홈"
             />
 
         <Button

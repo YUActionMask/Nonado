@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogIn = findViewById(R.id.btn_login);
         buttonFindId = findViewById(R.id.btn_sendEmail);
 
-        id = findViewById(R.id.id);
+        id = findViewById(R.id.showid);
         password = findViewById(R.id.password);
 
         //데이터 베이스에서 사용자 받아오기
@@ -75,72 +75,74 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if(task.isSuccessful()){
-                            user = FirebaseAuth.getInstance().getCurrentUser();
-                            //String user_id = user.getEmail().split(".")[0];
-                            String user_id = strId.split("@")[0];
-                            mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+                        if (task.isSuccessful()) {
+                            if (firebaseAuth.getCurrentUser().isEmailVerified()) {
+                                user = FirebaseAuth.getInstance().getCurrentUser();
+                                //String user_id = user.getEmail().split(".")[0];
+                                String user_id = strId.split("@")[0];
+                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
-                            Log.d("milky",  "주소찾기");
-                            ValueEventListener postListener = new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    //for (DataSnapshot userData : dataSnapshot.getChildren()) {
-                                    location = dataSnapshot.child("location").getValue().toString();
-                                    Log.d("milky", location);
+                                Log.d("milky", "주소찾기");
+                                ValueEventListener postListener = new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        //for (DataSnapshot userData : dataSnapshot.getChildren()) {
+                                        location = dataSnapshot.child("location").getValue().toString();
+                                        Log.d("milky", location);
 
-                                    if(location.equals("null")){
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                        builder.setTitle("동네인증이 필요합니다. ").setMessage("확인을 누르면 동네인증이 진행됩니다. ");
+                                        if (location.equals("null")) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                            builder.setTitle("동네인증이 필요합니다. ").setMessage("확인을 누르면 동네인증이 진행됩니다. ");
 
-                                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                Intent intent = new Intent(LoginActivity.this, NeighborhoodCertificationActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
+                                            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(LoginActivity.this, NeighborhoodCertificationActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
 
-                                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                                    mDatabase.child("User").child(user_id).child("location").setValue("현재위치를 설정해주세요.");
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                            AlertDialog alertDialog = builder.create();
+                                            alertDialog.show();
+                                        } else {
+                                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
-                                            }
-                                        });
-                                        AlertDialog alertDialog = builder.create();
-                                        alertDialog.show();
+                                            intent.putExtra("name", user_id);
+                                            intent.putExtra("location", location);
+
+                                            startActivity(intent);
+                                        }
+
                                     }
-                                    else{
-                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 
-                                        intent.putExtra("name", user_id);
-
-                                        intent.putExtra("location",location);
-
-                                        startActivity(intent);
-                                        finish();
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        // Getting Post failed, log a message
+                                        Log.w("milky", "loadPost:onCancelled", databaseError.toException());
                                     }
-
-                                    //}
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    // Getting Post failed, log a message
-                                    Log.w("milky", "loadPost:onCancelled", databaseError.toException());
-                                }
-                            };
-                            mDatabase.addValueEventListener(postListener);
+                                };
+                                mDatabase.addValueEventListener(postListener);
 
 
-
+                            } else {
+                                Toast.makeText(LoginActivity.this, "이메일 인증을 완료해주세요.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
                         }
                         else{
                             Toast.makeText(LoginActivity.this, "아이디 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
+                    
                 });
 
 
