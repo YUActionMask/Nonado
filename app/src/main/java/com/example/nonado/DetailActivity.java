@@ -55,7 +55,7 @@ public class DetailActivity extends AppCompatActivity {
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-    
+
     Button reg_button;
     private ArrayAdapter<String> adapter2;
     private ArrayList<Comment> com = new ArrayList<>();
@@ -181,7 +181,7 @@ public class DetailActivity extends AppCompatActivity {
             return Tasks.whenAllComplete(tasks);
         }).addOnCompleteListener(task -> {
             for (Task<Uri> task2 : tasks) {
-                    uriList.add(task2.getResult());
+                uriList.add(task2.getResult());
             }
             adapter = new MultiImageAdapter(uriList, getApplicationContext());
             imageView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
@@ -266,4 +266,3 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.child(title).child(date + comment).setValue(Pf);
     }
 }
-

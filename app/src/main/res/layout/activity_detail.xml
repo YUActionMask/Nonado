@@ -42,12 +42,14 @@
 
     <TextView
         android:id="@+id/textwriter"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="작성자 : "
         android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_margin="20dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/list_border"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image"
