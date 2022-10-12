@@ -2,6 +2,7 @@ package com.example.nonado;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     Button plus, info, notice;
     List<String> title = new ArrayList<String>();
     List<String> comment = new ArrayList<String>();
+    List<String> writer = new ArrayList<String>();
     ListView listView;
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
@@ -71,8 +73,11 @@ public class HomeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
                 intent.putExtra("title", title.get(i));
                 intent.putExtra("comment", comment.get(i));
+                intent.putExtra("writer", writer.get(i));
                 intent.putExtra("name",str);
+                intent.putExtra("location",location);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -101,9 +106,11 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
+                    Log.d("write",msg2);
 
                     if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
                         comment.add(msg3[1].substring(9).replace("}",""));
+                        writer.add(msg3[0].substring(6).replace("}",""));
                         title.add(msg3[3].substring(7).replace("}",""));
                         Array.add(msg3[3].substring(7).replace("}",""));
                         adapter.add(msg3[3].substring(7).replace("}",""));
