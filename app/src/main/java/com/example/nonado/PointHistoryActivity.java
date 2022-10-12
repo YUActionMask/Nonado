@@ -1,17 +1,18 @@
 package com.example.nonado;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,8 +35,27 @@ public class PointHistoryActivity extends AppCompatActivity {
         chargingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PayActivity.class);
-                startActivity(intent);
+                final EditText editText = new EditText(PointHistoryActivity.this);
+
+
+                AlertDialog.Builder dlg = new AlertDialog.Builder(PointHistoryActivity.this);
+                dlg.setTitle("충전할 포인트를 입력하세요");
+                dlg.setView(editText);
+                dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String price = (editText.getText().toString());
+                        Intent intent = new Intent(getApplicationContext(), PayActivity.class);
+                       //intent.putExtra("price", price);
+                        intent.putExtra("price", price);
+                        startActivity(intent);
+                    }
+                });
+                dlg.show();
+
+
+
+
             }
         });
 
