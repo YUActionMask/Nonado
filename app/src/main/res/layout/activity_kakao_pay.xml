@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".KakaoPayActivity">
-    <WebView
+    <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/webView"/>
+        android:id="@+id/payView"
+        android:orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

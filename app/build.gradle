@@ -77,4 +77,13 @@ dependencies {
     implementation "com.kakao.sdk:v2-link:2.2.0" // 메시지(카카오링크)
     implementation "com.kakao.sdk:v2-navi:2.2.0" // 카카오내비
 
+    //아임포트
+    //implementation 'com.github.iamport:iamport-android:vX.Y.Z'
+
+    //코틀린
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
+
+    //부프페이
+    implementation 'io.github.bootpay:android:4.2.3' //최신 버전 추천
+
 }

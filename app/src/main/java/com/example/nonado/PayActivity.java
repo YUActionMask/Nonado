@@ -24,11 +24,6 @@ public class PayActivity extends AppCompatActivity {
                 String name = "name";
                 String price = "price";
 
-                KakaoPayActivity kakaoPayActivity = new KakaoPayActivity(name,price);
-
-                Intent intent = new Intent(getApplicationContext(), kakaoPayActivity.getClass());
-                startActivity(intent);
-
 
             }
         });
