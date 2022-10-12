@@ -3,12 +3,14 @@ package com.example.nonado;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ public class PointHistoryActivity extends AppCompatActivity {
 
     private ListView listView = null;
     private ListViewAdapter adapter = null;
+    private Button chargingBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +29,16 @@ public class PointHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_point_history);
 
         listView = (ListView) findViewById(R.id.listview);
+        chargingBtn = (Button) findViewById(R.id.chargingBtn);
+
+        chargingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), PayActivity.class);
+                startActivity(intent);
+            }
+        });
+
         adapter = new ListViewAdapter();
 
         //임시정보 저장
