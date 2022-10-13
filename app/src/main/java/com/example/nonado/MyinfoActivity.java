@@ -98,8 +98,6 @@ public class MyinfoActivity extends AppCompatActivity {
                     String userPoint = dataSnapshot.child("point").getValue().toString();
                     pointTv.setText(userPoint);
 
-                    Log.d("milky", userName);
-
                 //}
             }
 
