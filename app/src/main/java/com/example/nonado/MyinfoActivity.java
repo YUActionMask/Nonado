@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button pointBtn;
     private Button postingBtn;
     private Button cha;
-    private Button certifyBtn;
+    private Button logoutBtn;
     private TextView nameTv;
     private TextView pointTv;
 
@@ -47,6 +48,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private ListViewAdapter adapter = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myPost = database.getReference("User-Post");
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
@@ -78,7 +80,7 @@ public class MyinfoActivity extends AppCompatActivity {
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
-        certifyBtn = (Button) findViewById(R.id.certifyBtn);
+        logoutBtn = (Button) findViewById(R.id.logoutBtn);
         nameTv = (TextView) findViewById(R.id.nameTv);
         pointTv = (TextView) findViewById(R.id.pointTv);
         listView = (ListView) findViewById(R.id.listview);
@@ -97,8 +99,6 @@ public class MyinfoActivity extends AppCompatActivity {
                     nameTv.setText(userName);
                     String userPoint = dataSnapshot.child("point").getValue().toString();
                     pointTv.setText(userPoint);
-
-                    Log.d("milky", userName);
 
                 //}
             }
@@ -167,12 +167,17 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
-        //동네인증 버튼
-        certifyBtn.setOnClickListener(new View.OnClickListener() {
+        //로그아웃 버튼
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), NeighborhoodCertificationActivity.class);
+                firebaseAuth.signOut();
+
+                Intent intent = new Intent(MyinfoActivity.this, LoginActivity.class);
                 startActivity(intent);
+
+
+                Toast.makeText(MyinfoActivity.this, "로그아웃 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 

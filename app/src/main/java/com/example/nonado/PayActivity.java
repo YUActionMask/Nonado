@@ -9,6 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,49 +31,63 @@ import kr.co.bootpay.android.models.Payload;
 
 public class PayActivity extends AppCompatActivity {
 
-    private String application_id = "634567e6d01c7e002293c145";
     private  double price;
-
-
-
-    Context context;
-
-    Spinner spinner_pg;
-    Spinner spinner_method;
+    private String user_id;
+    private String userPoint = "0";
     View v ;
-//    EditText edit_price;
-//    EditText edit_non_tax;
-//
+
+    //DB
+    private FirebaseUser user;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
 
-        Log.d("bootpay", "milky");
         Intent intent = getIntent();
         String strPrice = intent.getStringExtra("price");
         price = Double.parseDouble(strPrice);
 
+        //DB
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = user.getEmail().split("@")[0];
+        Log.d("bootpay", user_id);
+        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
         BootpayAnalytics.init(this, "634567e6d01c7e002293c145");
+
+        // 현재 포인트
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userPoint = dataSnapshot.child("point").getValue().toString();
+                Log.d("bootpay", "userPoint : " + userPoint);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("bootpay", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mDatabase.addValueEventListener(postListener);
 
         v = (View) findViewById(R.id.payView);
         PaymentTest(v);
     }
 
     public void PaymentTest(View v) {
-        BootUser user = new BootUser().setId("id"); // 구매자 정보
+
+        BootUser user = new BootUser().setId(user_id); // 구매자 정보
 
         BootExtra extra = new BootExtra()
                 .setCardQuota("0,2,3"); // 일시불, 2개월, 3개월 할부 허용, 할부는 최대 12개월까지 사용됨 (5만원 이상 구매시 할부허용 범위)
 
 
         List items = new ArrayList<>();
-        BootItem item1 = new BootItem().setName("마우's 스").setId("ITEM_CODE_MOUSE").setQty(1).setPrice(price);
+        BootItem item1 = new BootItem().setName(user_id + "_point").setId(user_id + "_POINT").setQty(1).setPrice(price);
         items.add(item1);
 
-        Log.d("bootpay", item1.getName());
 
         Payload payload = new Payload();
         payload.setApplicationId("5b8f6a4d396fa665fdc2b5e8")
@@ -85,6 +107,11 @@ public class PayActivity extends AppCompatActivity {
         payload.setMetadata(map);
 //        payload.setMetadata(new Gson().toJson(map));
 
+
+
+
+
+
         Bootpay.init(getSupportFragmentManager(), getApplicationContext())
                 .setPayload(payload)
                 .setEventListener(new BootpayEventListener() {
@@ -101,6 +128,21 @@ public class PayActivity extends AppCompatActivity {
                     @Override
                     public void onClose() {
                         Log.d("bootpay", "close: " );
+
+
+                        /**********포인트 충전 완료되면 처리되어야 하는 부분*************/
+                        Map<String, Object> update = new HashMap<>();
+                        int setPoint = (int) price + Integer.parseInt(userPoint);
+                        String setPointStr = Integer.toString(setPoint);
+                        update.put("point", setPointStr);
+                        mDatabase.updateChildren(update);
+                        /**********포인트 충전 완료되면 처리되어야 하는 부분*************/
+
+
+
+                        Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
+                        //intent.putExtra("price", price);
+                        startActivity(intent);
                     }
 
 
@@ -119,7 +161,7 @@ public class PayActivity extends AppCompatActivity {
 
                     @Override
                     public void onDone(String data) {
-                        Log.d("done", data);
+                        Log.d("bootpay", data);
                     }
                 }).requestPayment();
     }
