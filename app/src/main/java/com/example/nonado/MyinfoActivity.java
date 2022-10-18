@@ -69,7 +69,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private String userName;
     private List<String> title = new ArrayList<String>();
 
-
+    private
+    String location ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -98,6 +99,7 @@ public class MyinfoActivity extends AppCompatActivity {
                     userName = dataSnapshot.child("name").getValue().toString();
                     nameTv.setText(userName);
                     String userPoint = dataSnapshot.child("point").getValue().toString();
+                    location = dataSnapshot.child("location").getValue().toString();
                     pointTv.setText(userPoint);
 
                 //}
@@ -126,11 +128,15 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
 
-        //메시지 정보 버튼
+        //홈버튼
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name", user_id);
+                intent.putExtra("location", location);
                 startActivity(intent);
             }
         });
