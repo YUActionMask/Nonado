@@ -20,6 +20,7 @@
     <string name="signup_id">ID</string>
     <string name="signup_password">password</string>
     <string name="signup_name">Name</string>
+<<<<<<< Updated upstream
     <string name="find_id">Find ID</string>
     <string name="todo">TODO</string>
     <string name="text_login">로그인</string>
@@ -32,4 +33,8 @@
     <string name="fcm_message">Message</string>
     <string name="fcm_imageView">TODO</string>
     <string name="default_notification_channel_id">com.domain.appname.urgent</string>
+=======
+    <string name="send_email">Send E-mail</string>
+    <string name="find_id">Find ID</string>
+>>>>>>> Stashed changes
 </resources>
