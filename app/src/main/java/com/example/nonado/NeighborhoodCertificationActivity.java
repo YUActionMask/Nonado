@@ -80,7 +80,6 @@ public class NeighborhoodCertificationActivity extends AppCompatActivity impleme
         kakaoMapView.setMapViewEventListener(this);
 
         if(!checkLocationServiceStatus()){
-            Log.d("fdf","errors");
             showDialogForLocationServiceSetting();
         }else{
             checkRuntTimePermission();;

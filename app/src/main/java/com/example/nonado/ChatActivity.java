@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.*;
 
@@ -34,6 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     private String sender;
     private String receiver = "익명1";
     private String postId = "";
+    private String withPost = "";
 
     private EditText chatEt;
     private Button sendBtn;
@@ -41,6 +43,7 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
+    private DatabaseReference myPost = database.getReference("User-Chat");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +57,8 @@ public class ChatActivity extends AppCompatActivity {
         chamBtn = findViewById(R.id.chamBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         sender = user.getEmail();
-
+        Log.d("MyTag",sender);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,8 +87,10 @@ public class ChatActivity extends AppCompatActivity {
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        String name = sender.split("@")[0];
                         myRef = database.getReference("Post-User");
-                        myRef.child(postId).child(sender.split("@")[0]).setValue("");
+                        myRef.child(postId).child(name).setValue("");
+                        myPost.child(name).child(postId).setValue(postId);
                     }
                 });
 
@@ -141,7 +145,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });
-
 
 
     }

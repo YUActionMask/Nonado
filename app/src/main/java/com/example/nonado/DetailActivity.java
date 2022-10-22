@@ -1,6 +1,7 @@
 package com.example.nonado;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,13 +17,17 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,11 +40,13 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DetailActivity extends AppCompatActivity {
-    TextView title, comment;
-    String str, name, location;
+    TextView title, comment, writerview;
+    String str, name, writer, location;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
     private static final String TAG = "MultiImageActivity";
@@ -52,19 +59,30 @@ public class DetailActivity extends AppCompatActivity {
     long mNow;
     Date mDate;
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-    
+
     Button reg_button;
     private ArrayAdapter<String> adapter2;
     private ArrayList<Comment> com = new ArrayList<>();
     List<Object> Array = new ArrayList<Object>();
-    Button btn;
+    Button btn, del;
     EditText comment_et;
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
 
+    //채팅 넘어가는 데이터베이스
+    private FirebaseUser user;
+    private DatabaseReference mDatabase ;
+    //현재 사용자
+    private  String user_id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User-Chat").child(user_id);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
@@ -78,9 +96,13 @@ public class DetailActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image);
         reg_button = findViewById(R.id.reg_button);
         comment_et = findViewById(R.id.comment_et);
+        del = findViewById(R.id.del);
+        writerview = findViewById(R.id.textwriter);
         imageView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));     // 리사이클러뷰 수평 스크롤 적용
         str = getIntent().getStringExtra("title");
         name = getIntent().getStringExtra("name");
+        writer = getIntent().getStringExtra("writer");
+        location = getIntent().getStringExtra("location");
         title.setText(str);
         storage=FirebaseStorage.getInstance();
         stoRe=storage.getReference();
@@ -88,16 +110,57 @@ public class DetailActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         initDatabase();
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
+        Log.d("writer",writer);
+        Log.d("name",name);
+        writerview.setText("작성자 : " + writer);
+        if(writer.equals(name)){
+            del.setClickable(true);
+        }
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?");
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference dataRef = mDatabase.getReference("Post").child(str);
+                        dataRef.removeValue();
+                        Toast.makeText(DetailActivity.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
+                        intent.putExtra("name", name);
+                        intent.putExtra("location", location);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        //참여하기 버튼
+       btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Map<String, Object> update = new HashMap<>();
+                update.put( str, "");
+                mDatabase.updateChildren(update);
+
                 Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
-
-
                 intent.putExtra("postId",str);
-
-
                 startActivity(intent);
             }
         });
@@ -113,6 +176,7 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.child(str).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                com.clear();
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg = messageData.getValue().toString();
                     String msg2[] = msg.split(",");
@@ -135,7 +199,7 @@ public class DetailActivity extends AppCompatActivity {
             return Tasks.whenAllComplete(tasks);
         }).addOnCompleteListener(task -> {
             for (Task<Uri> task2 : tasks) {
-                    uriList.add(task2.getResult());
+                uriList.add(task2.getResult());
             }
             adapter = new MultiImageAdapter(uriList, getApplicationContext());
             imageView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
@@ -220,4 +284,3 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.child(title).child(date + comment).setValue(Pf);
     }
 }
-
