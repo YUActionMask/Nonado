@@ -26,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +40,9 @@ import com.google.firebase.storage.StorageReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DetailActivity extends AppCompatActivity {
     TextView title, comment, writerview;
@@ -66,8 +70,19 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
 
+    //채팅 넘어가는 데이터베이스
+    private FirebaseUser user;
+    private DatabaseReference mDatabase ;
+    //현재 사용자
+    private  String user_id;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = user.getEmail().split("@")[0];
+        mDatabase = FirebaseDatabase.getInstance().getReference("User-Chat").child(user_id);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         showLoading(DetailActivity.this, true);
@@ -134,15 +149,18 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        //참여하기 버튼
+       btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                Map<String, Object> update = new HashMap<>();
+                update.put( str, "");
+                mDatabase.updateChildren(update);
+
                 Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
-
-
                 intent.putExtra("postId",str);
-
-
                 startActivity(intent);
             }
         });

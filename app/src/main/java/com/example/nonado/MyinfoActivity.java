@@ -51,6 +51,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button certifyBtn;
     private TextView nameTv;
     private TextView pointTv;
+    String str;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -58,6 +59,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private ListViewAdapter adapter = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myPost = database.getReference("User-Post");
+    private DatabaseReference myPoint = database.getReference("User");
 
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
@@ -77,6 +79,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private UserAccount userAccount;
     private String userName;
     private List<String> title = new ArrayList<String>();
+    private String point;
 
 
     @Override
@@ -93,7 +96,7 @@ public class MyinfoActivity extends AppCompatActivity {
         nameTv = (TextView) findViewById(R.id.nameTv);
         pointTv = (TextView) findViewById(R.id.pointTv);
         listView = (ListView) findViewById(R.id.listview);
-
+        str = getIntent().getStringExtra("name");
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
@@ -158,7 +161,18 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+        myPoint.child(str).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                point = snapshot.child("point").getValue().toString();
+                Log.d("ddddd",point);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         //포인트 내역 버튼
         pointBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -285,14 +299,21 @@ public class MyinfoActivity extends AppCompatActivity {
                 ValueEventListener value = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String point = snapshot.child("point").getValue().toString();
-                        Log.d("MyTag4",point);
+                        String price = snapshot.child("price").getValue().toString();
                         AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                        builder.setTitle("송금 ").setMessage("송금 금액 : " + point);
+                        builder.setTitle("송금 ").setMessage("송금 금액 : " + price);
+
+                        Log.d("ddd",price);
 
                         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(nameTv.getText().toString());
+                                int a = Integer.parseInt(point)- Integer.parseInt(price);
+                                mDatabase.child("point").setValue(Integer.toString(a));
+                                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                                intent.putExtra("name",str);
+                                startActivity(intent);
                             }
                         });
 
