@@ -23,6 +23,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class FCMPushServer extends FirebaseMessagingService {
 
+    private  static final String TAG = "FCMPushServer";
+
     public static final String apikey = "AAAA3wOK1Ss:APA91bGsq7k52Csp78vQQswe8eib4bDFhaKKBSf9VxlC_P9igOxR5G-VKYRPo1BCNz0vBG-MgDDbfUH3_64AsH-xPbvIrKhhDZLNNXWt_sQyr7gTIweAnD_e-n4NaqLatW9L9i646A88\t\n";
     public static final String senderId = "957837137195";
 
@@ -99,6 +101,7 @@ public class FCMPushServer extends FirebaseMessagingService {
         }
         notificationManager.notify(0, builder.build());
     }
+
 }
 
 
