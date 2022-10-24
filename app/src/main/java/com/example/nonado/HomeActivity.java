@@ -12,6 +12,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,10 +37,13 @@ public class HomeActivity extends AppCompatActivity {
     String str, location;
     EditText edit;
 
+    private FirebaseUser user;
+
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
-    private DatabaseReference databaseReference2 = database.getReference("User");
+    private DatabaseReference databaseReference2 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,30 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        databaseReference2 = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+
+//        ValueEventListener postListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
+//                location = dataSnapshot.child("location").getValue().toString();
+//                str = dataSnapshot.child("name").getValue().toString();
+//                Log.d("milky", str + location);
+//                //}
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w("milky", "loadPost:onCancelled", databaseError.toException());
+//            }
+//        };
+//        databaseReference2.addValueEventListener(postListener);
+
+
         str = getIntent().getStringExtra("name");
         location = getIntent().getStringExtra("location");
         plus = (Button) findViewById(R.id.plus);
@@ -129,6 +158,8 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
     private void initDatabase() {
         mChild = new ChildEventListener() {

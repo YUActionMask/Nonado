@@ -57,7 +57,7 @@ public class ChatActivity extends AppCompatActivity {
         chamBtn = findViewById(R.id.chamBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        sender = user.getEmail();
+        sender = user.getEmail().split("@")[0];
         Log.d("MyTag",sender);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class ChatActivity extends AppCompatActivity {
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String name = sender.split("@")[0];
+                        String name = sender;
                         myRef = database.getReference("Post-User");
                         myRef.child(postId).child(name).setValue("");
                         myPost.child(name).child(postId).setValue(postId);

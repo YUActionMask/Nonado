@@ -81,7 +81,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private List<String> title = new ArrayList<String>();
     private String point;
 
-
+    private
+    String location ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -111,6 +112,7 @@ public class MyinfoActivity extends AppCompatActivity {
                     userName = dataSnapshot.child("name").getValue().toString();
                     nameTv.setText(userName);
                     String userPoint = dataSnapshot.child("point").getValue().toString();
+                    location = dataSnapshot.child("location").getValue().toString();
                     pointTv.setText(userPoint);
 
                     Log.d("milky", userName);
@@ -140,12 +142,16 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
 
-
-        //메시지 정보 버튼
-        msgBtn.setOnClickListener(new View.OnClickListener() {
+        //홈버튼
+        homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+
+
+                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name", user_id);
+                intent.putExtra("location", location);
+
                 startActivity(intent);
             }
         });
@@ -281,6 +287,7 @@ public class MyinfoActivity extends AppCompatActivity {
             moneyBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
             postingTv.setText(posting.getPostName());
+            postingTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
 
