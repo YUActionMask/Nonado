@@ -86,4 +86,9 @@ dependencies {
     //부프페이
     implementation 'io.github.bootpay:android:4.2.3' //최신 버전 추천
 
+    //FCM okHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
+
+
 }
