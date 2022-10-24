@@ -266,6 +266,7 @@ public class MyinfoActivity extends AppCompatActivity {
             moneyBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
             postingTv.setText(posting.getPostName());
+            postingTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
 
