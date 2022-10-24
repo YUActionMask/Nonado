@@ -12,6 +12,8 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     List<String> title = new ArrayList<String>();
     List<String> comment = new ArrayList<String>();
     List<String> writer = new ArrayList<String>();
+    List<String> price = new ArrayList<>();
     ListView listView;
     private ChildEventListener mChild;
     private ArrayAdapter<String> adapter;
@@ -34,10 +37,13 @@ public class HomeActivity extends AppCompatActivity {
     String str, location;
     EditText edit;
 
+    private FirebaseUser user;
+
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
-    private DatabaseReference databaseReference2 = database.getReference("User");
+    private DatabaseReference databaseReference2 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,30 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        databaseReference2 = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+
+//        ValueEventListener postListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
+//                location = dataSnapshot.child("location").getValue().toString();
+//                str = dataSnapshot.child("name").getValue().toString();
+//                Log.d("milky", str + location);
+//                //}
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w("milky", "loadPost:onCancelled", databaseError.toException());
+//            }
+//        };
+//        databaseReference2.addValueEventListener(postListener);
+
+
         str = getIntent().getStringExtra("name");
         location = getIntent().getStringExtra("location");
         plus = (Button) findViewById(R.id.plus);
@@ -64,6 +94,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                intent.putExtra("name",str);
                 startActivity(intent);
             }
         });
@@ -76,8 +107,8 @@ public class HomeActivity extends AppCompatActivity {
                 intent.putExtra("writer", writer.get(i));
                 intent.putExtra("name",str);
                 intent.putExtra("location",location);
+                intent.putExtra("price",price.get(i));
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -95,6 +126,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                intent.putExtra("name",str);
                 startActivity(intent);
             }
         });
@@ -108,12 +140,13 @@ public class HomeActivity extends AppCompatActivity {
                     String msg3[] = msg2.split(",");
                     Log.d("write",msg2);
 
-                    if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
-                        comment.add(msg3[1].substring(9).replace("}",""));
-                        writer.add(msg3[0].substring(6).replace("}",""));
-                        title.add(msg3[3].substring(7).replace("}",""));
-                        Array.add(msg3[3].substring(7).replace("}",""));
-                        adapter.add(msg3[3].substring(7).replace("}",""));
+                    if(edit.getText().toString().equals(msg3[3].substring(10).replace("}","")) == true) {
+                        comment.add(msg3[2].substring(9).replace("}",""));
+                        writer.add(msg3[1].substring(6).replace("}",""));
+                        title.add(msg3[4].substring(7).replace("}",""));
+                        Array.add(msg3[4].substring(7).replace("}",""));
+                        adapter.add(msg3[4].substring(7).replace("}",""));
+                        price.add(msg3[0].substring(5).replace("}",""));
                     }
 
                 }
@@ -125,6 +158,8 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
     private void initDatabase() {
         mChild = new ChildEventListener() {

@@ -1,26 +1,36 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,18 +39,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyinfoActivity extends AppCompatActivity {
-    private Button homebtn;
+    private Button msgBtn;
     private Button pointBtn;
     private Button postingBtn;
     private Button cha;
-    private Button logoutBtn;
+    private Button certifyBtn;
     private TextView nameTv;
     private TextView pointTv;
+    String str;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -48,7 +59,7 @@ public class MyinfoActivity extends AppCompatActivity {
     private ListViewAdapter adapter = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myPost = database.getReference("User-Post");
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private DatabaseReference myPoint = database.getReference("User");
 
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
@@ -68,28 +79,31 @@ public class MyinfoActivity extends AppCompatActivity {
     private UserAccount userAccount;
     private String userName;
     private List<String> title = new ArrayList<String>();
+    private String point;
 
-
+    private
+    String location ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo);
 
-        homebtn = (Button) findViewById(R.id.homeBtn);
+        msgBtn = (Button) findViewById(R.id.msgBtn);
         pointBtn = (Button) findViewById(R.id.pointBtn);
         postingBtn = (Button) findViewById(R.id.postingBtn);
         cha = (Button) findViewById(R.id.cha);
-        logoutBtn = (Button) findViewById(R.id.logoutBtn);
+        certifyBtn = (Button) findViewById(R.id.certifyBtn);
         nameTv = (TextView) findViewById(R.id.nameTv);
         pointTv = (TextView) findViewById(R.id.pointTv);
         listView = (ListView) findViewById(R.id.listview);
-
+        str = getIntent().getStringExtra("name");
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
        // mDatabase.child("2");
 
+        Log.d("milky", "Ed");
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -98,7 +112,10 @@ public class MyinfoActivity extends AppCompatActivity {
                     userName = dataSnapshot.child("name").getValue().toString();
                     nameTv.setText(userName);
                     String userPoint = dataSnapshot.child("point").getValue().toString();
+                    location = dataSnapshot.child("location").getValue().toString();
                     pointTv.setText(userPoint);
+
+                    Log.d("milky", userName);
 
                 //}
             }
@@ -125,12 +142,16 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
 
-
-        //메시지 정보 버튼
+        //홈버튼
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name", user_id);
+                intent.putExtra("location", location);
+
                 startActivity(intent);
             }
         });
@@ -146,7 +167,18 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
+        myPoint.child(str).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                point = snapshot.child("point").getValue().toString();
+                Log.d("ddddd",point);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         //포인트 내역 버튼
         pointBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,17 +199,12 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
-        //로그아웃 버튼
-        logoutBtn.setOnClickListener(new View.OnClickListener() {
+        //동네인증 버튼
+        certifyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                firebaseAuth.signOut();
-
-                Intent intent = new Intent(MyinfoActivity.this, LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), NeighborhoodCertificationActivity.class);
                 startActivity(intent);
-
-
-                Toast.makeText(MyinfoActivity.this, "로그아웃 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -260,6 +287,7 @@ public class MyinfoActivity extends AppCompatActivity {
             moneyBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
             postingTv.setText(posting.getPostName());
+            postingTv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
 
@@ -278,14 +306,21 @@ public class MyinfoActivity extends AppCompatActivity {
                 ValueEventListener value = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String point = snapshot.child("point").getValue().toString();
-                        Log.d("MyTag4",point);
+                        String price = snapshot.child("price").getValue().toString();
                         AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                        builder.setTitle("송금 ").setMessage("송금 금액 : " + point);
+                        builder.setTitle("송금 ").setMessage("송금 금액 : " + price);
+
+                        Log.d("ddd",price);
 
                         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(nameTv.getText().toString());
+                                int a = Integer.parseInt(point)- Integer.parseInt(price);
+                                mDatabase.child("point").setValue(Integer.toString(a));
+                                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                                intent.putExtra("name",str);
+                                startActivity(intent);
                             }
                         });
 
