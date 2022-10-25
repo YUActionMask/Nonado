@@ -57,7 +57,7 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
     //사진 업로드용 uri
-   // private Uri mlmageCaptureUri;
+    // private Uri mlmageCaptureUri;
 
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
@@ -69,7 +69,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private String userName;
     private List<String> title = new ArrayList<String>();
 
-
+    private
+    String location ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -88,17 +89,18 @@ public class MyinfoActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
-       // mDatabase.child("2");
+        // mDatabase.child("2");
 
 
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //for (DataSnapshot userData : dataSnapshot.getChildren()) {
-                    userName = dataSnapshot.child("name").getValue().toString();
-                    nameTv.setText(userName);
-                    String userPoint = dataSnapshot.child("point").getValue().toString();
-                    pointTv.setText(userPoint);
+                userName = dataSnapshot.child("name").getValue().toString();
+                nameTv.setText(userName);
+                String userPoint = dataSnapshot.child("point").getValue().toString();
+                location = dataSnapshot.child("location").getValue().toString();
+                pointTv.setText(userPoint);
 
                 //}
             }
@@ -126,11 +128,15 @@ public class MyinfoActivity extends AppCompatActivity {
 
 
 
-        //메시지 정보 버튼
+        //홈버튼
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name", user_id);
+                intent.putExtra("location", location);
                 startActivity(intent);
             }
         });
@@ -311,4 +317,3 @@ public class MyinfoActivity extends AppCompatActivity {
     }
 
 }
-
