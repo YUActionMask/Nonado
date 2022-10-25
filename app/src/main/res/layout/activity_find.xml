@@ -13,30 +13,18 @@
         android:layout_marginStart="150dp"
         android:layout_marginTop="500dp"
         android:layout_marginEnd="150dp"
-<<<<<<< Updated upstream
         android:layout_marginBottom="150dp"
         android:text="@string/send_e_mail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-=======
-        android:layout_marginBottom="160dp"
-        android:text="@string/send_email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
->>>>>>> Stashed changes
 
     <EditText
         android:id="@+id/editTextFindEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="150dp"
-<<<<<<< Updated upstream
         android:layout_marginTop="200dp"
         android:layout_marginEnd="150dp"
         android:layout_marginBottom="150dp"
@@ -67,16 +55,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-=======
-        android:layout_marginTop="300dp"
-        android:layout_marginEnd="150dp"
-        android:ems="10"
-        android:hint="E-mail"
-        android:inputType="textEmailAddress"
-        android:minHeight="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:importantForAutofill="no" />
->>>>>>> Stashed changes
 </androidx.constraintlayout.widget.ConstraintLayout>

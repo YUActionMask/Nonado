@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     private UserAccount userAccount;
     private String location = "null";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         buttonSignUp = findViewById(R.id.btn_signup);
         buttonLogIn = findViewById(R.id.btn_login);
         buttonFindId = findViewById(R.id.btn_sendEmail);
-        buttonFindId = findViewById(R.id.btn_findid);
 
         id = findViewById(R.id.showid);
         password = findViewById(R.id.password);
@@ -151,11 +149,9 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-
-        buttonFindId.setOnClickListener(new View.OnClickListener(){
+        buttonFindId.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
-                //아이디 찾기 화면으로 이동
                 Intent intent = new Intent(LoginActivity.this, FindActivity.class);
                 startActivity(intent);
             }
