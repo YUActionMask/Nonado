@@ -1,36 +1,40 @@
 package com.example.nonado;
 
 public class Point {
-    private String type;
-    private String pointName;
-    private Integer amount;
-    public Point(String type, String pointName, int pointAmount){
-        this.type = type;
-        this.pointName = pointName;
-        this.amount = pointAmount;
+    private String sender;
+    private String receiver;
+    private int balance;
+    private String certification;
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
-    public String getPointName() {
-        return pointName;
+    public void setCertification(String certification) {
+        this.certification = certification;
     }
 
-    public String getType() {
-        return type;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 
-    public void setPointName(String pointName) {
-        this.pointName = pointName;
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getBalance() {
+        return balance;
     }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
+    public String getCertification() {
+        return certification;
     }
 
-    public Integer getAmount() {
-        return amount;
+    public String getReceiver() {
+        return receiver;
+    }
+
+    public String getSender() {
+        return sender;
     }
 }

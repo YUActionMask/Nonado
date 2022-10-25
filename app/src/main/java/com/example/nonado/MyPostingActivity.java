@@ -48,14 +48,6 @@ public class MyPostingActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("User-Chat").child(user_id);
 
         listView = (ListView) findViewById(R.id.listview);
-//        adapter = new ListViewAdapter();
-//
-//        adapter.addItem("김");
-//        adapter.addItem("이");
-//        adapter.addItem("박");
-//
-//        listView.setAdapter(adapter);
-//
 
         //채팅 띄우기
         databaseReference.addValueEventListener(new ValueEventListener() {
