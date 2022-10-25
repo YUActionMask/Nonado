@@ -36,7 +36,7 @@ public class PlusActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference();
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
 
-    EditText EditText4, EditText5;
+    EditText EditText4, EditText5, price;
     Button btn2;
     RecyclerView imageView;  // 이미지를 보여줄 리사이클러뷰
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
@@ -47,6 +47,7 @@ public class PlusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_plus);
         EditText4 = findViewById(R.id.EditText4);
         EditText5 = findViewById(R.id.EditText5);
+        price = findViewById(R.id.price);
         btn2 = findViewById(R.id.btn2);
         imageView = findViewById(R.id.image);
         String name = getIntent().getStringExtra("name");
@@ -67,7 +68,7 @@ public class PlusActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plus(EditText4.getText().toString(), EditText5.getText().toString(), name, location);
+                plus(EditText4.getText().toString(), EditText5.getText().toString(), name, location, price.getText().toString());
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("location",location);
@@ -122,8 +123,8 @@ public class PlusActivity extends AppCompatActivity {
         }
     }
 
-    public void plus(String title, String comment, String id, String location){
-        Plusfirebase Pf = new Plusfirebase(title,comment,id, location);
+    public void plus(String title, String comment, String id, String location, String price){
+        Plusfirebase Pf = new Plusfirebase(title,comment,id, location, price);
         databaseReference.child("Post").child(title).setValue(Pf);
         databaseReference.child("Post-User").child(title).setValue("");
     }
