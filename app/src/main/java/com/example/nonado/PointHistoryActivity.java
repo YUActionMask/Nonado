@@ -78,13 +78,13 @@ public class PointHistoryActivity extends AppCompatActivity {
         adapter = new ListViewAdapter();
 
         //임시정보 저장
-        adapter.addItem(new Point("입금", "A", 1000));
-        adapter.addItem(new Point("입금", "B", 2300));
-        adapter.addItem(new Point("출금", "C", 4533));
-        adapter.addItem(new Point("입금", "D", 1234));
-        adapter.addItem(new Point("출금", "E", 12000));
-        adapter.addItem(new Point("출금", "F", 12455));
-        adapter.addItem(new Point("입금", "G", 12466));
+//        adapter.addItem(new Point("입금", "A", 1000));
+//        adapter.addItem(new Point("입금", "B", 2300));
+//        adapter.addItem(new Point("출금", "C", 4533));
+//        adapter.addItem(new Point("입금", "D", 1234));
+//        adapter.addItem(new Point("출금", "E", 12000));
+//        adapter.addItem(new Point("출금", "F", 12455));
+//        adapter.addItem(new Point("입금", "G", 12466));
 
         listView.setAdapter(adapter);
 
@@ -143,9 +143,9 @@ public class PointHistoryActivity extends AppCompatActivity {
             TextView pointNameTv = (TextView) convertView.findViewById(R.id.pointNameTv);
             TextView pointAmountTv = (TextView) convertView.findViewById(R.id.pointAmountTv);
 
-            typeTv.setText(point.getType());
-            pointNameTv.setText(point.getPointName());
-            pointAmountTv.setText(point.getAmount().toString());
+//            typeTv.setText(point.getType());
+//            pointNameTv.setText(point.getPointName());
+//            pointAmountTv.setText(point.getAmount().toString());
 
 
             return convertView;
