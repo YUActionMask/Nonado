@@ -34,6 +34,7 @@ public class SignupActivity extends AppCompatActivity {
     private int point = 0;
     private String location = null;
     private String number = "";
+    private String token = "";
     private Button mBtnRegister;
 
     @Override
@@ -77,8 +78,9 @@ public class SignupActivity extends AppCompatActivity {
                                         result.put("point", point);
                                         result.put("location", location);
                                         result.put("number", number);
+                                        result.put("token", token);
 
-                                        wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location, number);
+                                        wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location, number, token);
                                         Toast.makeText(SignupActivity.this, "해당 이메일로 인증 링크를 전송하였습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                     else{
@@ -101,12 +103,12 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
-    private void wirteUser(String userid, String id , String password, String name, int point, String location, String number) {
+    private void wirteUser(String userid, String id , String password, String name, int point, String location, String number, String token) {
         if(location==null) {
 
             /**by재은, pc로 테스트 해보려고 location값에 스트링으로 값을 주었음. 수정할 예정 - 220926
              * **/
-            UserAccount user = new UserAccount(id, password, name, point, "null", number);
+            UserAccount user = new UserAccount(id, password, name, point, "null", number, token);
 
             mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
