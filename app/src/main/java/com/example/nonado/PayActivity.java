@@ -39,6 +39,7 @@ public class PayActivity extends AppCompatActivity {
     //DB
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference myPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class PayActivity extends AppCompatActivity {
         user_id = user.getEmail().split("@")[0];
         Log.d("bootpay", user_id);
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+        myPoint= FirebaseDatabase.getInstance().getReference("Point");
 
         BootpayAnalytics.init(this, "634567e6d01c7e002293c145");
 
@@ -136,6 +138,16 @@ public class PayActivity extends AppCompatActivity {
                         String setPointStr = Integer.toString(setPoint);
                         update.put("point", setPointStr);
                         mDatabase.updateChildren(update);
+
+
+                        Point point = new Point();
+                        point.setBalance((int) (price));
+                        point.setCertification("0");
+                        point.setReceiver(user_id);
+                        point.setSender("");
+
+                        myPoint.push().setValue(point);
+
                         /**********포인트 충전 완료되면 처리되어야 하는 부분*************/
 
 
