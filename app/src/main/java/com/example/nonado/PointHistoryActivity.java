@@ -1,5 +1,7 @@
 package com.example.nonado;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +40,7 @@ public class PointHistoryActivity extends AppCompatActivity {
     //DB
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference historyDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class PointHistoryActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+        historyDatabase = FirebaseDatabase.getInstance().getReference("Point");
 
         chargingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,7 +83,7 @@ public class PointHistoryActivity extends AppCompatActivity {
         adapter = new ListViewAdapter();
 
         //임시정보 저장
-//        adapter.addItem(new Point("입금", "A", 1000));
+
 //        adapter.addItem(new Point("입금", "B", 2300));
 //        adapter.addItem(new Point("출금", "C", 4533));
 //        adapter.addItem(new Point("입금", "D", 1234));
@@ -86,7 +91,7 @@ public class PointHistoryActivity extends AppCompatActivity {
 //        adapter.addItem(new Point("출금", "F", 12455));
 //        adapter.addItem(new Point("입금", "G", 12466));
 
-        listView.setAdapter(adapter);
+
 
         //현재 보유한 포인트
         ValueEventListener postListener = new ValueEventListener() {
@@ -103,17 +108,61 @@ public class PointHistoryActivity extends AppCompatActivity {
         };
         mDatabase.addValueEventListener(postListener);
 
+        //포인트 히스토리
+        historyDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Point point = snapshot.getValue(Point.class);
+                if(point.getSender().equals(user_id)){
+                    adapter.addItem(new PointHistory("보냄", point.getReceiver(), point.getBalance()));
+                   // Log.d("milky", name);
+                }
+                else if(point.getReceiver().equals(user_id)){
+                    if(point.getSender().equals("")){
+                        adapter.addItem(new PointHistory("충전", "", point.getBalance()));
+                      //  Log.d("milky", name);
+                    }else{
+                        adapter.addItem(new PointHistory("받음", point.getSender(), point.getBalance()));
+                      //  Log.d("milky", name);
+                    }
+                }
+
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     public class ListViewAdapter extends BaseAdapter {
-        ArrayList<Point> items = new ArrayList<Point>();
+        ArrayList<PointHistory> items = new ArrayList<PointHistory>();
 
         @Override
         public int getCount() {
             return items.size();
         }
 
-        public void addItem(Point item){
+        public void addItem(PointHistory item){
             items.add(item);
         }
         @Override
@@ -129,7 +178,7 @@ public class PointHistoryActivity extends AppCompatActivity {
         @Override
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             final Context context = viewGroup.getContext();
-            final Point point = items.get(position);
+            final PointHistory pointHistory = items.get(position);
 
             if(convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -143,9 +192,9 @@ public class PointHistoryActivity extends AppCompatActivity {
             TextView pointNameTv = (TextView) convertView.findViewById(R.id.pointNameTv);
             TextView pointAmountTv = (TextView) convertView.findViewById(R.id.pointAmountTv);
 
-//            typeTv.setText(point.getType());
-//            pointNameTv.setText(point.getPointName());
-//            pointAmountTv.setText(point.getAmount().toString());
+            typeTv.setText(pointHistory.getType());
+            pointNameTv.setText(pointHistory.getPointName());
+            pointAmountTv.setText(Integer.toString(pointHistory.getAmount()));
 
 
             return convertView;

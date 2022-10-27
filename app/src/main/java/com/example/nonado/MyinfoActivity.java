@@ -153,15 +153,6 @@ public class MyinfoActivity extends AppCompatActivity {
         });
 
 
-        //포인트 내역 버튼
-        pointBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
-                startActivity(intent);
-
-            }
-        });
 
         //함께한 글 버튼
         postingBtn.setOnClickListener(new View.OnClickListener() {
