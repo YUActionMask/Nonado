@@ -2,8 +2,18 @@ package com.example.nonado;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.textclassifier.TextLinks;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
+
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -12,6 +22,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SendNotification {
+
+    private DatabaseReference mDatabase;
+    private String mPushToken;
 
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static void sendNotification(String regToken, String title, String messsage){
@@ -42,6 +55,36 @@ public class SendNotification {
         }.execute();
     }
 
+    /*
+    private void sendGson() {
 
+        Chat chat;
+        mDatabase.child("User-Chat").child(postId).child("PushToken").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Map<String,String> map= (Map<String, String>) dataSnapshot.getValue(); //상대유저의 토큰
+                mPushToken = map.get("pushToken");
+
+                mDatabase.child("UserList").child(mFriendUid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Profile profile = dataSnapshot.getValue(Profile.class);
+                        SendNotification.sendNotification(mPushToken, profile.getNickName(), mFcmMessage);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    */
 }
 

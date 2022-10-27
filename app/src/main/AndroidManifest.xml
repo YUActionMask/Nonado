@@ -30,55 +30,55 @@
         </activity>
         <activity
             android:name=".FindActivity"
-            />
+            android:exported="true" />
         <activity
             android:name=".NeighborhoodCertificationActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".MyPostingActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".PointHistoryActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".MyinfoActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".HomeActivity"
             android:exported="true" />
         <activity
             android:name=".PlusActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".MyinfoActivity"
+            android:exported="true"
             tools:ignore="DuplicateActivity" />
         <activity
             android:name=".NoticeActivity"
-            />
+            android:exported="true" />
         <activity
             android:name=".DetailActivity"
-            />
+            android:exported="true" />
         <activity
             android:name=".NewsActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".ChatActivity"
-             />
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
         <activity
             android:name=".PlusActivity"
-
+            android:exported="true"
             tools:ignore="DuplicateActivity" />
         <activity
             android:name=".SignupActivity"
             android:exported="true" />
         <activity
             android:name=".ChangeinfoActivity"
-             />
-        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
-            android:exported="true" >
+            android:exported="true" />
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

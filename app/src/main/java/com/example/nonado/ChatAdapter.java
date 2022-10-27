@@ -1,7 +1,6 @@
 package com.example.nonado;
 
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,31 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import org.w3c.dom.Text;
 
 import java.util.List;
-import java.util.Map;
 
 class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     private List<Chat> chatList;
     private String name;
     private String postId;
-
-
-    private String msg;
-
-    private FirebaseUser user;
-    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
 
     public ChatAdapter(List<Chat> chatData, String name, String postId){
         chatList = chatData;
@@ -89,15 +71,11 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
                 holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
 
                 holder.msgLinear.setGravity(Gravity.RIGHT);
-                
             } else {
                 holder.nameTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
                 holder.msgTv.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
 
                 holder.msgLinear.setGravity(Gravity.LEFT);
-
-                //현재 채팅보낸 사람과 현재 로그인한 사람의 이름이 다른경우 메시지 fcm 알림 보내기
-                sendGson();
             }
 
     }
@@ -113,41 +91,4 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
         notifyItemInserted(chatList.size() - 1);
     }
 
-
-    private void sendGson(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
-        mDatabase.child("User").child(user_id).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, String> map = (Map<String, String>) snapshot.getValue(); // 상대유저의 토큰
-                String token = map.get("token");
-
-                mDatabase.child("User").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        mDatabase.child("message").push().child("msg").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    msg = task.getResult().toString();
-                                }
-                            }
-                        });
-                        SendNotification.sendNotification(token, user_id,msg);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
 }

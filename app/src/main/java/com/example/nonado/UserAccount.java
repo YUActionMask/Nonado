@@ -10,7 +10,6 @@ public class UserAccount {
     private String location; //위치
     private int point; // 포인트
     private String number; // 전화번호
-    private String token; // 내토큰
 
     public UserAccount() { }
 
@@ -53,17 +52,13 @@ public class UserAccount {
     public void setNumber(String number){this.number = number;}
     public String getNumber(){return number;}
 
-    public void setToken(String token){this.token = token;}
-    public String getToken(){return token;}
-
-    public UserAccount(String id, String password, String name, int point, String location, String number, String token){
+    public UserAccount(String id, String password, String name, int point, String location, String number){
         this.id = id;
         this.password = password;
         this.name=name;
         this.point = point;
         this.location = location;
         this.number = number;
-        this.token = token;
     }
 
 }

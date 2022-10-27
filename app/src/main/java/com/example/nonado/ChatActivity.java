@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -39,14 +37,13 @@ public class ChatActivity extends AppCompatActivity {
     private String postId = "";
     private String withPost = "";
 
-    public EditText chatEt;
+    private EditText chatEt;
     private Button sendBtn;
     private Button chamBtn;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
     private DatabaseReference myPost = database.getReference("User-Chat");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +148,4 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
-
-
-
 }

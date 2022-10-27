@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.example.nonado"
         minSdk 23
-        targetSdk 33
+        targetSdk 28
         versionCode 1
         versionName "1.0"
 
@@ -34,35 +34,35 @@ apply plugin: 'com.google.gms.google-services'
 
 dependencies {
 
-    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.android.volley:volley:1.1.0'
 
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment:2.5.3'
-    implementation 'androidx.navigation:navigation-ui:2.5.3'
-    implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.6.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.navigation:navigation-fragment:2.4.2'
+    implementation 'androidx.navigation:navigation-ui:2.4.2'
+    implementation 'com.google.firebase:firebase-database:20.0.5'
     implementation platform('com.google.firebase:firebase-bom:30.0.2')
     implementation 'com.google.firebase:firebase-storage'
     implementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-database-ktx'
 
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'com.google.firebase:firebase-database:20.1.0'
-    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-core:10.0.1'
+    implementation 'com.google.firebase:firebase-database:10.0.1'
+    implementation 'com.google.firebase:firebase-messaging:10.0.1'
+    implementation 'com.google.firebase:firebase-auth:10.0.1'
 
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
-    implementation 'com.google.firebase:firebase-storage:20.1.0'
-    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-storage:11.0.4'
+    implementation 'com.google.firebase:firebase-auth:11.0.4'
 
     implementation files('libs/libDaumMapAndroid.jar')
 
@@ -81,16 +81,14 @@ dependencies {
     //implementation 'com.github.iamport:iamport-android:vX.Y.Z'
 
     //코틀린
-    //implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
 
     //부프페이
     implementation 'io.github.bootpay:android:4.2.3' //최신 버전 추천
 
     //FCM okHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
-    //Firebase SDK
-    implementation 'com.google.firebase:firebase-core:21.1.1'
-    implementation 'com.google.firebase:firebase-messaging:23.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.1'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
 
 }
