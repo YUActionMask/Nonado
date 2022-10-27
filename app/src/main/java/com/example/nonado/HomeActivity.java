@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,9 +21,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceIdReceiver;
+import com.google.firebase.iid.internal.FirebaseInstanceIdInternal;
+import com.kakao.sdk.user.model.Profile;
+
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity {
     Button plus, info, notice;
@@ -37,16 +44,23 @@ public class HomeActivity extends AppCompatActivity {
     String str, location;
     EditText edit;
 
-    private FirebaseUser user;
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
     private DatabaseReference databaseReference2 ;
 
+    private FirebaseUser user;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         //by재은, fcm 서비스 시작 - 220930
         //MainActivity가 없어서 HomeActivity에 추가함.
@@ -192,6 +206,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
         databaseReference.removeEventListener(mChild);
     }
+
+
 
 
 }

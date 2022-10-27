@@ -182,6 +182,7 @@ public class MyinfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(MyinfoActivity.this, LoginActivity.class);
                 startActivity(intent);
 
+                mDatabase.child("token").setValue("null");
 
                 Toast.makeText(MyinfoActivity.this, "로그아웃 하였습니다.", Toast.LENGTH_SHORT).show();
             }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,10 +26,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class LoginActivity extends AppCompatActivity {
 
 
     private FirebaseAuth firebaseAuth;
+
     private EditText id;
     private EditText password;
     private Button buttonLogIn;
@@ -36,20 +45,27 @@ public class LoginActivity extends AppCompatActivity {
     private Button buttonFindId;
 
     private FirebaseUser user;
+    private String msg;
+
     private DatabaseReference mDatabase;
-    private UserAccount userAccount;
     private String location = "null";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        FirebaseApp.initializeApp(this);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         buttonSignUp = findViewById(R.id.btn_signup);
         buttonLogIn = findViewById(R.id.btn_login);
         buttonFindId = findViewById(R.id.btn_sendEmail);
+
+
+
 
         id = findViewById(R.id.showid);
         password = findViewById(R.id.password);
@@ -77,18 +93,17 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (task.isSuccessful()) {
                             if (firebaseAuth.getCurrentUser().isEmailVerified()) {
-                                user = FirebaseAuth.getInstance().getCurrentUser();
-                                //String user_id = user.getEmail().split(".")[0];
-                                String user_id = strId.split("@")[0];
-                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
-                                Log.d("milky", "주소찾기");
+                                String user_id = strId.split("@")[0];
+                                sendPushTokenToDB();
+
+                                //Log.d("milky", "주소찾기");
                                 ValueEventListener postListener = new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                                         location = dataSnapshot.child("location").getValue().toString();
-                                        Log.d("milky", location);
+                                        //Log.d("milky", location);
 
                                         if (location.equals("null")) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -146,7 +161,6 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
 
-
             }
         });
         buttonFindId.setOnClickListener(new View.OnClickListener() {
@@ -157,5 +171,32 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    //fcm 토큰을 얻어 DB에 저장
+    private void sendPushTokenToDB(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(LoginActivity.this, new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    return;
+                }
+
+                UserAccount userAccount = new UserAccount();
+
+                String token = task.getResult();
+                Map<String, Object> map = new HashMap<>();
+                map.put("fcmToken", token);
+                mDatabase.child("User").child(user_id).child("token").setValue(token);
+
+            }
+        });
+
+    }
+
+
+
+
 
 }
