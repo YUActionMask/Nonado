@@ -163,7 +163,8 @@
             android:layout_height="40dp"
             android:background="@drawable/roundbutton"
             android:text="수정 완료"
-            tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
+            tools:ignore="TouchTargetSizeCheck,TextContrastCheck"
+            />
 
         <Button
             android:id="@+id/logout_btn"
@@ -172,7 +173,8 @@
             android:layout_weight="1"
             android:background="@drawable/roundbutton"
             android:text="로그아웃"
-            tools:ignore="TouchTargetSizeCheck" />
+            tools:ignore="TouchTargetSizeCheck"
+            />
 
         <Button
             android:id="@+id/signout_btn"
@@ -182,6 +184,7 @@
             android:background="@drawable/roundbutton"
             android:text="회원탈퇴"
             tools:ignore="TouchTargetSizeCheck,TextContrastCheck"
-            style="?android:attr/buttonBarButtonStyle" />
+            style="?android:attr/buttonBarButtonStyle"
+            />
     </LinearLayout>
 </LinearLayout>
