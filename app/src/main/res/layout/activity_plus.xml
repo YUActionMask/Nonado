@@ -96,12 +96,5 @@
             android:background="@drawable/roundbutton"
             android:text="완료"
         />
-
-        <EditText
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:hint="참여 금액을 입력하세요"/>
     </LinearLayout>
 </LinearLayout>

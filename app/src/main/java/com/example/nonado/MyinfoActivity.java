@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +40,10 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button postingBtn;
     private Button cha;
     private Button logoutBtn;
-    private TextView nameTv;
+    private TextView nameTv, toName;
     private TextView pointTv;
+    private View dlgView;
+    private EditText how;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -62,11 +65,12 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
+    private static int a;
 
     private FirebaseUser user;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabase2;
     private UserAccount userAccount;
-    private String userName;
+    private String userName, userPoint;
     private List<String> title = new ArrayList<String>();
 
     private
@@ -98,7 +102,7 @@ public class MyinfoActivity extends AppCompatActivity {
                 //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                 userName = dataSnapshot.child("name").getValue().toString();
                 nameTv.setText(userName);
-                String userPoint = dataSnapshot.child("point").getValue().toString();
+                userPoint = dataSnapshot.child("point").getValue().toString();
                 location = dataSnapshot.child("location").getValue().toString();
                 pointTv.setText(userPoint);
 
@@ -153,15 +157,6 @@ public class MyinfoActivity extends AppCompatActivity {
         });
 
 
-        //포인트 내역 버튼
-        pointBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), PointHistoryActivity.class);
-                startActivity(intent);
-
-            }
-        });
 
         //함께한 글 버튼
         postingBtn.setOnClickListener(new View.OnClickListener() {
@@ -262,9 +257,12 @@ public class MyinfoActivity extends AppCompatActivity {
 
             TextView postingTv = (TextView) convertView.findViewById(R.id.postingTv);
             Button moneyBtn = (Button) convertView.findViewById(R.id.moneyBtn);
+            Button okBtn = (Button) convertView.findViewById(R.id.okBtn);
 
             moneyBtn.setTag(position);
+            okBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
+            okBtn.setOnClickListener(onClickListener2);
             postingTv.setText(posting.getPostName());
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
@@ -284,21 +282,48 @@ public class MyinfoActivity extends AppCompatActivity {
                 ValueEventListener value = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String point = snapshot.child("point").getValue().toString();
-                        Log.d("MyTag4",point);
+                        dlgView = (View)View.inflate(MyinfoActivity.this, R.layout.dialog, null);
                         AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                        builder.setTitle("송금 ").setMessage("송금 금액 : " + point);
-
+                        builder.setTitle("송금 ");
+                        builder.setView(dlgView);
+                        toName = dlgView.findViewById(R.id.dlg_id);
+                        how = dlgView.findViewById(R.id.dlg_price);
+                        toName.setText(ti);
                         builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(userName);
+                                String input = how.getText().toString().trim();
+                                if(input.equals("") == true ) {
+                                    Toast.makeText(MyinfoActivity.this, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    for(int k=0;k<input.length();k++){
+                                        char chr = input.charAt(k);
+                                        Log.d("input",Integer.toString(chr));
+                                        if(chr < 48 || chr > 57){
+                                            Toast.makeText(MyinfoActivity.this, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                        else if(47 < chr && chr <58 && k==input.length()-1){
+                                            int price = Integer.parseInt(input);
+                                            a = Integer.parseInt(userPoint)- price;
+                                            mDatabase.child("point").setValue(a);
+                                            Log.d("price",input);
+                                            Toast.makeText(MyinfoActivity.this,"완료 되었습니다.",Toast.LENGTH_SHORT).show();
+                                        }
+                                        else if(k==input.length()-1){
+                                            Toast.makeText(MyinfoActivity.this,"종료 되었습니다.",Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
                             }
                         });
 
                         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-
+                                Toast.makeText(MyinfoActivity.this,"취소되었습니다.",Toast.LENGTH_SHORT).show();
                             }
                         });
                         AlertDialog alertDialog = builder.create();
@@ -307,13 +332,19 @@ public class MyinfoActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
 
                 };
                 mDatabase.addValueEventListener(value);
             }
         };
+        Button.OnClickListener onClickListener2 = new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                int position = Integer.parseInt(v.getTag().toString());
+                Log.d("MyTag3", title.get(position));
+                String ti = title.get(position);
+            }
+        };
     }
-
 }
