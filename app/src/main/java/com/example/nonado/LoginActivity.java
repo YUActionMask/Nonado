@@ -110,9 +110,6 @@ public class LoginActivity extends AppCompatActivity {
                                             builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                                    mDatabase.child("User").child(user_id).child("location").setValue("현재위치를 설정해주세요.");
-                                                    startActivity(intent);
                                                 }
                                             });
                                             AlertDialog alertDialog = builder.create();
