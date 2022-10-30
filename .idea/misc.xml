@@ -8,9 +8,9 @@
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_home.xml" value="0.33" />
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_login.xml" value="0.32447916666666665" />
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/activity_signup.xml" value="0.33" />
-<<<<<<< Updated upstream
+
         <entry key="..\:/Users/PC/.git/Nonado/app/src/main/res/layout/server_fcmpush.xml" value="0.22" />
-=======
+
         <entry key="..\:/Users/YSR/Documents/GitHub/Nonado/app/src/main/res/layout/activity_plus.xml" value="0.24114583333333334" />
         <entry key="..\:/Users/YSR/Documents/GitHub/Nonado/app/src/main/res/layout/activity_point_history.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/YSR/Documents/GitHub/Nonado/app/src/main/res/layout/row_my_posting.xml" value="0.30572916666666666" />
@@ -21,7 +21,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.184375" />
         <entry key="app/src/main/res/drawable/list_border.xml" value="0.18020833333333333" />
         <entry key="app/src/main/res/drawable/roundbutton.xml" value="0.18020833333333333" />
->>>>>>> Stashed changes
+
         <entry key="app/src/main/res/layout/activity_chat_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.23177083333333334" />
