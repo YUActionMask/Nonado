@@ -32,6 +32,9 @@
             android:name=".FindActivity"
             android:exported="true" />
         <activity
+            android:name=".RemitActivity"
+            android:exported="true" />
+        <activity
             android:name=".NeighborhoodCertificationActivity"
             android:exported="true" />
         <activity

@@ -224,6 +224,7 @@ public class MyinfoActivity extends AppCompatActivity {
     public class ListViewAdapter extends BaseAdapter{
         ArrayList <Posting> items = new ArrayList<Posting>();
 
+
         @Override
         public int getCount() {
             return items.size();
@@ -246,6 +247,7 @@ public class MyinfoActivity extends AppCompatActivity {
         public View getView(int position, View convertView, ViewGroup viewGroup) {
             final Context context = viewGroup.getContext();
             final Posting posting = items.get(position);
+
 
             if(convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -271,79 +273,38 @@ public class MyinfoActivity extends AppCompatActivity {
         }
 
         Button.OnClickListener onClickListener = new Button.OnClickListener(){
-
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 int position = Integer.parseInt(v.getTag().toString());
-                Log.d("MyTag3", title.get(position));
-                String ti = title.get(position);
-                mDatabase = FirebaseDatabase.getInstance().getReference("Post").child(ti);
-
-                ValueEventListener value = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        dlgView = (View)View.inflate(MyinfoActivity.this, R.layout.dialog, null);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                        builder.setTitle("송금 ");
-                        builder.setView(dlgView);
-                        toName = dlgView.findViewById(R.id.dlg_id);
-                        how = dlgView.findViewById(R.id.dlg_price);
-                        toName.setText(ti);
-                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                mDatabase = FirebaseDatabase.getInstance().getReference("User").child(userName);
-                                String input = how.getText().toString().trim();
-                                if(input.equals("") == true ) {
-                                    Toast.makeText(MyinfoActivity.this, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    for(int k=0;k<input.length();k++){
-                                        char chr = input.charAt(k);
-                                        Log.d("input",Integer.toString(chr));
-                                        if(chr < 48 || chr > 57){
-                                            Toast.makeText(MyinfoActivity.this, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                            return;
-                                        }
-                                        else if(47 < chr && chr <58 && k==input.length()-1){
-                                            int price = Integer.parseInt(input);
-                                            a = Integer.parseInt(userPoint)- price;
-                                            mDatabase.child("point").setValue(a);
-                                            Log.d("price",input);
-                                            Toast.makeText(MyinfoActivity.this,"완료 되었습니다.",Toast.LENGTH_SHORT).show();
-                                        }
-                                        else if(k==input.length()-1){
-                                            Toast.makeText(MyinfoActivity.this,"종료 되었습니다.",Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            }
-                        });
-
-                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                Toast.makeText(MyinfoActivity.this,"취소되었습니다.",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-
-                };
-                mDatabase.addValueEventListener(value);
+                Intent intent = new Intent(getApplicationContext(), RemitActivity.class);
+                intent.putExtra("title", title.get(position));
+                intent.putExtra("name",nameTv.getText().toString());
+                intent.putExtra("userPoint",userPoint);
+                Log.d("title",title.get(position));
+                startActivity(intent);
             }
         };
+
         Button.OnClickListener onClickListener2 = new Button.OnClickListener(){
             @Override
             public void onClick(View v){
                 int position = Integer.parseInt(v.getTag().toString());
                 Log.d("MyTag3", title.get(position));
                 String ti = title.get(position);
+                mDatabase = FirebaseDatabase.getInstance().getReference("Point");
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot messageData : snapshot.getChildren()) {
+                            Log.d("user",messageData.getValue().toString());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
             }
         };
     }
