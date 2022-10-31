@@ -86,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
                                 String user_id = strId.split("@")[0];
                                 mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
-                                sendPushTokenToDB();
                                 //Log.d("milky", "주소찾기");
                                 ValueEventListener postListener = new ValueEventListener() {
                                     @Override
@@ -158,27 +157,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-    private void sendPushTokenToDB(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(LoginActivity.this, new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if(!task.isSuccessful()){
-                    return;
-                }
-
-                UserAccount userAccount = new UserAccount();
-
-                String token = task.getResult();
-                Map<String, Object> map = new HashMap<>();
-                map.put("fcmToken", token);
-                mDatabase.child("User").child(user_id).child("token").setValue(token);
-
-            }
-        });
-
     }
 
 }
