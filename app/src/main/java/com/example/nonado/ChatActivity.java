@@ -58,7 +58,7 @@ public class ChatActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         sender = user.getEmail().split("@")[0];
-        Log.d("MyTag",sender);
+        //Log.d("MyTag",sender);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

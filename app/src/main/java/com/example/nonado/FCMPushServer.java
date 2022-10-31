@@ -49,6 +49,7 @@ public class FCMPushServer extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         //수신한 메시지를 처리
+        super.onMessageReceived(remoteMessage);
         if(remoteMessage.getData().size()>0){
             showNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
@@ -66,7 +67,8 @@ public class FCMPushServer extends FirebaseMessagingService {
 
         // 기본 사운드 알람음 설정.
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), channel_id)
+        NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channel_id)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -77,7 +79,8 @@ public class FCMPushServer extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent);
 
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel notificationChannel = new NotificationChannel("nodado_channel", "nodado_channel", NotificationManager.IMPORTANCE_HIGH);

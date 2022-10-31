@@ -144,7 +144,6 @@ public class ChangeinfoActivity extends AppCompatActivity {
     public void loadAlbum(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent,GALLERY_CODE);
     }
     protected void onActivityResult(int requestCode, final int resultCode, final Intent data){
         super.onActivityResult(requestCode, resultCode,data);
