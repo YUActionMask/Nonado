@@ -91,6 +91,8 @@ public class ChatActivity extends AppCompatActivity {
                         myRef = database.getReference("Post-User");
                         myRef.child(postId).child(name).setValue("");
                         myPost.child(name).child(postId).setValue(postId);
+                        myRef = database.getReference("User-Post");
+                        myRef.child(name).child(postId).setValue(postId);
                     }
                 });
 

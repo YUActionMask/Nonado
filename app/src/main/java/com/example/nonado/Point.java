@@ -5,10 +5,11 @@ public class Point {
     private String receiver;
     private int balance;
     private String certification;
+    private String title;
 
-    public void setBalance(int balance) {
-        this.balance = balance;
-    }
+    public void setBalance(int balance) {this.balance = balance;}
+
+    public void setTitle(String title){this.title = title;}
 
     public void setCertification(String certification) {
         this.certification = certification;
@@ -21,6 +22,8 @@ public class Point {
     public void setSender(String sender) {
         this.sender = sender;
     }
+
+    public String getTitle(){return title;}
 
     public int getBalance() {
         return balance;
