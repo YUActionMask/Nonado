@@ -1,11 +1,11 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -292,19 +292,50 @@ public class MyinfoActivity extends AppCompatActivity {
                 Log.d("MyTag3", title.get(position));
                 String ti = title.get(position);
                 mDatabase = FirebaseDatabase.getInstance().getReference("Point");
-                mDatabase.addValueEventListener(new ValueEventListener() {
+                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
+                builder.setTitle("인증 ").setMessage("인증 후 되돌릴수 없습니다.\n인증하시겠습니까? ");
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot messageData : snapshot.getChildren()) {
-                            Log.d("user",messageData.getValue().toString());
-                        }
-                    }
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot messageData : snapshot.getChildren()) {
+                                    Log.d("user",messageData.getValue().toString());
+                                    String key = messageData.getKey();
+                                    Log.d("title",title.get(position));
+                                    String msg = messageData.getValue().toString();
+                                    String msg2[] = msg.split(",");
+                                    if(title.get(position).equals(msg2[3].substring(7)) && nameTv.getText().toString().equals(msg2[2].substring(8))){
+                                        DatabaseReference dR = database.getReference("Point").child(key).child("certification");
+                                        dR.setValue("1");
+                                    }
+                                    Toast.makeText(MyinfoActivity.this, "완료 되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
 
                     }
                 });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(MyinfoActivity.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         };
     }
