@@ -40,14 +40,15 @@ public class RemitActivity extends AppCompatActivity {
     RecyclerView imageView;
     EditText remitEdit;
     MultiImageAdapter adapter;  // 리사이클러뷰에 적용시킬 어댑터
-    Button remitBtn;
+    Button remitBtn, certiBtn, cancelBtn;
     private ChildEventListener mChild;
     StorageReference stoRe;
     StorageReference patRe;
     FirebaseStorage storage;
-    String title, name, userPoint;
+    String title, name, userPoint, writer;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference;
+    private DatabaseReference mDatabase;
     private DatabaseReference databaseReference2;
     private DatabaseReference myPoint = database.getReference("Point");
     @Override
@@ -61,10 +62,13 @@ public class RemitActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image);
         remitEdit = findViewById(R.id.remitEdit);
         remitBtn = findViewById(R.id.remitBtn);
+        certiBtn = findViewById(R.id.certiBtn);
+        cancelBtn = findViewById(R.id.cancelBtn);
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
         ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
         title = getIntent().getStringExtra("title");
         name = getIntent().getStringExtra("name");
+        writer = getIntent().getStringExtra("writer");
         userPoint = getIntent().getStringExtra("userPoint");
         storage=FirebaseStorage.getInstance();
         stoRe=storage.getReference();
@@ -100,7 +104,7 @@ public class RemitActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String input = remitEdit.getText().toString();
 
-                        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("User").child(name);
+                        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(name);
                         if(input.equals("")==true){
                             Toast.makeText(RemitActivity.this, "금액을 입력해주세요.", Toast.LENGTH_SHORT).show();
                         }
@@ -112,21 +116,145 @@ public class RemitActivity extends AppCompatActivity {
                                 }
                                 else if(Character.isDigit(chr)==true && k==input.length()-1) {
                                     int price = Integer.parseInt(input);
-                                    int a = Integer.parseInt(userPoint) - price;
-                                    mDatabase.child("point").setValue(a);
-                                    Point point = new Point();
-                                    point.setBalance(Integer.parseInt(input));
-                                    point.setCertification("0");
-                                    String writer[] = textwriter.getText().toString().split(": ");
-                                    point.setReceiver(writer[1]);
-                                    point.setSender(name);
-                                    point.setTitle(title);
-                                    myPoint.push().setValue(point);
-                                    Toast.makeText(RemitActivity.this, "송금이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    if(Integer.parseInt(userPoint) < price){
+                                        Toast.makeText(RemitActivity.this, "금액이 부족합니다.", Toast.LENGTH_SHORT).show();
 
+                                    }
+                                    else {
+                                        int a = Integer.parseInt(userPoint) - price;
+                                        mDatabase.child("point").setValue(a);
+                                        Point point = new Point();
+                                        point.setBalance(Integer.parseInt(input));
+                                        point.setCertification("0");
+                                        String writer[] = textwriter.getText().toString().split(": ");
+                                        point.setReceiver(writer[1]);
+                                        point.setSender(name);
+                                        point.setTitle(title);
+                                        myPoint.push().setValue(point);
+                                        Toast.makeText(RemitActivity.this, "송금이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                         }
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(RemitActivity.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RemitActivity.this);
+                builder.setTitle("송금 취소").setMessage("송금한 금액을 다시 돌려받습니다.");
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mDatabase = FirebaseDatabase.getInstance().getReference("Point");
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot messageData : snapshot.getChildren()) {
+                                    Log.d("user",messageData.getValue().toString());
+                                    String key = messageData.getKey();
+                                    Log.d("title",title);
+                                    String msg = messageData.getValue().toString();
+                                    String msg2[] = msg.split(",");
+                                    Log.d("msg",msg);
+                                    String po = msg2[0].substring(9);
+                                    if(title.equals(msg2[3].substring(7)) && name.equals(msg2[2].substring(8)) && writer.equals(msg2[1].substring(10))){
+                                        if(msg2[3].substring(15).equals("1")){
+                                            Toast.makeText(RemitActivity.this, "인증이 완료되어 취소가 불가능합니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                        else {
+                                            DatabaseReference dR = database.getReference("Point").child(key);
+                                            dR.removeValue();
+                                            mDatabase = FirebaseDatabase.getInstance().getReference("User").child(name);
+                                            int a = Integer.parseInt(userPoint) + Integer.parseInt(po);
+                                            mDatabase.child("point").setValue(a);
+                                            Toast.makeText(RemitActivity.this, "취소가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(RemitActivity.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        certiBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDatabase = FirebaseDatabase.getInstance().getReference("Point");
+                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(RemitActivity.this);
+                builder.setTitle("인증 ").setMessage("인증 후 되돌릴수 없습니다.\n인증하시겠습니까? ");
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String point;
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(writer);
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                String msg = snapshot.getValue().toString();
+                                point  = msg.split(",")[6].substring(7);
+                                Log.d("point",msg);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                        mDatabase = FirebaseDatabase.getInstance().getReference("Point");
+                        mDatabase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot messageData : snapshot.getChildren()) {
+                                    Log.d("user",messageData.getValue().toString());
+                                    String key = messageData.getKey();
+                                    Log.d("title",title);
+                                    String msg = messageData.getValue().toString();
+                                    String msg2[] = msg.split(",");
+                                    String po = msg2[0].substring(9);
+                                    if(title.equals(msg2[3].substring(7)) && name.equals(msg2[2].substring(8)) && writer.equals(msg2[1].substring(10))){
+                                        DatabaseReference dR = database.getReference("Point").child(key).child("certification");
+                                        dR.setValue("1");
+
+                                        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(name).child("point");
+                                        int a = Integer.parseInt(point) + Integer.parseInt(po);
+                                        mDatabase.setValue(a);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
+                        Toast.makeText(RemitActivity.this, "완료 되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

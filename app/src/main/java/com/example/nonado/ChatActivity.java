@@ -35,6 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     private String sender;
     private String receiver = "익명1";
     private String postId = "";
+    private String postWriter = "";
     private String withPost = "";
 
     private EditText chatEt;
@@ -51,6 +52,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_main);
 
         postId = getIntent().getStringExtra("postId");
+        postWriter = getIntent().getStringExtra("postWriter");
+        Log.d("postWriter",postWriter);
 
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
@@ -92,7 +95,8 @@ public class ChatActivity extends AppCompatActivity {
                         myRef.child(postId).child(name).setValue("");
                         myPost.child(name).child(postId).setValue(postId);
                         myRef = database.getReference("User-Post");
-                        myRef.child(name).child(postId).setValue(postId);
+                        String value = postId + "," + postWriter;
+                        myRef.child(name).child(postId).setValue(value);
                     }
                 });
 

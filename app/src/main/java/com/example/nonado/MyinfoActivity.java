@@ -72,6 +72,8 @@ public class MyinfoActivity extends AppCompatActivity {
     private UserAccount userAccount;
     private String userName, userPoint;
     private List<String> title = new ArrayList<String>();
+    private List<String> writer = new ArrayList<String>();
+
 
     private
     String location ;
@@ -182,15 +184,17 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ListViewAdapter();
         myPost.child(user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                adapter = new ListViewAdapter();
                 for(DataSnapshot messageData : snapshot.getChildren()){
-                    String msg2 = messageData.getValue().toString();
-                    Log.d("MyTag2",msg2);
-                    adapter.addItem(new Posting(msg2));
-                    title.add(msg2);
+                    String msg = messageData.getValue().toString();
+                    String msg2[] = msg.split(",");
+
+                    adapter.addItem(new Posting(msg2[0]));
+                    title.add(msg2[0]);
+                    writer.add(msg2[1]);
                 }
                 listView.setAdapter(adapter);
             }
@@ -259,12 +263,12 @@ public class MyinfoActivity extends AppCompatActivity {
 
             TextView postingTv = (TextView) convertView.findViewById(R.id.postingTv);
             Button moneyBtn = (Button) convertView.findViewById(R.id.moneyBtn);
-            Button okBtn = (Button) convertView.findViewById(R.id.okBtn);
+            Button delBtn = (Button) convertView.findViewById(R.id.delBtn);
 
             moneyBtn.setTag(position);
-            okBtn.setTag(position);
+            delBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
-            okBtn.setOnClickListener(onClickListener2);
+            delBtn.setOnClickListener(onClickListener3);
             postingTv.setText(posting.getPostName());
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
@@ -278,6 +282,7 @@ public class MyinfoActivity extends AppCompatActivity {
                 int position = Integer.parseInt(v.getTag().toString());
                 Intent intent = new Intent(getApplicationContext(), RemitActivity.class);
                 intent.putExtra("title", title.get(position));
+                intent.putExtra("wrtier",writer.get(position));
                 intent.putExtra("name",nameTv.getText().toString());
                 intent.putExtra("userPoint",userPoint);
                 Log.d("title",title.get(position));
@@ -285,56 +290,34 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         };
 
-        Button.OnClickListener onClickListener2 = new Button.OnClickListener(){
+        Button.OnClickListener onClickListener3 = new Button.OnClickListener(){
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MyinfoActivity.this);
+                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?\n 만약 참여중이라면 금액을 회수하고 진행해 주세요.");
                 int position = Integer.parseInt(v.getTag().toString());
-                Log.d("MyTag3", title.get(position));
-                String ti = title.get(position);
-                mDatabase = FirebaseDatabase.getInstance().getReference("Point");
-                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                builder.setTitle("인증 ").setMessage("인증 후 되돌릴수 없습니다.\n인증하시겠습니까? ");
+
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String ti = title.get(position);
+                    String na = nameTv.getText().toString();
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        mDatabase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot messageData : snapshot.getChildren()) {
-                                    Log.d("user",messageData.getValue().toString());
-                                    String key = messageData.getKey();
-                                    Log.d("title",title.get(position));
-                                    String msg = messageData.getValue().toString();
-                                    String msg2[] = msg.split(",");
-                                    if(title.get(position).equals(msg2[3].substring(7)) && nameTv.getText().toString().equals(msg2[2].substring(8))){
-                                        DatabaseReference dR = database.getReference("Point").child(key).child("certification");
-                                        dR.setValue("1");
-                                    }
-                                    Toast.makeText(MyinfoActivity.this, "완료 되었습니다.", Toast.LENGTH_SHORT).show();
-
-
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-
-
-
+                        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference dataRef = mDatabase.getReference("User-Post").child(na).child(ti);
+                        dataRef.removeValue();
+                        dataRef = mDatabase.getReference("Post-User").child(ti).child(na);
+                        dataRef.removeValue();
+                        Toast.makeText(MyinfoActivity.this, "삭제 되었습니다", Toast.LENGTH_SHORT).show();
                     }
                 });
 
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(MyinfoActivity.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+
                     }
                 });
-                AlertDialog alertDialog = builder.create();
+                androidx.appcompat.app.AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
         };

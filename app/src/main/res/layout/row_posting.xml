@@ -20,21 +20,14 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
     <Button
-        android:layout_width="40dp"
+        android:layout_width="80dp"
         android:layout_height="40dp"
         android:background="@drawable/roundbutton"
         android:layout_gravity="right"
-        android:text="송금"
+        android:text="송금, 인증"
         android:layout_marginRight="20dp"
         android:id="@+id/moneyBtn"/>
-    <Button
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/roundbutton"
-        android:layout_gravity="right"
-        android:text="인증"
-        android:layout_marginRight="20dp"
-        android:id="@+id/okBtn"/>
+
     <Button
         android:layout_width="40dp"
         android:layout_height="40dp"

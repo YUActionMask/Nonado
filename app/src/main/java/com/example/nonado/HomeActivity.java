@@ -136,6 +136,7 @@ public class HomeActivity extends AppCompatActivity {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
                     Log.d("write",msg2);
+                    Log.d("write",edit.getText().toString());
 
                     if(edit.getText().toString().equals(msg3[2].substring(10).replace("}","")) == true) {
                         comment.add(msg3[1].substring(9).replace("}",""));

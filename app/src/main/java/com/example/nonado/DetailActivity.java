@@ -161,6 +161,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
                 intent.putExtra("postId",str);
+                intent.putExtra("postWriter", writer);
                 startActivity(intent);
             }
         });
@@ -179,6 +180,7 @@ public class DetailActivity extends AppCompatActivity {
                 com.clear();
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg = messageData.getValue().toString();
+                    Log.d("com",msg);
                     String msg2[] = msg.split(",");
                     com.add(new Comment(msg2[1].substring(6),msg2[2].substring(9).replace("}",""),msg2[0].substring(6)));
                 }
