@@ -12,13 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/list_border">
+        >
     <EditText
         android:hint="제목을 입력하세요.."
         android:id="@+id/EditText4"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@null"
         android:textSize="25sp"
         android:layout_margin="20dp"
         android:textStyle="bold"
