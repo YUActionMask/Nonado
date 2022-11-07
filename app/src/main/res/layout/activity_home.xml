@@ -16,15 +16,15 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="20"
-            android:text="OOO 동네"
             android:textSize="20dp"
             android:focusable="false"
             android:textAlignment="center" />
 
         <Button
             android:layout_width="50dp"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_weight="1"
+            android:background="@drawable/ic_bear"
             android:text="+"
             android:id="@+id/plus"/>
     </LinearLayout>

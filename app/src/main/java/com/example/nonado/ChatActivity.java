@@ -43,7 +43,7 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
-    private DatabaseReference myPost = database.getReference("User-Chat");
+    private DatabaseReference myPost = database.getReference("User-Post");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

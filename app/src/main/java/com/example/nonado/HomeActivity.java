@@ -93,8 +93,8 @@ public class HomeActivity extends AppCompatActivity {
         notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
-                intent.putExtra("name",str);
+                Intent intent = new Intent(getApplicationContext(), NoticeActivity.class);
+                //intent.putExtra("name",str);
                 startActivity(intent);
             }
         });
