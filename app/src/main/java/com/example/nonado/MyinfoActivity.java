@@ -1,11 +1,11 @@
 package com.example.nonado;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +40,10 @@ public class MyinfoActivity extends AppCompatActivity {
     private Button postingBtn;
     private Button cha;
     private Button logoutBtn;
-    private TextView nameTv;
+    private TextView nameTv, toName;
     private TextView pointTv;
+    private View dlgView;
+    private EditText how;
 
 
     private String TAG = MyinfoActivity.class.getSimpleName();
@@ -62,12 +65,15 @@ public class MyinfoActivity extends AppCompatActivity {
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
     private static final int CROP_FROM_IMAGE = 2;
+    private static int a;
 
     private FirebaseUser user;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabase2;
     private UserAccount userAccount;
-    private String userName;
+    private String userName, userPoint;
     private List<String> title = new ArrayList<String>();
+    private List<String> writer = new ArrayList<String>();
+
 
     private
     String location ;
@@ -98,7 +104,7 @@ public class MyinfoActivity extends AppCompatActivity {
                 //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                 userName = dataSnapshot.child("name").getValue().toString();
                 nameTv.setText(userName);
-                String userPoint = dataSnapshot.child("point").getValue().toString();
+                userPoint = dataSnapshot.child("point").getValue().toString();
                 location = dataSnapshot.child("location").getValue().toString();
                 pointTv.setText(userPoint);
 
@@ -178,15 +184,17 @@ public class MyinfoActivity extends AppCompatActivity {
             }
         });
 
-        adapter = new ListViewAdapter();
         myPost.child(user_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                adapter = new ListViewAdapter();
                 for(DataSnapshot messageData : snapshot.getChildren()){
-                    String msg2 = messageData.getValue().toString();
-                    Log.d("MyTag2",msg2);
-                    adapter.addItem(new Posting(msg2));
-                    title.add(msg2);
+                    String msg = messageData.getValue().toString();
+                    String msg2[] = msg.split(",");
+
+                    adapter.addItem(new Posting(msg2[0]));
+                    title.add(msg2[0]);
+                    writer.add(msg2[1]);
                 }
                 listView.setAdapter(adapter);
             }
@@ -220,6 +228,7 @@ public class MyinfoActivity extends AppCompatActivity {
     public class ListViewAdapter extends BaseAdapter{
         ArrayList <Posting> items = new ArrayList<Posting>();
 
+
         @Override
         public int getCount() {
             return items.size();
@@ -243,6 +252,7 @@ public class MyinfoActivity extends AppCompatActivity {
             final Context context = viewGroup.getContext();
             final Posting posting = items.get(position);
 
+
             if(convertView == null){
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = inflater.inflate(R.layout.row_posting, viewGroup, false);
@@ -253,9 +263,12 @@ public class MyinfoActivity extends AppCompatActivity {
 
             TextView postingTv = (TextView) convertView.findViewById(R.id.postingTv);
             Button moneyBtn = (Button) convertView.findViewById(R.id.moneyBtn);
+            Button delBtn = (Button) convertView.findViewById(R.id.delBtn);
 
             moneyBtn.setTag(position);
+            delBtn.setTag(position);
             moneyBtn.setOnClickListener(onClickListener);
+            delBtn.setOnClickListener(onClickListener3);
             postingTv.setText(posting.getPostName());
             Log.d(TAG, "getView() - ["+position+"] "+posting.getPostName());
 
@@ -264,47 +277,49 @@ public class MyinfoActivity extends AppCompatActivity {
         }
 
         Button.OnClickListener onClickListener = new Button.OnClickListener(){
-
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 int position = Integer.parseInt(v.getTag().toString());
-                Log.d("MyTag3", title.get(position));
-                String ti = title.get(position);
-                mDatabase = FirebaseDatabase.getInstance().getReference("Post").child(ti);
+                Intent intent = new Intent(getApplicationContext(), RemitActivity.class);
+                intent.putExtra("title", title.get(position));
+                intent.putExtra("wrtier",writer.get(position));
+                intent.putExtra("name",nameTv.getText().toString());
+                intent.putExtra("userPoint",userPoint);
+                Log.d("title",title.get(position));
+                startActivity(intent);
+            }
+        };
 
-                ValueEventListener value = new ValueEventListener() {
+        Button.OnClickListener onClickListener3 = new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MyinfoActivity.this);
+                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?\n 만약 참여중이라면 금액을 회수하고 진행해 주세요.");
+                int position = Integer.parseInt(v.getTag().toString());
+
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    String ti = title.get(position);
+                    String na = nameTv.getText().toString();
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String point = snapshot.child("point").getValue().toString();
-                        Log.d("MyTag4",point);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MyinfoActivity.this);
-                        builder.setTitle("송금 ").setMessage("송금 금액 : " + point);
-
-                        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        });
-
-                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+                        DatabaseReference dataRef = mDatabase.getReference("User-Post").child(na).child(ti);
+                        dataRef.removeValue();
+                        dataRef = mDatabase.getReference("Post-User").child(ti).child(na);
+                        dataRef.removeValue();
+                        Toast.makeText(MyinfoActivity.this, "삭제 되었습니다", Toast.LENGTH_SHORT).show();
                     }
+                });
 
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
-
-                };
-                mDatabase.addValueEventListener(value);
+                });
+                androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         };
     }
-
 }

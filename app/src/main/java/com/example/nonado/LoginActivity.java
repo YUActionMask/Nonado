@@ -23,6 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -82,13 +86,13 @@ public class LoginActivity extends AppCompatActivity {
                                 String user_id = strId.split("@")[0];
                                 mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
-                                Log.d("milky", "주소찾기");
+                                //Log.d("milky", "주소찾기");
                                 ValueEventListener postListener = new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                                         location = dataSnapshot.child("location").getValue().toString();
-                                        Log.d("milky", location);
+                                        //Log.d("milky", location);
 
                                         if (location.equals("null")) {
                                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);

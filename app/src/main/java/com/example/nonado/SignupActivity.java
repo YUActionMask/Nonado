@@ -19,21 +19,25 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.HashMap;
-
+import java.util.Map;
 
 
 public class SignupActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference mDatabase;
+    private FirebaseUser user;
     public EditText name, id, password;
     private int point = 0;
     private String location = null;
     private String number = "";
+    private String token = "";
     private Button mBtnRegister;
 
     @Override
@@ -61,6 +65,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 firebaseAuth.createUserWithEmailAndPassword(strId, strPwd).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
+                    @SuppressWarnings("unchecked")
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
                         if (task.isSuccessful()) {
@@ -70,6 +75,9 @@ public class SignupActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         showDialog();
 
+
+                                        sendPushTokenToDB();
+
                                         HashMap result = new HashMap<>();
                                         result.put("name", strName);
                                         result.put("id", strId);
@@ -77,8 +85,9 @@ public class SignupActivity extends AppCompatActivity {
                                         result.put("point", point);
                                         result.put("location", location);
                                         result.put("number", number);
+                                        result.put("token", token);
 
-                                        wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location, number);
+                                        wirteUser(strId.split("@")[0], strId, strPwd,strName,point,location, number, token);
                                         Toast.makeText(SignupActivity.this, "해당 이메일로 인증 링크를 전송하였습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                     else{
@@ -101,12 +110,11 @@ public class SignupActivity extends AppCompatActivity {
         });
 
     }
-    private void wirteUser(String userid, String id , String password, String name, int point, String location, String number) {
+    private void wirteUser(String userid, String id , String password, String name, int point, String location, String number, String token) {
         if(location==null) {
 
-            /**by재은, pc로 테스트 해보려고 location값에 스트링으로 값을 주었음. 수정할 예정 - 220926
-             * **/
-            UserAccount user = new UserAccount(id, password, name, point, "null", number);
+            /**by재은,수정 **/
+            UserAccount user = new UserAccount(id, password, name, point, "null", number, token);
 
             mDatabase.child("User").child(userid).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
@@ -147,5 +155,24 @@ public class SignupActivity extends AppCompatActivity {
         msgDlg.show();
     }
 
+    private void sendPushTokenToDB(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(SignupActivity.this, new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    return;
+                }
+
+                String token = task.getResult();
+                Map<String, Object> map = new HashMap<>();
+                map.put("fcmToken", token);
+                mDatabase.child("User").child(user_id).child("token").setValue(token);
+
+            }
+        });
+
+    }
 
 }
