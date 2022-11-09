@@ -37,6 +37,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.android.support:support-annotations:28.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
@@ -68,13 +69,6 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:30.5.0')
     implementation'com.google.firebase:firebase-storage'
 
-    //카카오
-    implementation "com.kakao.sdk:v2-user:2.2.0" // 카카오 로그인
-    implementation "com.kakao.sdk:v2-talk:2.2.0" // 친구, 메시지(카카오톡)
-
-    implementation "com.kakao.sdk:v2-story:2.2.0" // 카카오스토리
-    implementation "com.kakao.sdk:v2-link:2.2.0" // 메시지(카카오링크)
-    implementation "com.kakao.sdk:v2-navi:2.2.0" // 카카오내비
 
     //아임포트
     //implementation 'com.github.iamport:iamport-android:vX.Y.Z'
