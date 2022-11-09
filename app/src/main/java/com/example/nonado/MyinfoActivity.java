@@ -101,14 +101,11 @@ public class MyinfoActivity extends AppCompatActivity {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
                 userName = dataSnapshot.child("name").getValue().toString();
                 nameTv.setText(userName);
                 userPoint = dataSnapshot.child("point").getValue().toString();
                 location = dataSnapshot.child("location").getValue().toString();
                 pointTv.setText(userPoint);
-
-                //}
             }
 
             @Override

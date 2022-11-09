@@ -1,8 +1,10 @@
 package com.example.nonado;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,6 +36,7 @@ public class MyPostingActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private DatabaseReference databaseReference ;
+    private DatabaseReference postReference;
 
     private String user_id;
 
@@ -76,10 +79,54 @@ public class MyPostingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String postId = post_ids.get(i);
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra("postId", postId);
-                startActivity(intent);
-                finish();
+                postReference = FirebaseDatabase.getInstance().getReference("Post").child(postId);
+
+                ValueEventListener postListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.getValue() == null){
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MyPostingActivity.this);
+                            builder.setTitle("이미 삭제된 게시글 입니다. ").setMessage("그래도 채팅에 접속하시겠슶니까?");
+
+                            builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                                    intent.putExtra("postId", postId);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+
+                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+
+                        }
+
+                        else {
+                            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                            intent.putExtra("postId", postId);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+                postReference.addValueEventListener(postListener);
+
+
+
             }
         });
 

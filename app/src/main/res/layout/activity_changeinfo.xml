@@ -10,13 +10,15 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        android:layout_margin="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
         android:contentDescription="TODO"
         android:src="@drawable/ic_bear"></ImageView>
 
     <Button
         android:id="@+id/imageUpload_btn"
         android:layout_width="100dp"
+        android:layout_marginBottom="30dp"
         android:layout_height="48dp"
         android:layout_gravity="center"
         android:background="@drawable/roundbutton"
@@ -41,11 +43,13 @@
             android:id="@+id/showid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:textSize="20dp"
+            android:layout_marginLeft="40dp"
             android:layout_weight="5"
-            android:minHeight="48dp"
-            android:importantForAutofill="no"
-            android:inputType="none" />
+            />
+<!--            android:inputType="none" -->
+<!--            android:minHeight="48dp"-->
+<!--            android:importantForAutofill="no"-->
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

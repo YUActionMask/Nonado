@@ -53,7 +53,6 @@ public class ChatActivity extends AppCompatActivity {
 
         postId = getIntent().getStringExtra("postId");
         postWriter = getIntent().getStringExtra("postWriter");
-        Log.d("postWriter",postWriter);
 
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
