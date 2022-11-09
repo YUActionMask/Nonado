@@ -346,6 +346,5 @@ public class RemitActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        databaseReference.removeEventListener(mChild);
     }
 }
