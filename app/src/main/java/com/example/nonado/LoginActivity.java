@@ -86,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                                 String user_id = strId.split("@")[0];
                                 mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
+                                mDatabase.child("password").setValue(password.getText().toString().trim());
+
                                 //Log.d("milky", "주소찾기");
                                 ValueEventListener postListener = new ValueEventListener() {
                                     @Override
