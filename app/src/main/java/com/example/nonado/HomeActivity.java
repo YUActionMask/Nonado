@@ -59,23 +59,6 @@ public class HomeActivity extends AppCompatActivity {
         String user_id = user.getEmail().split("@")[0];
         databaseReference2 = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
-//        ValueEventListener postListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                //for (DataSnapshot userData : dataSnapshot.getChildren()) {
-//                location = dataSnapshot.child("location").getValue().toString();
-//                str = dataSnapshot.child("name").getValue().toString();
-//                Log.d("milky", str + location);
-//                //}
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w("milky", "loadPost:onCancelled", databaseError.toException());
-//            }
-//        };
-//        databaseReference2.addValueEventListener(postListener);
 
 
         str = getIntent().getStringExtra("name");
