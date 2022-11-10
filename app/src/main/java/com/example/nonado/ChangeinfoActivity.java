@@ -132,14 +132,10 @@ public class ChangeinfoActivity extends AppCompatActivity {
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
                             //비밀번호 변경 후 로그아웃
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
-                            if(user!=null){
-                                user.delete();
+                            firebaseAuth.signOut();
 
-                                Intent intent = new Intent(ChangeinfoActivity.this, LoginActivity.class);
-                                startActivity(intent);
-
-                            }
+                            Intent intent = new Intent(ChangeinfoActivity.this, LoginActivity.class);
+                            startActivity(intent);
                         }
                         else{
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
