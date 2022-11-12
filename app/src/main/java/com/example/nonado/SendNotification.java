@@ -16,7 +16,7 @@ public class SendNotification {
 
 
     //; charset=utf-8
-    public static final MediaType JSON = MediaType.parse("application/json");
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static void sendNotification(String regToken, String title, String messsage){
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -25,7 +25,7 @@ public class SendNotification {
                     OkHttpClient client = new OkHttpClient();
                     JSONObject json = new JSONObject();
                     JSONObject dataJson = new JSONObject();
-                    dataJson.put("message", messsage);
+                    dataJson.put("body", messsage);
                     dataJson.put("title", title);
                     json.put("notification", dataJson);
                     json.put("to", regToken);
