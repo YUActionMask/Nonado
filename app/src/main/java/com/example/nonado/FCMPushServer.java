@@ -17,6 +17,10 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -25,15 +29,48 @@ public class FCMPushServer extends FirebaseMessagingService {
 
     //private  static final String TAG = "FCMPushServer";
 
+    private FirebaseAuth firebaseAuth;
+    private DatabaseReference userDatabase;
+    private FirebaseUser user;
+    private String user_id;
+
+
     public FCMPushServer() {
         super();
         Task<String> token = FirebaseMessaging.getInstance().getToken();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        userDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         token.addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 if(task.isSuccessful()){
 
-                    Log.d("FCM Token", task.getResult());
+                    Log.d("milkyLog", task.getResult());
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    user_id = user.getEmail().split("@")[0];
+                    userDatabase.child("User").child(user_id).child("token").setValue(task.getResult());
+
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("milkyLog", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+
+                                    // Log and toast
+                                    //String msg = getString(R.string.msg_token_fmt, token);
+                                    Log.d("milkyLog", "ss = " + token);
+                                }
+                            });
+
                 }
             }
         });

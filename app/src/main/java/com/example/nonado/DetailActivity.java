@@ -78,6 +78,7 @@ public class DetailActivity extends AppCompatActivity {
     //채팅 넘어가는 데이터베이스
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference jsonDatabase;
     //현재 사용자
     private String user_id;
 
@@ -296,26 +297,30 @@ public class DetailActivity extends AppCompatActivity {
 
     private void sendGson() {
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        if(mDatabase.child("Post").child(str).equals(mDatabase.child("Comment").child(str))){
-            mDatabase.child("User").child(String.valueOf(mDatabase.child("Post").child(str).child("name"))).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+        jsonDatabase = FirebaseDatabase.getInstance().getReference();
+
+        jsonDatabase.child("User").child(writer).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 @SuppressWarnings("unchecked")
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String fcmToken =  snapshot.getValue().toString(); // 상대유저의 토큰
+                    String fcmToken = snapshot.getValue().toString();// 상대유저의 토큰
 
-                    mDatabase.child("Comment").child(String.valueOf(mDatabase.child("Post").child(String.valueOf(title)).child(comment_et.getText().toString()))).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    jsonDatabase.child("Comment").child(str).child(comment_et.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            mDatabase.child("Comment").child(String.valueOf(title)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            jsonDatabase.child("Comment").child(str).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DataSnapshot> task) {
                                     if (task.isSuccessful()) {
-                                        comment_msg = task.getResult().toString();
+                                        //comment_msg = comment_et.getText().toString();
                                     }
                                 }
                             });
+                            comment_msg = comment_et.getText().toString();
                             SendNotification.sendNotification(fcmToken, user_id, comment_msg);
+
+                            comment_et.setText("");
                         }
 
                         @Override
@@ -328,7 +333,7 @@ public class DetailActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-        }
+
 
     }
 }
