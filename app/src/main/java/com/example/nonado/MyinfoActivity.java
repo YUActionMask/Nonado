@@ -136,7 +136,6 @@ public class MyinfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("name", user_id);
                 intent.putExtra("location", location);

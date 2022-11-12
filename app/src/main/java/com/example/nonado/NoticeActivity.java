@@ -17,6 +17,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +42,12 @@ public class NoticeActivity extends AppCompatActivity {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
+    private DatabaseReference userDatabaseReference;
+
+    private FirebaseUser user;
+
+
+    String user_location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +59,38 @@ public class NoticeActivity extends AppCompatActivity {
         adapter =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         listView.setAdapter(adapter);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         String location = "관리자";
         String str = "관리자";
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+
+        userDatabaseReference = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user_location = dataSnapshot.child("location").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+            }
+        };
+        userDatabaseReference.addValueEventListener(userListener);
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Log.d("milkyTag", user_location);
+
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                intent.putExtra("name", user_id);
+                intent.putExtra("location", user_location);
                 startActivity(intent);
             }
         });
@@ -82,7 +115,6 @@ public class NoticeActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
-                    Log.d("milkyy",msg2);
 
 
                     if("관리자".equals(msg3[2].substring(10).replace("}","")) == true) {

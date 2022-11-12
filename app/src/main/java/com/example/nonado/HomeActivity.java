@@ -40,9 +40,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private DatabaseReference databaseReference = database.getReference("Post");
-    private DatabaseReference databaseReference2 ;
+    //private DatabaseReference databaseReference2 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         String user_id = user.getEmail().split("@")[0];
-        databaseReference2 = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+        //databaseReference2 = FirebaseDatabase.getInstance().getReference("User").child(user_id);
 
 
 
