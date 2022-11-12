@@ -141,39 +141,4 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
             }
         });
     }
-
-
-    /**private void sendGson(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
-        mDatabase.child("User").child(user_id).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            @SuppressWarnings("unchecked")
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Map<String, String> map = (Map<String, String>) snapshot.getValue(); // 상대유저의 토큰
-                String token = map.get("fcmToken");
-
-                mDatabase.child("User").child(user_id).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        mDatabase.child("message").push().child("msg").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if(task.isSuccessful()){
-                                    msg = task.getResult().toString();
-                                }
-                            }
-                        });
-                        SendNotification.sendNotification(token, user_id,msg);
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                    }
-                });
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }**/
 }

@@ -83,12 +83,14 @@ public class FCMPushServer extends FirebaseMessagingService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel notificationChannel = new NotificationChannel("nodado_channel", "nodado_channel", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel notificationChannel = new NotificationChannel("nonado_channel", "nonado_channel", NotificationManager.IMPORTANCE_HIGH);
             notificationChannel.setSound(uri, null);
             notificationManager.createNotificationChannel(notificationChannel);
         }
         notificationManager.notify(0, notificationBuilder.build());
     }
+
+
 
 }
 

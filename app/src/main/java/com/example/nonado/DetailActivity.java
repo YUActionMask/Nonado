@@ -19,11 +19,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -70,11 +72,14 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
 
+    private String comment_msg;
+    private String comment_title;
+
     //채팅 넘어가는 데이터베이스
     private FirebaseUser user;
-    private DatabaseReference mDatabase ;
+    private DatabaseReference mDatabase;
     //현재 사용자
-    private  String user_id;
+    private String user_id;
 
 
     @Override
@@ -91,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
         comment = (TextView) findViewById(R.id.textView5);
 
         comment2 = (ListView) findViewById(R.id.comment);
-        adapter2 =  new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
+        adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, new ArrayList<String>());
         comment2.setAdapter(adapter2);
         imageView = findViewById(R.id.image);
         reg_button = findViewById(R.id.reg_button);
@@ -104,15 +109,17 @@ public class DetailActivity extends AppCompatActivity {
         writer = getIntent().getStringExtra("writer");
         location = getIntent().getStringExtra("location");
         title.setText(str);
-        storage=FirebaseStorage.getInstance();
-        stoRe=storage.getReference();
-        patRe=stoRe.child(str);
+        storage = FirebaseStorage.getInstance();
+        stoRe = storage.getReference();
+        patRe = stoRe.child(str);
         btn = (Button) findViewById(R.id.btn);
         initDatabase();
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
-        Log.d("writer",writer);
-        Log.d("name",name);
+        Log.d("writer", writer);
+        Log.d("name", name);
         writerview.setText("작성자 : " + writer);
+
+        comment_title = comment_et.getText().toString();
 
         del.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,27 +156,29 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         //참여하기 버튼
-       btn.setOnClickListener(new View.OnClickListener() {
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
                 Map<String, Object> update = new HashMap<>();
-                update.put( str, "");
+                update.put(str, "");
                 mDatabase.updateChildren(update);
 
                 Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
-                intent.putExtra("postId",str);
+                intent.putExtra("postId", str);
                 intent.putExtra("postWriter", writer);
                 startActivity(intent);
             }
         });
 
+        //게시글 댓글 등록 btn
         reg_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 adapter2.clear();
-                plus(str, name, comment_et.getText().toString(),getTime());
+                plus(str, name, comment_et.getText().toString(), getTime());
+                sendGson();
             }
         });
 
@@ -179,9 +188,9 @@ public class DetailActivity extends AppCompatActivity {
                 com.clear();
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg = messageData.getValue().toString();
-                    Log.d("com",msg);
+                    Log.d("com", msg);
                     String msg2[] = msg.split(",");
-                    com.add(new Comment(msg2[1].substring(6),msg2[2].substring(9).replace("}",""),msg2[0].substring(6)));
+                    com.add(new Comment(msg2[1].substring(6), msg2[2].substring(9).replace("}", ""), msg2[0].substring(6)));
                 }
                 CommentAdapter commentAdapter = new CommentAdapter(com);
                 comment2.setAdapter(commentAdapter);
@@ -206,18 +215,16 @@ public class DetailActivity extends AppCompatActivity {
             imageView.setAdapter(adapter);   // 리사이클러뷰에 어댑터 세팅
         });
         comment.setText(getIntent().getStringExtra("comment"));
-        new Handler().postDelayed(new Runnable()
-        {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 showLoading(DetailActivity.this, false);
             }
         }, 1900);//
     }
 
     void showLoading(Activity activity, boolean isShow) {
-        if(isShow) {
+        if (isShow) {
             LinearLayout linear = new LinearLayout(activity);
             linear.setTag("MyProgressBar");
             linear.setGravity(Gravity.CENTER);
@@ -227,7 +234,8 @@ public class DetailActivity extends AppCompatActivity {
             progressBar.setLayoutParams(layoutParams);
             linear.addView(progressBar);
             linear.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) { /*클릭방지*/ }
+                @Override
+                public void onClick(View view) { /*클릭방지*/ }
             });
 
             FrameLayout rootView = activity.findViewById(android.R.id.content);
@@ -236,7 +244,7 @@ public class DetailActivity extends AppCompatActivity {
         } else {
             FrameLayout rootView = activity.findViewById(android.R.id.content);
             LinearLayout linear = rootView.findViewWithTag("MyProgressBar");
-            if(linear != null) {
+            if (linear != null) {
                 rootView.removeView(linear);
             }
         }
@@ -274,14 +282,53 @@ public class DetailActivity extends AppCompatActivity {
         databaseReference.removeEventListener(mChild);
     }
 
-    private String getTime(){
+    private String getTime() {
         mNow = System.currentTimeMillis();
         mDate = new Date(mNow);
         return mFormat.format(mDate);
     }
 
-    public void plus(String title, String name, String comment, String date){
-        Plusfirebase Pf = new Plusfirebase(name,comment,date);
+    public void plus(String title, String name, String comment, String date) {
+        Plusfirebase Pf = new Plusfirebase(name, comment, date);
         databaseReference.child(title).child(date + comment).setValue(Pf);
+    }
+
+
+    private void sendGson() {
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        if(mDatabase.child("Post").child(str).equals(mDatabase.child("Comment").child(str))){
+            mDatabase.child("User").child(String.valueOf(mDatabase.child("Post").child(str).child("name"))).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                @SuppressWarnings("unchecked")
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String fcmToken =  snapshot.getValue().toString(); // 상대유저의 토큰
+
+                    mDatabase.child("Comment").child(String.valueOf(mDatabase.child("Post").child(String.valueOf(title)).child(comment_et.getText().toString()))).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            mDatabase.child("Comment").child(String.valueOf(title)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        comment_msg = task.getResult().toString();
+                                    }
+                                }
+                            });
+                            SendNotification.sendNotification(fcmToken, user_id, comment_msg);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        }
+
     }
 }
