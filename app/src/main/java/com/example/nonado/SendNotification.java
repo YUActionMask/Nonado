@@ -15,7 +15,8 @@ import okhttp3.Response;
 public class SendNotification {
 
 
-    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    //; charset=utf-8
+    public static final MediaType JSON = MediaType.parse("application/json");
     public static void sendNotification(String regToken, String title, String messsage){
         new AsyncTask<Void, Void, Void>() {
             @Override
@@ -24,7 +25,7 @@ public class SendNotification {
                     OkHttpClient client = new OkHttpClient();
                     JSONObject json = new JSONObject();
                     JSONObject dataJson = new JSONObject();
-                    dataJson.put("body", messsage);
+                    dataJson.put("message", messsage);
                     dataJson.put("title", title);
                     json.put("notification", dataJson);
                     json.put("to", regToken);
@@ -39,7 +40,7 @@ public class SendNotification {
                 }catch (Exception e){
                     Log.d("error", e+"");
                 }
-                return  null;
+                return null;
             }
         }.execute();
     }
