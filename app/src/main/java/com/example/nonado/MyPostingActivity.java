@@ -86,7 +86,7 @@ public class MyPostingActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(dataSnapshot.getValue() == null){
                             AlertDialog.Builder builder = new AlertDialog.Builder(MyPostingActivity.this);
-                            builder.setTitle("이미 삭제된 게시글 입니다. ").setMessage("그래도 채팅에 접속하시겠슶니까?");
+                            builder.setTitle("이미 삭제된 게시글 입니다. ").setMessage("그래도 채팅에 접속하시겠습니까?");
 
                             builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
