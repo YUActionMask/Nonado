@@ -113,39 +113,38 @@ public class DetailActivity extends AppCompatActivity {
         Log.d("writer",writer);
         Log.d("name",name);
         writerview.setText("작성자 : " + writer);
-        if(writer.equals(name)){
-            del.setClickable(true);
-        }
 
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
-                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?");
+                if (writer.equals(name)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DetailActivity.this);
+                    builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?");
 
-                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
-                        DatabaseReference dataRef = mDatabase.getReference("Post").child(str);
-                        dataRef.removeValue();
-                        Toast.makeText(DetailActivity.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
-                        intent.putExtra("name", name);
-                        intent.putExtra("location", location);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+                    builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+                            DatabaseReference dataRef = mDatabase.getReference("Post").child(str);
+                            dataRef.removeValue();
+                            Toast.makeText(DetailActivity.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
+                            intent.putExtra("name", name);
+                            intent.putExtra("location", location);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
 
-                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
             }
         });
 
