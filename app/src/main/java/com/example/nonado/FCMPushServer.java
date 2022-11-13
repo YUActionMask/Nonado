@@ -48,7 +48,7 @@ public class FCMPushServer extends FirebaseMessagingService {
             public void onComplete(@NonNull Task<String> task) {
                 if(task.isSuccessful()){
 
-                    Log.d("milkyLog", task.getResult());
+                    Log.d("UserToken :", task.getResult());
                     user = FirebaseAuth.getInstance().getCurrentUser();
                     user_id = user.getEmail().split("@")[0];
                     userDatabase.child("User").child(user_id).child("token").setValue(task.getResult());

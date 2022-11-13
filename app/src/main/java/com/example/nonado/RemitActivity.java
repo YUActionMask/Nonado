@@ -21,8 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,13 +49,20 @@ public class RemitActivity extends AppCompatActivity {
     StorageReference patRe;
     FirebaseStorage storage;
     String title, name, userPoint, writer;
+    String success;
+    private String fcmMessage;
+    private String user_id;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference;
     private DatabaseReference mDatabase;
     private DatabaseReference databaseReference2;
+    private DatabaseReference jsonDatabase;
     private DatabaseReference myPoint = database.getReference("Point");
+    private FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        user_id = user.getEmail().split("@")[0];
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remit);
         showLoading(RemitActivity.this, true);
@@ -126,11 +136,13 @@ public class RemitActivity extends AppCompatActivity {
                                         Point point = new Point();
                                         point.setBalance(Integer.parseInt(input));
                                         point.setCertification("0");
-                                        String writer[] = textwriter.getText().toString().split(": ");
-                                        point.setReceiver(writer[1]);
+                                        String writers[] = textwriter.getText().toString().split(": ");
+                                        point.setReceiver(writers[1]);
                                         point.setSender(name);
                                         point.setTitle(title);
                                         myPoint.push().setValue(point);
+                                        success = "원을 송금하였습니다.";
+                                        sendGson(point, success);
                                         Toast.makeText(RemitActivity.this, "송금이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -343,8 +355,45 @@ public class RemitActivity extends AppCompatActivity {
         databaseReference.addChildEventListener(mChild);
     }
 
+
+    private void sendGson(Point point, String msg){
+
+        jsonDatabase = FirebaseDatabase.getInstance().getReference();
+        jsonDatabase.child("User").child(point.getReceiver()).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            @SuppressWarnings("unchecked")
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String fcmToken = snapshot.getValue().toString();// 상대유저의 토큰
+                jsonDatabase.child("Point").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        jsonDatabase.child("Point").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if(task.isSuccessful()){
+                                }
+                            }
+                        });
+
+                        fcmMessage = remitEdit.getText().toString();
+                        SendNotification.sendNotification(fcmToken, user_id, fcmMessage+msg);
+
+                        remitEdit.setText("");
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }
