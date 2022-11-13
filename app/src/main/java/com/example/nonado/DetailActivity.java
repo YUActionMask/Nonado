@@ -73,7 +73,6 @@ public class DetailActivity extends AppCompatActivity {
     private DatabaseReference databaseReference = database.getReference("Comment");
 
     private String comment_msg;
-    private String comment_title;
 
     //채팅 넘어가는 데이터베이스
     private FirebaseUser user;
@@ -120,7 +119,6 @@ public class DetailActivity extends AppCompatActivity {
         Log.d("name", name);
         writerview.setText("작성자 : " + writer);
 
-        comment_title = comment_et.getText().toString();
 
         del.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,13 +296,11 @@ public class DetailActivity extends AppCompatActivity {
     private void sendGson() {
 
         jsonDatabase = FirebaseDatabase.getInstance().getReference();
-
         jsonDatabase.child("User").child(writer).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 @SuppressWarnings("unchecked")
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String fcmToken = snapshot.getValue().toString();// 상대유저의 토큰
-
 
                     jsonDatabase.child("Comment").child(str).child(comment_et.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -322,18 +318,14 @@ public class DetailActivity extends AppCompatActivity {
 
                             comment_et.setText("");
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-
-
     }
 }
