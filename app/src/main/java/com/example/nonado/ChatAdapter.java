@@ -132,8 +132,8 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.getValue().equals(chat.getPostId())){
-                    SendNotification.sendNotification(token, sender,msg);
-                    fcmPushServer.showNotification(sender,msg);
+                    SendNotification.sendNotification(token, sender,msg, "ChatActivit");
+                    //fcmPushServer.showNotification(sender,msg);
                 }
             }
             @Override

@@ -68,7 +68,6 @@
         <activity
             android:name=".MyinfoActivity"
             android:exported="true">
-
         </activity>
         <activity
             android:name=".NoticeActivity"

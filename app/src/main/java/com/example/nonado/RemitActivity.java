@@ -376,7 +376,7 @@ public class RemitActivity extends AppCompatActivity {
                         });
 
                         fcmMessage = remitEdit.getText().toString();
-                        SendNotification.sendNotification(fcmToken, user_id, fcmMessage+msg);
+                        SendNotification.sendNotification(fcmToken, user_id, fcmMessage+msg, "MyinfoActivity");
 
                         remitEdit.setText("");
                     }
