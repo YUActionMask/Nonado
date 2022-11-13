@@ -37,7 +37,12 @@
         </activity>
         <activity
             android:name=".FindActivity"
-            android:exported="true" />
+            android:exported="true" >
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RemitActivity"
             android:exported="true" />
@@ -50,9 +55,7 @@
         <activity
             android:name=".PointHistoryActivity"
             android:exported="true" />
-        <activity
-            android:name=".MyinfoActivity"
-            android:exported="true" />
+
         <activity
             android:name=".HomeActivity"
             android:exported="true" />
@@ -61,8 +64,13 @@
             android:exported="true" />
         <activity
             android:name=".MyinfoActivity"
-            android:exported="true"
-            tools:ignore="DuplicateActivity" />
+            android:exported="true">
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+        </activity>
         <activity
             android:name=".NoticeActivity"
             android:exported="true" />
@@ -78,7 +86,9 @@
         <activity
             android:name=".PlusActivity"
             android:exported="true"
-            tools:ignore="DuplicateActivity" />
+            tools:ignore="DuplicateActivity" >
+
+        </activity>
         <activity
             android:name=".SignupActivity"
             android:exported="true" />
@@ -106,7 +116,7 @@
 
 
         <service android:name=".FCMPushServer"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
