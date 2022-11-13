@@ -40,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private EditText chatEt;
     private Button sendBtn;
-    private Button chamBtn;
+    private Button chamBtn , personBtn;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
@@ -57,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
         chatEt = findViewById(R.id.chatEt);
         sendBtn = findViewById(R.id.sendBtn);
         chamBtn = findViewById(R.id.chamBtn);
+        personBtn = findViewById(R.id.personBtn);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         sender = user.getEmail().split("@")[0];
@@ -77,6 +78,15 @@ public class ChatActivity extends AppCompatActivity {
 
                     chatEt.setText("");
                 }
+            }
+        });
+
+        personBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ChatActivity.this, NowActivity.class);
+                intent.putExtra("postId", postId);
+                startActivity(intent);
             }
         });
 
