@@ -314,7 +314,9 @@ public class DetailActivity extends AppCompatActivity {
                                 }
                             });
                             comment_msg = comment_et.getText().toString();
-                            SendNotification.sendNotification(fcmToken, user_id, comment_msg);
+                            String fcmTitle = str + "에 댓글이 달렸습니다 ";
+                            String fcmBody = user_id + " : " + comment_msg;
+                            SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody);
 
                             comment_et.setText("");
                         }
