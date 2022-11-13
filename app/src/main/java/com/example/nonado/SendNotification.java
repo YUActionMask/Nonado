@@ -15,6 +15,7 @@ import okhttp3.Response;
 public class SendNotification {
 
 
+    //; charset=utf-8
     public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     public static void sendNotification(String regToken, String title, String messsage){
         new AsyncTask<Void, Void, Void>() {
@@ -39,7 +40,7 @@ public class SendNotification {
                 }catch (Exception e){
                     Log.d("error", e+"");
                 }
-                return  null;
+                return null;
             }
         }.execute();
     }

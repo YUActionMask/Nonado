@@ -64,6 +64,7 @@ public class PlusActivity extends AppCompatActivity {
             }
         });
 
+        //게시글 등록
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

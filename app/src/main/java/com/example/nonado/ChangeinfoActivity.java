@@ -122,13 +122,20 @@ public class ChangeinfoActivity extends AppCompatActivity {
         mBtnChange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().getCurrentUser().updatePassword(mEditpw.toString()).addOnCompleteListener(ChangeinfoActivity.this, new OnCompleteListener<Void>() {
+
+
+                FirebaseAuth.getInstance().getCurrentUser().updatePassword(mEditpw.getText().toString()).addOnCompleteListener(ChangeinfoActivity.this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-                            database.getReference().child("User").child(user_id).child("password").setValue(task.getResult().toString());
+                            database.getReference().child("User").child(user_id).child("password").setValue(mEditpw.getText().toString());
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
+                            //비밀번호 변경 후 로그아웃
+                            firebaseAuth.signOut();
+
+                            Intent intent = new Intent(ChangeinfoActivity.this, LoginActivity.class);
+                            startActivity(intent);
                         }
                         else{
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
