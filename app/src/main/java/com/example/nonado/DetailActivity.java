@@ -108,6 +108,7 @@ public class DetailActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("name");
         writer = getIntent().getStringExtra("writer");
         location = getIntent().getStringExtra("location");
+
         title.setText(str);
         storage = FirebaseStorage.getInstance();
         stoRe = storage.getReference();
@@ -314,9 +315,9 @@ public class DetailActivity extends AppCompatActivity {
                                 }
                             });
                             comment_msg = comment_et.getText().toString();
-                            String fcmTitle = str + "에 댓글이 달렸습니다 ";
+                            String fcmTitle = str ;
                             String fcmBody = user_id + " : " + comment_msg;
-                            SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody);
+                            SendNotification.sendNotification(fcmToken, str, fcmBody, "DetailActivity");
 
                             comment_et.setText("");
                         }

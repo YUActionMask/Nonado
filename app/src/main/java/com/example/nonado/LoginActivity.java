@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.util.BuddhistCalendar;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -41,13 +42,71 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private DatabaseReference postDatabase;
+    private DatabaseReference userDatabase;
     private UserAccount userAccount;
     private String location = "null";
+    private String comment ;
+    private String post_name ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        /***알림와서 넘어가는 부분***/
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            //열 액티비티의 이름이 저장됨
+            String intent_str = extras.getString("click_action");
+
+            //게시글 상세화면을 열 때
+            if(intent_str.equals("DetailActivity")){
+
+                Intent intent = new Intent(this, DetailActivity.class);
+                String title = extras.getString("title");
+                postDatabase = FirebaseDatabase.getInstance().getReference("Post").child(title);
+
+                ValueEventListener postListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        comment = dataSnapshot.child("comment").getValue().toString();
+                        post_name = dataSnapshot.child("name").getValue().toString();
+
+                        userDatabase = FirebaseDatabase.getInstance().getReference("User").child(post_name);
+
+                        ValueEventListener userListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                location = dataSnapshot.child("location").getValue().toString();
+
+                                intent.putExtra("title", title);
+                                intent.putExtra("comment", comment);
+                                intent.putExtra("writer", post_name);
+                                intent.putExtra("name",post_name);
+                                intent.putExtra("location",location);
+                                startActivity(intent);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        };
+                        userDatabase.addValueEventListener(userListener);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+                postDatabase.addValueEventListener(postListener);
+            }
+
+            //
+        }
 
         firebaseAuth = FirebaseAuth.getInstance();
 
