@@ -54,6 +54,41 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+
+            user = FirebaseAuth.getInstance().getCurrentUser();
+            String user_id = user.getEmail().split("@")[0];
+
+            mDatabase = FirebaseDatabase.getInstance().getReference("User").child(user_id);
+
+            ValueEventListener userListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    location = dataSnapshot.child("location").getValue().toString();
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
+                    intent.putExtra("name", user_id);
+                    intent.putExtra("location", location);
+
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            };
+            mDatabase.addValueEventListener(userListener);
+
+
+            Log.d("milkyLog", "login");
+
+
+
+        }else{
+
+            Log.d("milkyLog", "out");
+        }
+
 
         /***알림와서 넘어가는 부분***/
         Bundle extras = getIntent().getExtras();
