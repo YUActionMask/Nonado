@@ -68,7 +68,14 @@ public class PlusActivity extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                plus(EditText4.getText().toString(), EditText5.getText().toString(), name, location);
+                String tit = EditText4.getText().toString();
+                plus(tit, EditText5.getText().toString(), name, location);
+                databaseReference = database.getReference("Post-User");
+                databaseReference.child(tit).child(name).setValue("");
+                databaseReference.child(name).child(tit).setValue(tit);
+                databaseReference = database.getReference("User-Post");
+                String value = tit + "," + name;
+                databaseReference.child(name).child(tit).setValue(value);
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("name",name);
                 intent.putExtra("location",location);
