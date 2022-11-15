@@ -80,6 +80,7 @@ public class DetailActivity extends AppCompatActivity {
     private DatabaseReference jsonDatabase;
     //현재 사용자
     private String user_id;
+    private String point;
 
 
     @Override
@@ -134,6 +135,63 @@ public class DetailActivity extends AppCompatActivity {
                             FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
                             DatabaseReference dataRef = mDatabase.getReference("Post").child(str);
                             dataRef.removeValue();
+                            dataRef = mDatabase.getReference("Point");
+                            dataRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot messageData : snapshot.getChildren()) {
+                                        Log.d("user",messageData.getValue().toString());
+                                        String key = messageData.getKey();
+                                        Log.d("title",str);
+                                        String msg = messageData.getValue().toString();
+                                        String msg2[] = msg.split(",");
+                                        Log.d("certi",msg2[4].substring(15));
+                                        String po = msg2[0].substring(9);
+                                        if(str.equals(msg2[3].substring(7)) && writer.equals(msg2[1].substring(10)) && msg2[4].substring(15).equals("0}")){
+                                            DatabaseReference dR = database.getReference("Point").child(key);
+                                            dR.removeValue();
+                                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("User").child(msg2[2].substring(8));
+                                            mDatabase2.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    String msg = snapshot.getValue().toString();
+                                                    point  = msg.split(",")[6].substring(7);
+                                                    Log.d("point",msg);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("Post-User").child(str);
+                                            mDatabase2.removeValue();
+                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("User-Post");
+                                            mDatabase2.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if(snapshot.hasChild(str)){
+                                                        DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference("User-Post").child(str);
+                                                        mDatabase3.removeValue();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("User").child(name).child("point");
+                                            int a = Integer.parseInt(point) + Integer.parseInt(po);
+                                            mDatabase2.setValue(a);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
                             Toast.makeText(DetailActivity.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
                             intent.putExtra("name", name);
