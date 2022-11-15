@@ -43,11 +43,15 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference mDatabase;
     private DatabaseReference postDatabase;
-    private DatabaseReference userDatabase;
+    private DatabaseReference remitDatabase;
+    private DatabaseReference user_postDatabase;
+    private DatabaseReference user_remitDatabase;
     private UserAccount userAccount;
     private String location = "null";
     private String comment ;
     private String post_name ;
+    private String sender;
+    private String price;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                         comment = dataSnapshot.child("comment").getValue().toString();
                         post_name = dataSnapshot.child("name").getValue().toString();
 
-                        userDatabase = FirebaseDatabase.getInstance().getReference("User").child(post_name);
+                        user_postDatabase = FirebaseDatabase.getInstance().getReference("User").child(post_name);
 
                         ValueEventListener userListener = new ValueEventListener() {
                             @Override
@@ -129,7 +133,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onCancelled(DatabaseError databaseError) {
                             }
                         };
-                        userDatabase.addValueEventListener(userListener);
+                        user_postDatabase.addValueEventListener(userListener);
 
                     }
 
@@ -138,6 +142,38 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 };
                 postDatabase.addValueEventListener(postListener);
+            }
+            else if(intent_str.equals("RemitActivity")){
+                Intent intent = new Intent(this, PointHistoryActivity.class);
+                remitDatabase = FirebaseDatabase.getInstance().getReference("Post");
+
+                ValueEventListener remitListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        user_remitDatabase = FirebaseDatabase.getInstance().getReference("User");
+
+                        ValueEventListener user_remitListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        };
+                        user_remitDatabase.addValueEventListener(user_remitListener);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                };
+
+                remitDatabase.addValueEventListener(remitListener);
             }
 
             //
