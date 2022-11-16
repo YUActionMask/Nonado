@@ -143,19 +143,21 @@ public class LoginActivity extends AppCompatActivity {
                 };
                 postDatabase.addValueEventListener(postListener);
             }
-            else if(intent_str.equals("RemitActivity")){
+            else if(intent_str.equals("PointHistoryActivity")){
                 Intent intent = new Intent(this, PointHistoryActivity.class);
-                remitDatabase = FirebaseDatabase.getInstance().getReference("Post");
+                remitDatabase = FirebaseDatabase.getInstance().getReference("Point");
+
 
                 ValueEventListener remitListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                         user_remitDatabase = FirebaseDatabase.getInstance().getReference("User");
+
 
                         ValueEventListener user_remitListener = new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                                 startActivity(intent);
                             }
 
@@ -169,10 +171,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
                     }
                 };
-
                 remitDatabase.addValueEventListener(remitListener);
             }
 

@@ -375,7 +375,7 @@ public class DetailActivity extends AppCompatActivity {
                             comment_msg = comment_et.getText().toString();
                             String fcmTitle = str ;
                             String fcmBody = user_id + " : " + comment_msg;
-                            SendNotification.sendNotification(fcmToken, str, fcmBody, "DetailActivity");
+                            SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody, "DetailActivity");
 
                             comment_et.setText("");
                         }
