@@ -35,6 +35,7 @@ public class PointHistoryActivity extends AppCompatActivity {
     private ListView listView = null;
     private ListViewAdapter adapter = null;
     private Button chargingBtn;
+    private Button myinfoBtn;
     private TextView retentionPoint;
 
     //DB
@@ -49,6 +50,7 @@ public class PointHistoryActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listview);
         chargingBtn = (Button) findViewById(R.id.chargingBtn);
+        myinfoBtn = (Button) findViewById(R.id.myinfoBtn);
         retentionPoint = (TextView) findViewById(R.id.retentionPoint);
 
         //DB
@@ -80,16 +82,17 @@ public class PointHistoryActivity extends AppCompatActivity {
             }
         });
 
+        myinfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MyinfoActivity.class);
+                //intent.putExtra("price", price);
+                startActivity(intent);
+            }
+        });
+
         adapter = new ListViewAdapter();
 
-        //임시정보 저장
-
-//        adapter.addItem(new Point("입금", "B", 2300));
-//        adapter.addItem(new Point("출금", "C", 4533));
-//        adapter.addItem(new Point("입금", "D", 1234));
-//        adapter.addItem(new Point("출금", "E", 12000));
-//        adapter.addItem(new Point("출금", "F", 12455));
-//        adapter.addItem(new Point("입금", "G", 12466));
 
 
 

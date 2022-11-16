@@ -60,7 +60,6 @@ public class ChangeinfoActivity extends AppCompatActivity {
         mBtnSignout = findViewById(R.id.signout_btn);
         mBtnLocationChange = findViewById(R.id.local_amend_btn);
         mBtnChange =findViewById(R.id.amend_btn);
-        mBtnUploadImages = findViewById(R.id.imageUpload_btn);
         mPhoto = (ImageView)findViewById(R.id.img);
         storage = FirebaseStorage.getInstance();
 
@@ -101,16 +100,16 @@ public class ChangeinfoActivity extends AppCompatActivity {
             }
         });
 
-        mBtnUploadImages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.img:
-                        loadAlbum();
-                        break;
-                }
-            }
-        });
+//        mBtnUploadImages.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                switch (view.getId()){
+//                    case R.id.img:
+//                        loadAlbum();
+//                        break;
+//                }
+//            }
+//        });
         //by재은, 위치수정 버튼 구현
         mBtnLocationChange.setOnClickListener(new View.OnClickListener() {
             @Override
