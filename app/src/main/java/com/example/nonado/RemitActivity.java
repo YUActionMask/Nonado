@@ -375,8 +375,9 @@ public class RemitActivity extends AppCompatActivity {
                             }
                         });
 
+                        String fcmTitle = title;
                         fcmMessage = remitEdit.getText().toString();
-                        SendNotification.sendNotification(fcmToken, user_id, fcmMessage+msg, "MyinfoActivity");
+                        SendNotification.sendNotification(fcmToken, fcmTitle, user_id + " : "+fcmMessage+msg, "PostHistoryActivity");
 
                         remitEdit.setText("");
                     }
