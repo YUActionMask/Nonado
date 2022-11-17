@@ -71,6 +71,8 @@ public class DetailActivity extends AppCompatActivity {
     ArrayList<Uri> uriList = new ArrayList<>();     // 이미지의 uri를 담을 ArrayList 객체
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
+    private DatabaseReference myChat = FirebaseDatabase.getInstance().getReference("Chat-User");
+
 
     private String comment_msg;
 
@@ -81,6 +83,8 @@ public class DetailActivity extends AppCompatActivity {
     //현재 사용자
     private String user_id;
     private String point;
+    public String[] receivers;
+    public int size = 0;
 
 
     @Override
@@ -213,7 +217,7 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        //참여하기 버튼
+        //채팅하기 버튼
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +226,9 @@ public class DetailActivity extends AppCompatActivity {
                 Map<String, Object> update = new HashMap<>();
                 update.put(str, "");
                 mDatabase.updateChildren(update);
+
+                myChat.child(str).child(user_id).setValue("");
+
 
                 Intent intent = new Intent(DetailActivity.this, ChatActivity.class);
                 intent.putExtra("postId", str);

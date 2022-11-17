@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -34,17 +36,19 @@ public class ChatActivity extends AppCompatActivity {
 
     private String sender;
     private String receiver = "익명1";
+    private int size = 0;
     private String postId = "";
     private String postWriter = "";
     private String withPost = "";
 
     private EditText chatEt;
     private Button sendBtn;
-    private Button chamBtn , personBtn;
+    private Button chamBtn, personBtn;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
     private DatabaseReference myPost = database.getReference("User-Post");
+    private DatabaseReference jsonDatabase = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +65,17 @@ public class ChatActivity extends AppCompatActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         sender = user.getEmail().split("@")[0];
+
         //Log.d("MyTag",sender);
+        //채팅 전송 버튼
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String msg = chatEt.getText().toString();
 
-                if(msg != null){
+                if (msg != null) {
+
+
                     Chat chat = new Chat();
                     chat.setName(sender);
                     chat.setMsg(msg);
@@ -75,8 +83,10 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setPostId(postId);
 
                     myRef.push().setValue(chat);
-
                     chatEt.setText("");
+
+                    //fcm 알림
+                    sendGson();
                 }
             }
         });
@@ -135,8 +145,8 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Chat chat = snapshot.getValue(Chat.class);
-                if(chat.getPostId().equals(postId)){
-                    ((ChatAdapter)adapter).addChat(chat);
+                if (chat.getPostId().equals(postId)) {
+                    ((ChatAdapter) adapter).addChat(chat);
                 }
             }
 
@@ -161,6 +171,49 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void sendGson() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        String user_id = user.getEmail().split("@")[0];
+
+        jsonDatabase.child("User").child(postWriter).child("token").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String fcmToken = snapshot.getValue().toString();
+                Log.d("Receiver : ", postWriter);
+
+                jsonDatabase.child("message").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        jsonDatabase.child("message").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                if (task.isSuccessful()) {
+
+                                }
+                            }
+                        });
+                        String msg = chatEt.getText().toString();
+                        String fcmTitle = postId;
+                        String fcmBody = user_id + " : " + msg;
+                        SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody, "ChatActivity");
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 }
