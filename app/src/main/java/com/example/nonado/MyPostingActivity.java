@@ -84,7 +84,6 @@ public class MyPostingActivity extends AppCompatActivity {
                 ValueEventListener postListener = new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String postWriter = dataSnapshot.child("name").getValue().toString();
                         if(dataSnapshot.getValue() == null){
                             AlertDialog.Builder builder = new AlertDialog.Builder(MyPostingActivity.this);
                             builder.setTitle("이미 삭제된 게시글 입니다. ").setMessage("그래도 채팅에 접속하시겠습니까?");
@@ -94,7 +93,7 @@ public class MyPostingActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                                     intent.putExtra("postId", postId);
-                                    intent.putExtra("postWriter" ,postWriter);
+                                    intent.putExtra("postWriter" ,"");
                                     startActivity(intent);
                                     finish();
                                 }
@@ -113,6 +112,7 @@ public class MyPostingActivity extends AppCompatActivity {
                         }
 
                         else {
+                            String postWriter = dataSnapshot.child("name").getValue().toString();
                             Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                             intent.putExtra("postId", postId);
                             intent.putExtra("postWriter" ,postWriter);
