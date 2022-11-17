@@ -40,6 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     private String postId = "";
     private String postWriter = "";
     private String withPost = "";
+    private String msg;
 
     private EditText chatEt;
     private Button sendBtn;
@@ -71,7 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = chatEt.getText().toString();
+                 msg = chatEt.getText().toString();
 
                 if (msg != null) {
 
@@ -82,11 +83,12 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setReceiver(receiver);
                     chat.setPostId(postId);
 
+
                     myRef.push().setValue(chat);
+                    sendGson();
                     chatEt.setText("");
 
                     //fcm 알림
-                    sendGson();
                 }
             }
         });
@@ -195,7 +197,7 @@ public class ChatActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        String msg = chatEt.getText().toString();
+                       // String msg = chatEt.getText().toString();
                         String fcmTitle = postId;
                         String fcmBody = user_id + " : " + msg;
                         SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody, "ChatActivity");
