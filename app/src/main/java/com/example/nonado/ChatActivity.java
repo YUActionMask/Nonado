@@ -40,6 +40,8 @@ public class ChatActivity extends AppCompatActivity {
     private String postId = "";
     private String postWriter = "";
     private String withPost = "";
+    private String msg;
+    private String user_id;
 
     private EditText chatEt;
     private Button sendBtn;
@@ -71,7 +73,7 @@ public class ChatActivity extends AppCompatActivity {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String msg = chatEt.getText().toString();
+                 msg = chatEt.getText().toString();
 
                 if (msg != null) {
 
@@ -82,11 +84,20 @@ public class ChatActivity extends AppCompatActivity {
                     chat.setReceiver(receiver);
                     chat.setPostId(postId);
 
+
                     myRef.push().setValue(chat);
+
+
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    user_id = user.getEmail().split("@")[0];
+
+                    if(!(user_id.equals(postWriter))) {
+                        sendGson();
+                    }
+
                     chatEt.setText("");
 
                     //fcm 알림
-                    sendGson();
                 }
             }
         });
@@ -175,16 +186,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendGson() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
 
-        jsonDatabase.child("User").child(postWriter).child("token").addValueEventListener(new ValueEventListener() {
+        jsonDatabase.child("User").child(postWriter).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String fcmToken = snapshot.getValue().toString();
                 Log.d("Receiver : ", postWriter);
 
-                jsonDatabase.child("message").addValueEventListener(new ValueEventListener() {
+                jsonDatabase.child("message").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         jsonDatabase.child("message").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -195,7 +204,7 @@ public class ChatActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                        String msg = chatEt.getText().toString();
+                       // String msg = chatEt.getText().toString();
                         String fcmTitle = postId;
                         String fcmBody = user_id + " : " + msg;
                         SendNotification.sendNotification(fcmToken, fcmTitle, fcmBody, "ChatActivity");
