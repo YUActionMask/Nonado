@@ -105,7 +105,7 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
                 msg = chat.getMsg();
                 sender = this.name;
                 //현재 채팅보낸 사람과 현재 로그인한 사람의 이름이 다른경우 메시지 fcm 알림 보내기
-                sendGson(token, sender,msg);
+                //sendGson(token, sender,msg);
             }
 
     }
@@ -121,24 +121,5 @@ class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
         notifyItemInserted(chatList.size() - 1);
     }
 
-    private void sendGson(String token, String sender, String msg){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
 
-        Chat chat = new Chat();
-
-        FCMPushServer fcmPushServer = new FCMPushServer();
-        mDatabase.child("User-Chat").child(user_id).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.getValue().equals(chat.getPostId())){
-                    SendNotification.sendNotification(token, sender,msg, "ChatActivit");
-                    //fcmPushServer.showNotification(sender,msg);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-    }
 }

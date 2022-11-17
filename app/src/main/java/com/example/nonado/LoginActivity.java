@@ -44,8 +44,10 @@ public class LoginActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference postDatabase;
     private DatabaseReference remitDatabase;
+    private DatabaseReference chatDatabase;
     private DatabaseReference user_postDatabase;
     private DatabaseReference user_remitDatabase;
+    private DatabaseReference user_chatDatabase;
     private UserAccount userAccount;
     private String location = "null";
     private String comment ;
@@ -174,6 +176,36 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 };
                 remitDatabase.addValueEventListener(remitListener);
+            }
+            else if(intent_str.equals("ChatActivity")){
+                Intent intent = new Intent(this, ChatActivity.class);
+                chatDatabase = FirebaseDatabase.getInstance().getReference("message");
+
+                ValueEventListener chatListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        user_chatDatabase = FirebaseDatabase.getInstance().getReference("User");
+
+                        ValueEventListener user_chatListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        };
+                        user_chatDatabase.addValueEventListener(user_chatListener);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                };
+                chatDatabase.addValueEventListener(chatListener);
             }
 
             //
