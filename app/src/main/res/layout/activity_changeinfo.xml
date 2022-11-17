@@ -63,16 +63,13 @@
             android:text="@string/pw_text"
             android:textAlignment="center" />
 
-        <EditText
-            android:id="@+id/changepw"
+        <Button
+            android:id="@+id/pwchangebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="5"
-            android:hint="변경할 비밀번호를 입력하세요."
-            android:minHeight="48dp"
-            tools:ignore="TextContrastCheck"
-            android:importantForAutofill="no" />
+            android:layout_weight="1"
+            android:text="Button" />
+
     </LinearLayout>
 
     <LinearLayout
