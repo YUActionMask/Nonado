@@ -278,7 +278,7 @@ public class MyinfoActivity extends AppCompatActivity {
                 int position = Integer.parseInt(v.getTag().toString());
                 Intent intent = new Intent(getApplicationContext(), RemitActivity.class);
                 intent.putExtra("title", title.get(position));
-                intent.putExtra("wrtier",writer.get(position));
+                intent.putExtra("writer",writer.get(position));
                 intent.putExtra("name",nameTv.getText().toString());
                 intent.putExtra("userPoint",userPoint);
                 Log.d("title",title.get(position));
