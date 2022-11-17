@@ -125,7 +125,6 @@ public class DetailActivity extends AppCompatActivity {
         Log.d("name", name);
         writerview.setText("작성자 : " + writer);
 
-
         del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -174,9 +173,13 @@ public class DetailActivity extends AppCompatActivity {
                                             mDatabase2.addValueEventListener(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    if(snapshot.hasChild(str)){
-                                                        DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference("User-Post").child(str);
-                                                        mDatabase3.removeValue();
+                                                    for (DataSnapshot messageData : snapshot.getChildren()) {
+                                                        Log.d("hasChild", messageData.getValue().toString());
+                                                        if (messageData.getValue().toString().contains("="+str+",")) {
+                                                            Log.d("hasChild123", "haha");
+                                                            DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference("User-Post").child(name).child(str);
+                                                            mDatabase3.removeValue();
+                                                        }
                                                     }
                                                 }
 
