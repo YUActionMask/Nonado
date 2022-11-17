@@ -64,14 +64,13 @@ public class NowActivity extends AppCompatActivity {
                 for (DataSnapshot messageData : snapshot.getChildren()) {
                     String msgP = messageData.getValue().toString();
                     String msg[] = msgP.split(",");
-                    Log.d("msgP",msg[3].substring(7));
                     if(postId.equals(msg[3].substring(7))){
                         adapter.addItem(new PointHistory("보냄", msg[2].substring(8), Integer.parseInt(msg[0].substring(9))));
                         now2 ++;
                     }
 
                 }
-                nowPerson1.setText(now2 + "명");
+                nowPerson2.setText(now2 + "명");
                 listView.setAdapter(adapter);
             }
 
