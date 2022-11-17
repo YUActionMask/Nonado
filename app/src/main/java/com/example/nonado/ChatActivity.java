@@ -41,6 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private String postWriter = "";
     private String withPost = "";
     private String msg;
+    private String user_id;
 
     private EditText chatEt;
     private Button sendBtn;
@@ -85,7 +86,15 @@ public class ChatActivity extends AppCompatActivity {
 
 
                     myRef.push().setValue(chat);
-                    sendGson();
+
+
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    user_id = user.getEmail().split("@")[0];
+
+                    if(!(user_id.equals(postWriter))) {
+                        sendGson();
+                    }
+
                     chatEt.setText("");
 
                     //fcm 알림
@@ -177,16 +186,14 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendGson() {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        String user_id = user.getEmail().split("@")[0];
 
-        jsonDatabase.child("User").child(postWriter).child("token").addValueEventListener(new ValueEventListener() {
+        jsonDatabase.child("User").child(postWriter).child("token").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String fcmToken = snapshot.getValue().toString();
                 Log.d("Receiver : ", postWriter);
 
-                jsonDatabase.child("message").addValueEventListener(new ValueEventListener() {
+                jsonDatabase.child("message").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         jsonDatabase.child("message").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
