@@ -126,7 +126,7 @@ public class ChangeinfoActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().getCurrentUser().updatePassword(mEditpw.getText().toString()).addOnCompleteListener(ChangeinfoActivity.this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                        //if(task.isSuccessful()){
                             database.getReference().child("User").child(user_id).child("password").setValue(mEditpw.getText().toString());
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
 
@@ -135,11 +135,11 @@ public class ChangeinfoActivity extends AppCompatActivity {
 
                             Intent intent = new Intent(ChangeinfoActivity.this, LoginActivity.class);
                             startActivity(intent);
-                        }
-                        else{
+                        //}
+                        //else{
                             Toast.makeText(ChangeinfoActivity.this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
 
-                        }
+                        //}
                     }
                 });
             }
