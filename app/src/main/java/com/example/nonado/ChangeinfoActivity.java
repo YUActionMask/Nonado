@@ -42,7 +42,8 @@ public class ChangeinfoActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Button mBtnLogout, mBtnSignout, mBtnUploadImages, mBtnLocationChange,mBtnChange;
-    private EditText mEditpw;
+    private Button mBtnPWchange;
+
 
     private final int GALLERY_CODE = 10;
     private ImageView mPhoto;
@@ -54,8 +55,8 @@ public class ChangeinfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_changeinfo);
 
         mTextViewshowid = findViewById(R.id.showid);
-        mEditpw = findViewById(R.id.changepw);
 
+        mBtnPWchange = findViewById(R.id.pwchangebtn);
         mBtnLogout = findViewById(R.id.logout_btn);
         mBtnSignout = findViewById(R.id.signout_btn);
         mBtnLocationChange = findViewById(R.id.local_amend_btn);
@@ -81,6 +82,29 @@ public class ChangeinfoActivity extends AppCompatActivity {
                 Toast.makeText(ChangeinfoActivity.this, "로그아웃 하였습니다.", Toast.LENGTH_SHORT).show();
             }
         } );
+
+        mBtnPWchange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String emailAdrress = firebaseAuth.getCurrentUser().getEmail();
+
+                if(emailAdrress.length()>0) {
+                    firebaseAuth.sendPasswordResetEmail(emailAdrress).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(ChangeinfoActivity.this,"해당 Email로 전송했습니다 이메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(ChangeinfoActivity.this,"해당 Email로 전송이 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
 
 
         //by재은, 회원탈퇴 버튼 구현
@@ -118,39 +142,11 @@ public class ChangeinfoActivity extends AppCompatActivity {
             }
         });
 
-        mBtnChange.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-
-                FirebaseAuth.getInstance().getCurrentUser().updatePassword(mEditpw.getText().toString()).addOnCompleteListener(ChangeinfoActivity.this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        //if(task.isSuccessful()){
-                            database.getReference().child("User").child(user_id).child("password").setValue(mEditpw.getText().toString());
-                            Toast.makeText(ChangeinfoActivity.this, "비밀번호가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-
-                            //비밀번호 변경 후 로그아웃
-                            firebaseAuth.signOut();
-
-                            Intent intent = new Intent(ChangeinfoActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                        //}
-                        //else{
-                            Toast.makeText(ChangeinfoActivity.this, "비밀번호 변경에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-
-                        //}
-                    }
-                });
-            }
-        });
 
     }
 
-    public void loadAlbum(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-    }
+
     protected void onActivityResult(int requestCode, final int resultCode, final Intent data){
         super.onActivityResult(requestCode, resultCode,data);
         if(requestCode == GALLERY_CODE){
