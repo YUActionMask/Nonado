@@ -145,6 +145,7 @@ public class PayActivity extends AppCompatActivity {
                         point.setCertification("0");
                         point.setReceiver(user_id);
                         point.setSender("");
+                        point.setTitle("");
 
                         myPoint.push().setValue(point);
 
