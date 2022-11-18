@@ -72,6 +72,7 @@ public class DetailActivity extends AppCompatActivity {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference = database.getReference("Comment");
     private DatabaseReference myChat = FirebaseDatabase.getInstance().getReference("Chat-User");
+    private List<String> withP = new ArrayList<String>();
 
 
     private String comment_msg;
@@ -121,9 +122,24 @@ public class DetailActivity extends AppCompatActivity {
         btn = (Button) findViewById(R.id.btn);
         initDatabase();
         ArrayList<Task<Uri>> tasks = new ArrayList<>();
-        Log.d("writer", writer);
-        Log.d("name", name);
         writerview.setText("작성자 : " + writer);
+
+        DatabaseReference mDatabase0 = FirebaseDatabase.getInstance().getReference("Post-User").child(str);
+        mDatabase0.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                withP.clear();
+                String msg = snapshot.getValue().toString().replace("{","").replace("}","").replaceAll("=","");
+                String msg2[] = msg.split(",");
+                for(int i =0; i< msg2.length;i++){
+                    withP.add(msg2[i].trim());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
 
         del.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,23 +159,24 @@ public class DetailActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot messageData : snapshot.getChildren()) {
-                                        Log.d("user",messageData.getValue().toString());
                                         String key = messageData.getKey();
-                                        Log.d("title",str);
                                         String msg = messageData.getValue().toString();
                                         String msg2[] = msg.split(",");
-                                        Log.d("certi",msg2[4].substring(15));
                                         String po = msg2[0].substring(9);
-                                        if(str.equals(msg2[3].substring(7)) && writer.equals(msg2[1].substring(10)) && msg2[4].substring(15).equals("0}")){
+                                        DatabaseReference mDatabase2;
+                                        if(str.equals(msg2[3].substring(7)) && writer.equals(msg2[1].substring(10)) && msg2[4].substring(15).equals("0}")) {
                                             DatabaseReference dR = database.getReference("Point").child(key);
                                             dR.removeValue();
-                                            DatabaseReference mDatabase2 = FirebaseDatabase.getInstance().getReference("User").child(msg2[2].substring(8));
-                                            mDatabase2.addValueEventListener(new ValueEventListener() {
+                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("User").child(msg2[2].substring(8));
+
+                                            mDatabase2.addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     String msg = snapshot.getValue().toString();
-                                                    point  = msg.split(",")[6].substring(7);
-                                                    Log.d("point",msg);
+                                                    point = msg.split(",")[5].substring(7);
+                                                    DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference("User").child(msg2[2].substring(8)).child("point");
+                                                    int a = Integer.parseInt(point) + Integer.parseInt(po);
+                                                    mDatabase3.setValue(a);
                                                 }
 
                                                 @Override
@@ -167,30 +184,6 @@ public class DetailActivity extends AppCompatActivity {
 
                                                 }
                                             });
-                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("Post-User").child(str);
-                                            mDatabase2.removeValue();
-                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("User-Post");
-                                            mDatabase2.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    for (DataSnapshot messageData : snapshot.getChildren()) {
-                                                        Log.d("hasChild", messageData.getValue().toString());
-                                                        if (messageData.getValue().toString().contains("="+str+",")) {
-                                                            Log.d("hasChild123", "haha");
-                                                            DatabaseReference mDatabase3 = FirebaseDatabase.getInstance().getReference("User-Post").child(name).child(str);
-                                                            mDatabase3.removeValue();
-                                                        }
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                }
-                                            });
-                                            mDatabase2 = FirebaseDatabase.getInstance().getReference("User").child(name).child("point");
-                                            int a = Integer.parseInt(point) + Integer.parseInt(po);
-                                            mDatabase2.setValue(a);
                                         }
                                     }
                                 }
@@ -199,6 +192,14 @@ public class DetailActivity extends AppCompatActivity {
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
                             });
+                            DatabaseReference mDatabase2;
+                            mDatabase2 = FirebaseDatabase.getInstance().getReference("Post-User").child(str);
+                            mDatabase2.removeValue();
+                            for(int p =0; p<withP.size();p++){
+                                mDatabase2 = FirebaseDatabase.getInstance().getReference("User-Post").child(withP.get(p)).child(str);
+                                mDatabase2.removeValue();
+
+                            }
                             Toast.makeText(DetailActivity.this, "삭제가 완료되었습니다", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(DetailActivity.this, HomeActivity.class);
                             intent.putExtra("name", name);
@@ -256,7 +257,6 @@ public class DetailActivity extends AppCompatActivity {
                 com.clear();
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg = messageData.getValue().toString();
-                    Log.d("com", msg);
                     String msg2[] = msg.split(",");
                     com.add(new Comment(msg2[1].substring(6), msg2[2].substring(9).replace("}", ""), msg2[0].substring(6)));
                 }
