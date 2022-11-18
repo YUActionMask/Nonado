@@ -86,7 +86,7 @@ public class RemitActivity extends AppCompatActivity {
         databaseReference = database.getReference("Post").child(title);
         databaseReference2 = database.getReference("User").child(name);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String msg = snapshot.getValue().toString();
@@ -203,7 +203,6 @@ public class RemitActivity extends AppCompatActivity {
                             public void onCancelled(@NonNull DatabaseError error) {
                             }
                         });
-
                     }
                 });
 
@@ -213,6 +212,8 @@ public class RemitActivity extends AppCompatActivity {
                         Toast.makeText(RemitActivity.this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
         });
 
@@ -226,12 +227,13 @@ public class RemitActivity extends AppCompatActivity {
                     String point;
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.d("Writer", writer);
                         mDatabase = FirebaseDatabase.getInstance().getReference("User").child(writer);
                         mDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 String msg = snapshot.getValue().toString();
-                                point  = msg.split(",")[6].substring(7);
+                                point  = msg.split(",")[5].substring(7);
                                 Log.d("point",msg);
                             }
 
@@ -245,18 +247,19 @@ public class RemitActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot messageData : snapshot.getChildren()) {
-                                    Log.d("user",messageData.getValue().toString());
                                     String key = messageData.getKey();
                                     Log.d("title",title);
                                     String msg = messageData.getValue().toString();
                                     String msg2[] = msg.split(",");
                                     String po = msg2[0].substring(9);
+                                    Log.d("PPPPPPP", msg2[0].substring(9));
+                                    int a = Integer.parseInt(point) + Integer.parseInt(po);
                                     if(title.equals(msg2[3].substring(7)) && name.equals(msg2[2].substring(8)) && writer.equals(msg2[1].substring(10))){
                                         DatabaseReference dR = database.getReference("Point").child(key).child("certification");
                                         dR.setValue("1");
 
-                                        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(name).child("point");
-                                        int a = Integer.parseInt(point) + Integer.parseInt(po);
+                                        mDatabase = FirebaseDatabase.getInstance().getReference("User").child(writer).child("point");
+                                        Log.d("aaaaaaa",Integer.toString(a));
                                         mDatabase.setValue(a);
                                     }
                                 }

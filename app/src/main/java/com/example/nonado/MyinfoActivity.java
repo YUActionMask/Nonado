@@ -290,7 +290,7 @@ public class MyinfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MyinfoActivity.this);
-                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?\n 만약 참여중이라면 금액을 회수하고 진행해 주세요.");
+                builder.setTitle("삭제 ").setMessage("해당 게시글을 삭제 하시겠습니까?\n만약 참여중이라면 금액을 회수하고 진행해 주세요.");
                 int position = Integer.parseInt(v.getTag().toString());
 
                 builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {

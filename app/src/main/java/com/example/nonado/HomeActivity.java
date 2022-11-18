@@ -114,6 +114,11 @@ public class HomeActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                title.clear();
+                comment.clear();
+                writer.clear();
+                Array.clear();
+                adapter.clear();
                 for (DataSnapshot messageData : dataSnapshot.getChildren()) {
                     String msg2 = messageData.getValue().toString();
                     String msg3[] = msg2.split(",");
