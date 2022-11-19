@@ -86,7 +86,6 @@ public class NoticeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Log.d("milkyTag", user_location);
 
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                 intent.putExtra("name", user_id);
