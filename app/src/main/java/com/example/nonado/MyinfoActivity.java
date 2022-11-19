@@ -224,6 +224,9 @@ public class MyinfoActivity extends AppCompatActivity {
     public class ListViewAdapter extends BaseAdapter{
         ArrayList <Posting> items = new ArrayList<Posting>();
 
+        public void clear(){
+            items.clear();
+        }
 
         @Override
         public int getCount() {

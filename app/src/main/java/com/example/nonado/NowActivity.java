@@ -61,6 +61,7 @@ public class NowActivity extends AppCompatActivity {
         Postin.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                adapter.clear();
                 for (DataSnapshot messageData : snapshot.getChildren()) {
                     String msgP = messageData.getValue().toString();
                     String msg[] = msgP.split(",");
@@ -83,6 +84,10 @@ public class NowActivity extends AppCompatActivity {
     }
     public class ListViewAdapter extends BaseAdapter {
         ArrayList<PointHistory> items = new ArrayList<PointHistory>();
+
+        public void clear(){
+            items.clear();
+        }
 
         @Override
         public int getCount() {

@@ -116,6 +116,7 @@ public class PointHistoryActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 Point point = snapshot.getValue(Point.class);
+                adapter.clear();
                 if(point.getSender().equals(user_id)){
                     adapter.addItem(new PointHistory("보냄", point.getReceiver(), point.getBalance()));
                    // Log.d("milky", name);
@@ -159,6 +160,10 @@ public class PointHistoryActivity extends AppCompatActivity {
 
     public class ListViewAdapter extends BaseAdapter {
         ArrayList<PointHistory> items = new ArrayList<PointHistory>();
+
+        public void clear(){
+            items.clear();
+        }
 
         @Override
         public int getCount() {
