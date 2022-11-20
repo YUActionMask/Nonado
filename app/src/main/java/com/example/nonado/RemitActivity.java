@@ -243,7 +243,7 @@ public class RemitActivity extends AppCompatActivity {
                             }
                         });
                         mDatabase = FirebaseDatabase.getInstance().getReference("Point");
-                        mDatabase.addValueEventListener(new ValueEventListener() {
+                        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot messageData : snapshot.getChildren()) {
