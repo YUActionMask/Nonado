@@ -44,6 +44,7 @@ public class NowActivity extends AppCompatActivity {
         Post.child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                now1 = 0;
                 for (DataSnapshot messageData : snapshot.getChildren()) {
                     now1 ++;
                 }
@@ -62,6 +63,7 @@ public class NowActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 adapter.clear();
+                now2 = 0;
                 for (DataSnapshot messageData : snapshot.getChildren()) {
                     String msgP = messageData.getValue().toString();
                     String msg[] = msgP.split(",");
